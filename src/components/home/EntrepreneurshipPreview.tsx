@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Clock, Lock, Tools, Code, Shrink, Heart } from 'lucide-react';
+import { ArrowRight, Clock, Lock, Wrench, Code, Shrink, Heart } from 'lucide-react';
 import BlurEffect from '../ui/BlurEffect';
 
 interface ManifestoPointProps {
@@ -60,7 +60,7 @@ const EntrepreneurshipPreview = () => {
                   description="Stay independent and lean—maintain full control over your time and vision."
                 />
                 <ManifestoPoint 
-                  icon={<Tools size={18} className="text-primary" />}
+                  icon={<Wrench size={18} className="text-primary" />}
                   title="Product-Focused"
                   description="Make things, not manage things—prioritize engineering over operations."
                 />
