@@ -25,7 +25,7 @@ const PhilosophyPreview = () => {
           <div className="space-y-6 lg:col-span-1">
             <h2 className="heading-lg">Philosophy of Life</h2>
             <p className="body-md text-muted-foreground">
-              My philosophical framework guides how I interact with the world, balancing skepticism with pragmatism, embracing complexity, and seeking meaningful connection.
+              My philosophical framework guides how I interact with the world.
             </p>
             <Link 
               to="/philosophy" 
@@ -37,27 +37,34 @@ const PhilosophyPreview = () => {
           </div>
           
           <div className="lg:col-span-2">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-4">
+              {/* First row */}
               <PhilosophyCard 
-                title="Metaphysical View" 
+                title="Metaphysics" 
                 description="Information and consciousness as fundamental aspects of reality, embracing complexity with an agnostic, pragmatic stance."
               />
               <PhilosophyCard 
-                title="Epistemological Stance" 
+                title="Epistemology" 
                 description="Embracing skepticism while recognizing that contextual, pragmatic truths should guide our interactions."
               />
               <PhilosophyCard 
-                title="Ethical Framework" 
+                title="Ethics" 
                 description="Relativistic approach prioritizing empathy and meaningful dialogue across diverse moral frameworks."
               />
-              <PhilosophyCard 
-                title="Political Stance" 
-                description="Advocating for discourse-based governance that balances individual rights with collective well-being and ecological responsibility."
-              />
-              <PhilosophyCard 
-                title="Aesthetic Approach" 
-                description="Finding beauty in complexity and everyday moments, encouraging interdisciplinary appreciation of the world."
-              />
+              
+              {/* Second row */}
+              <div className="col-start-2 col-span-2">
+                <div className="grid grid-cols-2 gap-4">
+                  <PhilosophyCard 
+                    title="Politics" 
+                    description="Advocating for liberal ideals with libertarian influence, emphasizing freedom, dignity, and conditions that promote human flourishing."
+                  />
+                  <PhilosophyCard 
+                    title="Aesthetics" 
+                    description="Finding beauty in complexity and everyday moments, encouraging interdisciplinary appreciation of the world."
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
