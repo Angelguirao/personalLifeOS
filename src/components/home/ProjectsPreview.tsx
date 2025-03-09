@@ -22,7 +22,7 @@ const ProjectsPreview = () => {
       <div className="container-wide relative">
         <div className="flex flex-col lg:flex-row gap-10 items-start">
           <div className="lg:w-1/3 space-y-6 sticky top-32">
-            <h2 className="heading-lg">Projects & Works</h2>
+            <h2 className="heading-lg">Projects</h2>
             <p className="body-md text-muted-foreground">
               A selection of my software projects, open-source contributions, and other creative works that embody my philosophy and approach.
             </p>

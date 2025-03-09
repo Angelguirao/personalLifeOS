@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { Github, Twitter, Linkedin, Mail, Bitcoin } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -9,8 +9,8 @@ const Footer = () => {
   return (
     <footer className="border-t border-border py-12 mt-24">
       <div className="container-wide">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+          <div className="space-y-4 md:col-span-1">
             <h3 className="font-serif text-lg font-semibold">Angel Guirao</h3>
             <p className="text-muted-foreground text-sm max-w-md">
               Pursuing information as a means of connecting deeply and meaningfully with people, nature, and the universe.
@@ -21,37 +21,55 @@ const Footer = () => {
             <h3 className="font-serif text-lg font-semibold">Navigation</h3>
             <nav className="flex flex-col space-y-2">
               <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Home</Link>
-              <Link to="/philosophy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Philosophy</Link>
-              <Link to="/entrepreneurship" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Entrepreneurship</Link>
+              <Link to="/philosophy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Philosophy of Life</Link>
+              <Link to="/entrepreneurship" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Solopreneurship</Link>
               <Link to="/projects" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Projects</Link>
               <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Blog</Link>
-              <Link to="/garden" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Digital Garden</Link>
-              <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</Link>
+              <Link to="/garden" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Garden</Link>
+              <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About me</Link>
             </nav>
           </div>
           
           <div className="space-y-4">
             <h3 className="font-serif text-lg font-semibold">Connect</h3>
-            <div className="flex space-x-4">
-              <a href="https://github.com/" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Github size={18} />
+            <div className="flex flex-col space-y-2">
+              <a href="https://github.com/Angelguirao" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                <Github size={16} className="mr-2" /> GitHub
               </a>
-              <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Twitter size={18} />
+              <a href="https://x.com/civicCogitation" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                <Twitter size={16} className="mr-2" /> Twitter
               </a>
-              <a href="https://linkedin.com/in/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Linkedin size={18} />
+              <a href="https://www.linkedin.com/in/angelguirao/" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                <Linkedin size={16} className="mr-2" /> LinkedIn
               </a>
-              <a href="mailto:email@example.com" aria-label="Email" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Mail size={18} />
+              <a href="mailto:angelguirao92@gmail.com" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                <Mail size={16} className="mr-2" /> Email
               </a>
             </div>
+          </div>
+          
+          <div className="space-y-4">
+            <h3 className="font-serif text-lg font-semibold">Support</h3>
+            <p className="text-sm text-muted-foreground">
+              If you find value in my work, consider supporting through Value4Value.
+            </p>
+            <a 
+              href="https://value4value.info/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-sm text-primary hover:underline transition-colors inline-block"
+            >
+              Learn about Value4Value
+            </a>
             
-            <div className="mt-6 pt-6 border-t border-border">
-              <p className="text-xs text-muted-foreground">
-                <span className="monospace">Bitcoin: </span>
-                <span className="text-xs break-all">bc1q...</span>
-              </p>
+            <div className="pt-4">
+              <p className="text-sm font-medium">Bitcoin Address:</p>
+              <div className="flex items-center mt-1">
+                <Bitcoin size={16} className="text-amber-500 mr-2" />
+                <p className="text-xs break-all font-mono">
+                  bc1qyt377nm9z7u0zmgpudxgk8cps6qpzjl68xfauy
+                </p>
+              </div>
             </div>
           </div>
         </div>

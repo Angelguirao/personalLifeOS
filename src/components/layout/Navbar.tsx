@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Github, Twitter, Linkedin, Mail, Bitcoin } from 'lucide-react';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -11,12 +11,20 @@ const Navbar = () => {
   
   const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'Philosophy', path: '/philosophy' },
-    { name: 'Entrepreneurship', path: '/entrepreneurship' },
+    { name: 'Philosophy of Life', path: '/philosophy' },
+    { name: 'Solopreneurship', path: '/entrepreneurship' },
     { name: 'Projects', path: '/projects' },
     { name: 'Blog', path: '/blog' },
     { name: 'Garden', path: '/garden' },
-    { name: 'About', path: '/about' },
+    { name: 'About me', path: '/about' },
+  ];
+
+  const socialLinks = [
+    { icon: <Github size={16} />, url: 'https://github.com/Angelguirao', label: 'GitHub' },
+    { icon: <Twitter size={16} />, url: 'https://x.com/civicCogitation', label: 'Twitter' },
+    { icon: <Linkedin size={16} />, url: 'https://www.linkedin.com/in/angelguirao/', label: 'LinkedIn' },
+    { icon: <Mail size={16} />, url: 'mailto:angelguirao92@gmail.com', label: 'Email' },
+    { icon: <Bitcoin size={16} />, url: '#', label: 'Bitcoin', tooltip: 'bc1qyt377nm9z7u0zmgpudxgk8cps6qpzjl68xfauy' },
   ];
 
   useEffect(() => {
@@ -44,21 +52,40 @@ const Navbar = () => {
         </Link>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6">
-          {navItems.map((item, index) => (
-            <Link 
-              key={item.path} 
-              to={item.path}
-              className={cn(
-                "text-sm font-medium transition-colors duration-200 hover:text-primary opacity-0 animate-fade-in",
-                location.pathname === item.path ? "text-primary" : "text-muted-foreground",
-                `animation-delay-${(index + 1) * 100}`
-              )}
-            >
-              {item.name}
-            </Link>
-          ))}
-        </nav>
+        <div className="hidden md:flex items-center">
+          <nav className="flex items-center space-x-6 mr-6">
+            {navItems.map((item, index) => (
+              <Link 
+                key={item.path} 
+                to={item.path}
+                className={cn(
+                  "text-sm font-medium transition-colors duration-200 hover:text-primary opacity-0 animate-fade-in",
+                  location.pathname === item.path ? "text-primary" : "text-muted-foreground",
+                  `animation-delay-${(index + 1) * 100}`
+                )}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+          
+          {/* Social Icons */}
+          <div className="flex items-center space-x-3 border-l border-border pl-4 opacity-0 animate-fade-in">
+            {socialLinks.map((link, i) => (
+              <a 
+                key={i}
+                href={link.url}
+                target={link.url.startsWith('mailto:') ? '_self' : '_blank'}
+                rel="noopener noreferrer"
+                aria-label={link.label}
+                title={link.tooltip || link.label}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {link.icon}
+              </a>
+            ))}
+          </div>
+        </div>
         
         {/* Mobile Menu Button */}
         <button 
@@ -89,6 +116,23 @@ const Navbar = () => {
             </Link>
           ))}
         </nav>
+
+        {/* Mobile Social Icons */}
+        <div className="flex items-center space-x-4 mt-8 pt-6 border-t border-border">
+          {socialLinks.map((link, i) => (
+            <a 
+              key={i}
+              href={link.url}
+              target={link.url.startsWith('mailto:') ? '_self' : '_blank'}
+              rel="noopener noreferrer"
+              aria-label={link.label}
+              title={link.tooltip || link.label}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {link.icon}
+            </a>
+          ))}
+        </div>
       </div>
     </header>
   );
