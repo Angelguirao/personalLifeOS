@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, History } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import BlurEffect from '../components/ui/BlurEffect';
 import RevealText from '../components/ui/RevealText';
@@ -12,6 +12,14 @@ const Philosophy = () => {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
   }, []);
+
+  // Last modified date - update this when you make significant changes to your philosophy
+  const lastModified = new Date('2024-06-01');
+  const formattedDate = lastModified.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 
   return (
     <>
@@ -37,7 +45,7 @@ const Philosophy = () => {
           <div className="content-area">
             <BlurEffect className="animation-delay-300">
               <p>
-                My purpose in life is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe. I embrace narrative and playful exploration to deepen connection and understanding.
+                I embrace narrative and playful exploration to deepen connection and understanding.
               </p>
               
               <h2>Metaphysical View</h2>
@@ -65,14 +73,20 @@ const Philosophy = () => {
                 Aesthetically, I cherish the beauty inherent in complexity, finding awe in the ordinary moments and subtle intricacies of everyday life. My aesthetic approach encourages broad, interdisciplinary appreciation, inspiring wonder and deepening my connection to the world around me.
               </p>
               
-              <h2>Prioritizing Freedom Through Entrepreneurship</h2>
+              <h2>Current Focus: Freedom Through <Link to="/entrepreneurship" className="text-primary hover:underline">Solopreneurship</Link></h2>
               <p>
                 Recognizing that human life is inherently limited by time and that traditional work often consumes a disproportionate share, I currently prioritize entrepreneurship—particularly solopreneurship—as a means of eliminating unnecessary work. This focus allows me to cultivate greater freedom, enabling broader exploration and deeper connection aligned with my philosophy of life.
               </p>
               
-              <p>
-                As I navigate the marketplace of ideas, I remain committed to an ongoing process of reflection, refinement, and adaptation, open to new perspectives and continually reshaping my views to deepen understanding and enhance my capacity for meaningful connection.
-              </p>
+              <div className="mt-16 pt-6 border-t border-border">
+                <p className="text-sm text-muted-foreground flex items-center">
+                  <History size={14} className="mr-2" />
+                  Last modified: {formattedDate}
+                </p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  As I navigate the marketplace of ideas, I remain committed to an ongoing process of reflection, refinement, and adaptation, open to new perspectives and continually reshaping my views to deepen understanding and enhance my capacity for meaningful connection.
+                </p>
+              </div>
             </BlurEffect>
           </div>
         </div>
