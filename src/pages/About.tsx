@@ -2,7 +2,7 @@
 import React from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { ArrowLeft, Mail, Github, Twitter, Linkedin } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import BlurEffect from '../components/ui/BlurEffect';
 import RevealText from '../components/ui/RevealText';
@@ -24,67 +24,16 @@ const About = () => {
             </h1>
           </div>
           
-          <div className="flex flex-col md:flex-row gap-10">
-            <div className="md:w-1/3">
-              <BlurEffect className="animation-delay-200">
-                <div className="aspect-square overflow-hidden rounded-lg mb-6">
-                  <img 
-                    src="/lovable-uploads/2da07e1c-3347-4f46-a181-e87596b5e596.png" 
-                    alt="Illustration of a person with tangled thoughts" 
-                    className="w-full h-full object-contain bg-white/5"
-                  />
-                </div>
-                
-                <div className="glass p-6 space-y-4">
-                  <h2 className="font-serif text-xl font-semibold">Connect</h2>
-                  <div className="space-y-3">
-                    <a 
-                      href="mailto:email@example.com" 
-                      className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <Mail size={16} className="mr-2" />
-                      email@example.com
-                    </a>
-                    <a 
-                      href="https://github.com/" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <Github size={16} className="mr-2" />
-                      github.com/username
-                    </a>
-                    <a 
-                      href="https://twitter.com/" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <Twitter size={16} className="mr-2" />
-                      @username
-                    </a>
-                    <a 
-                      href="https://linkedin.com/in/" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <Linkedin size={16} className="mr-2" />
-                      linkedin.com/in/username
-                    </a>
-                  </div>
-                  
-                  <div className="pt-4 mt-4 border-t border-border">
-                    <p className="text-xs text-muted-foreground mb-1">Value4Value:</p>
-                    <p className="monospace text-xs break-all">
-                      bc1q...
-                    </p>
-                  </div>
-                </div>
-              </BlurEffect>
-            </div>
-            
-            <div className="md:w-2/3">
+          <div className="flex flex-col gap-8">
+            <div className="w-full max-w-3xl mx-auto">
+              <div className="aspect-square w-48 h-48 overflow-hidden rounded-lg mb-8 mx-auto">
+                <img 
+                  src="/lovable-uploads/2da07e1c-3347-4f46-a181-e87596b5e596.png" 
+                  alt="Illustration of a person with tangled thoughts" 
+                  className="w-full h-full object-contain bg-white/5"
+                />
+              </div>
+              
               <div className="content-area">
                 <BlurEffect className="animation-delay-300">
                   <p>
