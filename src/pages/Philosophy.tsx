@@ -69,10 +69,12 @@ const Philosophy = () => {
                 Aesthetically, I cherish the beauty inherent in complexity, finding awe in the ordinary moments and subtle intricacies of everyday life. My aesthetic approach encourages broad, interdisciplinary appreciation, inspiring wonder and deepening my connection to the world around me.
               </p>
               
-              <h2>Current Focus: Freedom Through <Link to="/entrepreneurship" className="text-primary hover:underline">Solopreneurship</Link></h2>
-              <p>
-                Recognizing that human life is inherently limited by time and that traditional work often consumes a disproportionate share, I currently prioritize entrepreneurship—particularly solopreneurship—as a means of eliminating unnecessary work. This focus allows me to cultivate greater freedom, enabling broader exploration and deeper connection aligned with my philosophy of life.
-              </p>
+              <div className="mt-12 pt-8 border-t border-border">
+                <h2>Current Focus: Freedom Through <Link to="/entrepreneurship" className="text-primary hover:underline">Solopreneurship</Link></h2>
+                <p>
+                  Recognizing that human life is inherently limited by time and that traditional work often consumes a disproportionate share, I currently prioritize entrepreneurship—particularly solopreneurship—as a means of eliminating unnecessary work. This focus allows me to cultivate greater freedom, enabling broader exploration and deeper connection aligned with my philosophy of life.
+                </p>
+              </div>
               
               <div className="mt-16 pt-6 border-t border-border">
                 <p className="text-sm text-muted-foreground flex items-center">
