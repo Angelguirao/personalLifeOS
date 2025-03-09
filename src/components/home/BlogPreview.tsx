@@ -10,7 +10,12 @@ const latestPost = {
   title: "Beyond Happiness: Rethinking What Matters",
   summary: "The global pursuit of happiness overlooks justice and equality. Against Happiness by Owen Flanagan and co-authors critiques the simplistic 'happiness agenda,' urging us to rethink what truly makes a life worth living. Time to prioritize deeper values.",
   date: "2024-09-01T10:23:00", // Updated date
-  category: "Ethics"
+  category: "Ethics",
+  bookInfo: {
+    title: "Against Happiness",
+    author: "Owen Flanagan",
+    link: "https://openlibrary.org/works/OL34335891W/Against_Happiness?edition=key%3A/books/OL46566568M"
+  }
 };
 
 const BlogPreview = () => {

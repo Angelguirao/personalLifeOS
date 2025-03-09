@@ -19,21 +19,21 @@ const blogPosts = [
     bookInfo: {
       title: "Should We Go Extinct?",
       author: "Todd May",
-      link: "https://openlibrary.org/works/OL21875318W/Should_We_Go_Extinct"
+      link: "https://openlibrary.org/works/OL37629912W/Should_We_Go_Extinct?edition=key%3A/books/OL50735111M"
     }
   },
   {
     id: 2,
     title: "Knowledge as Ethical Solidarity",
-    summary: "Richard Rorty's book \"Objectivity, Relativism, and Truth\" is a reminder that the heart of inquiry is ethical solidarity, not an objective endpoint. What if our pursuit of knowledge is really about how we relate to each other?",
+    summary: "Richard Rorty's book \"Contingency, irony, and solidarity\" is a reminder that the heart of inquiry is ethical solidarity, not an objective endpoint. What if our pursuit of knowledge is really about how we relate to each other?",
     date: "2024-08-31T10:03:00",
     category: "Ethics",
     status: "WIP",
     link: "https://x.com/civicCogitation/status/1829792194984607757?t=ay3pL0O04MtGsL2lPrwOig&s=03",
     bookInfo: {
-      title: "Objectivity, Relativism, and Truth",
+      title: "Contingency, irony, and solidarity",
       author: "Richard Rorty",
-      link: "https://openlibrary.org/works/OL3267304W/Objectivity_Relativism_and_Truth"
+      link: "https://openlibrary.org/works/OL2018373W/Contingency_irony_and_solidarity?edition=key%3A/books/OL23241517M"
     }
   },
   {
@@ -47,7 +47,7 @@ const blogPosts = [
     bookInfo: {
       title: "The Human Condition",
       author: "Hannah Arendt",
-      link: "https://openlibrary.org/works/OL1168990W/The_Human_Condition"
+      link: "https://openlibrary.org/works/OL10460638W/The_Human_Condition?edition=key%3A/books/OL14968018M"
     }
   },
   {
@@ -70,7 +70,7 @@ const blogPosts = [
     bookInfo: {
       title: "Against Happiness",
       author: "Owen Flanagan",
-      link: "https://openlibrary.org/works/OL19749253W/Against_happiness"
+      link: "https://openlibrary.org/works/OL34335891W/Against_Happiness?edition=key%3A/books/OL46566568M"
     }
   }
 ];
