@@ -8,7 +8,7 @@ import BlurEffect from '../ui/BlurEffect';
 const latestPost = {
   id: 1,
   title: "Beyond Happiness: Rethinking What Matters",
-  summary: "A critique against the simplistic "happiness agenda".",
+  summary: "A critique against the simplistic \"happiness agenda\".",
   date: new Date().toISOString().split('T')[0], // Today's date in YYYY-MM-DD format
   category: "Ethics"
 };
