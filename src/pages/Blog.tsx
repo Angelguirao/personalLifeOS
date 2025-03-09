@@ -2,7 +2,7 @@
 import React from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Feather } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import RevealText from '../components/ui/RevealText';
 import BlurEffect from '../components/ui/BlurEffect';
@@ -10,28 +10,44 @@ import BlurEffect from '../components/ui/BlurEffect';
 const blogPosts = [
   {
     id: 1,
-    title: "The Ethics of Artificial Intelligence",
-    summary: "Exploring the moral implications of developing increasingly autonomous AI systems and their impact on society.",
-    date: "2023-12-15",
-    category: "Ethics",
-    readTime: "8 min read"
+    title: "Beyond Happiness: Rethinking What Matters",
+    summary: "The global pursuit of happiness overlooks justice and equality. Against Happiness by Owen Flanagan and co-authors critiques the simplistic 'happiness agenda,' urging us to rethink what truly makes a life worth living. Time to prioritize deeper values.",
+    date: new Date().toISOString().split('T')[0], // Today's date
+    category: "Reflection",
+    readTime: "3 min read"
   },
   {
     id: 2,
-    title: "Freedom Through Entrepreneurship",
-    summary: "How building your own ventures can create the ultimate personal freedom when approached with the right mindset.",
-    date: "2023-11-30",
-    category: "Entrepreneurship",
-    readTime: "6 min read"
+    title: "Humanity's Future: Transform, Not Extinct",
+    summary: "Todd May's Should We Go Extinct? provokes deep reflection on humanity's future. What if the answer lies not in our extinction, but in transforming how we live—by valuing nature as part of ourselves?",
+    date: "2023-12-10", // Earlier date
+    category: "Philosophy",
+    readTime: "4 min read"
   },
   {
     id: 3,
-    title: "The Value of Interdisciplinary Thinking",
-    summary: "Why crossing boundaries between fields is essential for innovation and deeper understanding in the modern world.",
-    date: "2023-11-10",
-    category: "Philosophy",
-    readTime: "10 min read"
+    title: "Knowledge as Ethical Solidarity",
+    summary: "Richard Rorty's book 'Objectivity, Relativism, and Truth' is a reminder that the heart of inquiry is ethical solidarity, not an objective endpoint. What if our pursuit of knowledge is really about how we relate to each other?",
+    date: "2023-11-25", // Earlier date
+    category: "Ethics",
+    readTime: "5 min read"
   },
+  {
+    id: 4,
+    title: "Reclaiming Reflection in a Thoughtless Age",
+    summary: "In an age of thoughtless actions, Arendt's The Human Condition urges us to reclaim our capacity for reflection. Are we mindlessly drifting, or consciously shaping our world?",
+    date: "2023-11-15", // Earlier date
+    category: "Society",
+    readTime: "4 min read"
+  },
+  {
+    id: 5,
+    title: "The Beautiful Mystery of Truth",
+    summary: "From divine to scientific, our pursuit of certainty reflects a deeper need. But truth, shaped by our consciousness, remains a mystery we cannot fully grasp. To truly evolve, we must embrace skepticism and the beauty of uncertainty.",
+    date: "2023-10-30", // Earlier date
+    category: "Epistemology",
+    readTime: "6 min read"
+  }
 ];
 
 const Blog = () => {
@@ -47,11 +63,12 @@ const Blog = () => {
           
           <div className="space-y-4 mb-12">
             <h1 className="heading-lg">
-              <RevealText>Ideas & Essays</RevealText>
+              <RevealText>Blog</RevealText>
             </h1>
             <p className="text-muted-foreground max-w-2xl">
-              A collection of my thoughts on philosophy, technology, ethics, and entrepreneurship. 
-              These essays represent my ongoing exploration of ideas that shape how we understand and interact with the world.
+              An open-ended, playful exploration of the mysteries of the world. 
+              These entries represent my ongoing journey to understand the deeper questions 
+              of existence, consciousness, and what it means to be human.
             </p>
           </div>
           
