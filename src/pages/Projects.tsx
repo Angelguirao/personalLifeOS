@@ -2,7 +2,7 @@
 import React from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { ArrowLeft, Github, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import BlurEffect from '../components/ui/BlurEffect';
 import RevealText from '../components/ui/RevealText';
@@ -10,14 +10,11 @@ import RevealText from '../components/ui/RevealText';
 interface ProjectCardProps {
   title: string;
   description: string;
-  tags: string[];
   githubUrl?: string;
-  liveUrl?: string;
   imageSrc?: string;
-  content?: React.ReactNode;
 }
 
-const ProjectCard = ({ title, description, tags, githubUrl, liveUrl, imageSrc, content }: ProjectCardProps) => (
+const ProjectCard = ({ title, description, githubUrl, imageSrc }: ProjectCardProps) => (
   <div className="glass overflow-hidden flex flex-col h-full">
     {imageSrc && (
       <div className="h-64 overflow-hidden">
@@ -32,16 +29,6 @@ const ProjectCard = ({ title, description, tags, githubUrl, liveUrl, imageSrc, c
       <h3 className="font-serif text-xl font-semibold mb-3">{title}</h3>
       <p className="text-sm text-muted-foreground mb-4">{description}</p>
       
-      {content}
-      
-      <div className="flex flex-wrap gap-2 mb-4">
-        {tags.map((tag) => (
-          <span key={tag} className="px-3 py-1 text-xs rounded-full bg-secondary text-secondary-foreground font-medium">
-            {tag}
-          </span>
-        ))}
-      </div>
-      
       <div className="flex items-center space-x-3 mt-auto">
         {githubUrl && (
           <a 
@@ -54,17 +41,6 @@ const ProjectCard = ({ title, description, tags, githubUrl, liveUrl, imageSrc, c
             View on GitHub
           </a>
         )}
-        {liveUrl && (
-          <a 
-            href={liveUrl} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-sm flex items-center text-primary hover:underline"
-          >
-            <ExternalLink size={16} className="mr-1" />
-            Learn more
-          </a>
-        )}
       </div>
     </div>
   </div>
@@ -75,10 +51,8 @@ const Projects = () => {
     {
       title: "Scriptoria",
       description: "An AI-powered ebook management system that extracts insights, creates summaries, and enables semantic search across your digital library.",
-      tags: ["Node.js", "MongoDB", "Express", "OpenAI API", "Vector DB"],
       githubUrl: "https://github.com/Angelguirao/ai-ebook-system",
-      liveUrl: "https://example.com",
-      imageSrc: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80"
+      imageSrc: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=800&q=80"
     }
   ];
   
@@ -98,7 +72,7 @@ const Projects = () => {
             </h1>
             <BlurEffect className="animation-delay-200">
               <p className="body-lg text-muted-foreground max-w-2xl">
-                A collection of software, open-source contributions, and other works that reflect my philosophy and approach to meaningful creation.
+                A collection of software and open-source contributions that reflect my philosophy and approach to meaningful creation.
               </p>
             </BlurEffect>
           </div>
