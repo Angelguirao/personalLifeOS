@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { ArrowDownIcon } from 'lucide-react';
 import RevealText from '../ui/RevealText';
 import BlurEffect from '../ui/BlurEffect';
@@ -26,12 +25,6 @@ const Hero = () => {
               My purpose is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration.
             </p>
           </BlurEffect>
-          
-          <div className="pt-6 opacity-0 animate-fade-in animation-delay-700">
-            <Link to="/philosophy" className="inline-flex items-center justify-center px-8 py-3 border border-primary bg-primary text-primary-foreground font-medium rounded-lg transition-colors hover:bg-primary/90 text-base">
-              Explore All
-            </Link>
-          </div>
         </div>
       </div>
       
