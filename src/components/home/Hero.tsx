@@ -14,9 +14,9 @@ const Hero = () => {
               CONSCIOUSNESS • INFORMATION • CONNECTION
             </p>
             <h1 className="heading-xl">
-              <RevealText>Discovering depth</RevealText>
-              <RevealText delay="animation-delay-200">through information</RevealText>
-              <RevealText delay="animation-delay-300">and consciousness</RevealText>
+              <RevealText>Navigating Ideas,</RevealText>
+              <RevealText delay="animation-delay-200">Deepening</RevealText>
+              <RevealText delay="animation-delay-300">Relationships</RevealText>
             </h1>
           </div>
           

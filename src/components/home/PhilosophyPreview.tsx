@@ -12,8 +12,8 @@ interface PhilosophyCardProps {
 
 const PhilosophyCard = ({ title, description, className }: PhilosophyCardProps) => (
   <div className={cn("glass p-6 flex flex-col h-full", className)}>
-    <h3 className="font-serif text-lg font-semibold mb-3">{title}</h3>
-    <p className="text-sm text-muted-foreground flex-grow">{description}</p>
+    <h3 className="font-serif text-lg font-semibold mb-2">{title}</h3>
+    <p className="text-sm text-muted-foreground">{description}</p>
   </div>
 );
 
@@ -37,24 +37,26 @@ const PhilosophyPreview = () => {
           </div>
           
           <div className="lg:col-span-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               <PhilosophyCard 
                 title="Metaphysical View" 
-                description="I adopt an agnostic, pragmatically idealist stance, considering that information or consciousness might be fundamental to reality while embracing uncertainty and complexity."
+                description="Information and consciousness as fundamental aspects of reality, embracing complexity with an agnostic, pragmatic stance."
               />
               <PhilosophyCard 
                 title="Epistemological Stance" 
-                description="I align with skepticism, viewing ultimate truth as largely socially constructed, while upholding that contextual, pragmatic, and defensible truths should guide our interactions."
-                className="md:translate-y-4"
+                description="Embracing skepticism while recognizing that contextual, pragmatic truths should guide our interactions."
               />
               <PhilosophyCard 
                 title="Ethical Framework" 
-                description="My stance is relativistic, recognizing moral frameworks as diverse and context-dependent, prioritizing empathy, understanding, and meaningful dialogue across varied experiences."
+                description="Relativistic approach prioritizing empathy and meaningful dialogue across diverse moral frameworks."
+              />
+              <PhilosophyCard 
+                title="Political Stance" 
+                description="Advocating for discourse-based governance that balances individual rights with collective well-being and ecological responsibility."
               />
               <PhilosophyCard 
                 title="Aesthetic Approach" 
-                description="I cherish beauty in complexity, finding awe in ordinary moments and subtle intricacies of everyday life, encouraging broad, interdisciplinary appreciation of the world."
-                className="md:translate-y-4"
+                description="Finding beauty in complexity and everyday moments, encouraging interdisciplinary appreciation of the world."
               />
             </div>
           </div>
