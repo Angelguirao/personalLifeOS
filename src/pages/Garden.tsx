@@ -10,28 +10,64 @@ import BlurEffect from '../components/ui/BlurEffect';
 const gardenNotes = [
   {
     id: 1,
-    title: "Complexity Theory and Emergent Behavior",
-    summary: "Notes on how complex systems emerge from simple rules and what this means for understanding consciousness.",
+    title: "Humanity's Future: Transform, Not Extinct",
+    summary: "Todd May's Should We Go Extinct? provokes deep reflection on humanity's future. What if the answer lies not in our extinction, but in transforming how we live—by valuing nature as part of ourselves?",
     stage: "seedling",
-    lastUpdated: "2023-12-05",
-    connections: ["consciousness", "systems-thinking", "emergence"]
+    lastUpdated: "2024-09-01",
+    connections: ["ethics", "humanity", "environment"],
+    bookInfo: {
+      title: "Should We Go Extinct?",
+      author: "Todd May",
+      link: "https://openlibrary.org/works/OL37629912W/Should_We_Go_Extinct?edition=key%3A/books/OL50735111M"
+    }
   },
   {
     id: 2,
-    title: "Information as a Fundamental Property",
-    summary: "Exploring the idea that information might be as fundamental to reality as matter and energy.",
-    stage: "growing",
-    lastUpdated: "2023-11-22",
-    connections: ["metaphysics", "quantum-mechanics", "consciousness"]
+    title: "Beyond Happiness: Rethinking What Matters",
+    summary: "The global pursuit of happiness overlooks justice and equality. Against Happiness by Owen Flanagan and co-authors critiques the simplistic 'happiness agenda,' urging us to rethink what truly makes a life worth living. Time to prioritize deeper values.",
+    stage: "seedling",
+    lastUpdated: "2024-09-01",
+    connections: ["ethics", "happiness", "values"],
+    bookInfo: {
+      title: "Against Happiness",
+      author: "Owen Flanagan",
+      link: "https://openlibrary.org/works/OL34335891W/Against_Happiness?edition=key%3A/books/OL46566568M"
+    }
   },
   {
     id: 3,
-    title: "Open Source Ethics",
-    summary: "The moral case for open source software and its relationship to freedom and information sharing.",
-    stage: "evergreen",
-    lastUpdated: "2023-10-18",
-    connections: ["ethics", "open-source", "information-freedom"]
+    title: "Knowledge as Ethical Solidarity",
+    summary: "Richard Rorty's book \"Contingency, irony, and solidarity\" is a reminder that the heart of inquiry is ethical solidarity, not an objective endpoint. What if our pursuit of knowledge is really about how we relate to each other?",
+    stage: "seedling",
+    lastUpdated: "2024-08-31",
+    connections: ["ethics", "knowledge", "solidarity"],
+    bookInfo: {
+      title: "Contingency, irony, and solidarity",
+      author: "Richard Rorty",
+      link: "https://openlibrary.org/works/OL2018373W/Contingency_irony_and_solidarity?edition=key%3A/books/OL23241517M"
+    }
   },
+  {
+    id: 4,
+    title: "Reclaiming Reflection in a Thoughtless Age",
+    summary: "In an age of thoughtless actions, Arendt's The Human Condition urges us to reclaim our capacity for reflection. Are we mindlessly drifting, or consciously shaping our world?",
+    stage: "seedling",
+    lastUpdated: "2024-08-29",
+    connections: ["ethics", "reflection", "consciousness"],
+    bookInfo: {
+      title: "The Human Condition",
+      author: "Hannah Arendt",
+      link: "https://openlibrary.org/works/OL10460638W/The_Human_Condition?edition=key%3A/books/OL14968018M"
+    }
+  },
+  {
+    id: 5,
+    title: "The Beautiful Mystery of Truth",
+    summary: "From divine to scientific, our pursuit of certainty reflects a deeper need. But truth, shaped by our consciousness, remains a mystery we cannot fully grasp. To truly evolve, we must embrace skepticism and the beauty of uncertainty.",
+    stage: "seedling",
+    lastUpdated: "2024-08-29",
+    connections: ["truth", "consciousness", "uncertainty"],
+  }
 ];
 
 const getStageIcon = (stage: string) => {
@@ -101,6 +137,8 @@ const Garden = () => {
                     </div>
                     <span className="mx-2">•</span>
                     <time dateTime={note.lastUpdated}>Updated: {new Date(note.lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+                    <span className="mx-2">•</span>
+                    <span>WIP</span>
                   </div>
                   
                   <h2 className="font-serif text-xl font-semibold mb-3">
@@ -109,7 +147,24 @@ const Garden = () => {
                     </Link>
                   </h2>
                   
-                  <p className="text-muted-foreground mb-4">{note.summary}</p>
+                  <p className="text-muted-foreground mb-4">
+                    {note.bookInfo ? (
+                      <>
+                        {note.summary.split(note.bookInfo.title)[0]}
+                        <a 
+                          href={note.bookInfo.link} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline"
+                        >
+                          {note.bookInfo.title}
+                        </a>
+                        {note.summary.split(note.bookInfo.title)[1]}
+                      </>
+                    ) : (
+                      note.summary
+                    )}
+                  </p>
                   
                   <div className="flex flex-wrap gap-2 mb-4">
                     {note.connections.map((tag) => (

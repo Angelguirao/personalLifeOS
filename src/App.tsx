@@ -9,7 +9,6 @@ import Index from "./pages/Index";
 import Philosophy from "./pages/Philosophy";
 import Entrepreneurship from "./pages/Entrepreneurship";
 import Projects from "./pages/Projects";
-import Blog from "./pages/Blog";
 import Garden from "./pages/Garden";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
@@ -39,7 +38,6 @@ const App = () => (
           <Route path="/philosophy" element={<Philosophy />} />
           <Route path="/entrepreneurship" element={<Entrepreneurship />} />
           <Route path="/projects" element={<Projects />} />
-          <Route path="/blog" element={<Blog />} />
           <Route path="/garden" element={<Garden />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
