@@ -1,16 +1,16 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Feather } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import BlurEffect from '../ui/BlurEffect';
 
 // Use just one of the notes provided with today's date for the latest blog post
 const latestPost = {
   id: 1,
   title: "Beyond Happiness: Rethinking What Matters",
-  summary: "The global pursuit of happiness overlooks justice and equality. Against Happiness by Owen Flanagan and co-authors critiques the simplistic 'happiness agenda,' urging us to rethink what truly makes a life worth living. Time to prioritize deeper values.",
+  summary: "A critique against the simplistic "happiness agenda".",
   date: new Date().toISOString().split('T')[0], // Today's date in YYYY-MM-DD format
-  category: "Reflection"
+  category: "Ethics"
 };
 
 const BlogPreview = () => {
@@ -40,7 +40,7 @@ const BlogPreview = () => {
           <div className="lg:w-1/2">
             <div className="space-y-5">
               <BlurEffect className="animation-delay-100">
-                <Link to={`/blog/${latestPost.id}`} className="block glass p-6 transition-transform hover:-translate-y-1">
+                <Link to="/blog" className="block glass p-6 transition-transform hover:-translate-y-1">
                   <div className="mb-2 flex items-center text-xs text-muted-foreground">
                     <span className="font-medium text-primary">{latestPost.category}</span>
                     <span className="mx-2">•</span>
