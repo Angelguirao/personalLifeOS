@@ -55,11 +55,20 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    letter-spacing: -0.01em;
+  }
+  
+  ::selection {
+    @apply bg-primary/10 text-primary;
   }
   
   /* Glass effect */
   .glass {
-    @apply bg-white/70 backdrop-blur-md border border-white/20 rounded-xl shadow-sm;
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-sm transition-all duration-300;
+  }
+  
+  .glass:hover {
+    @apply shadow-md bg-white/90;
   }
   
   .glass-dark {
@@ -69,18 +78,22 @@
   /* Typography styles */
   .heading-xl {
     @apply font-serif text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+    letter-spacing: -0.02em;
   }
   
   .heading-lg {
     @apply font-serif text-3xl md:text-4xl font-bold tracking-tight;
+    letter-spacing: -0.02em;
   }
   
   .heading-md {
     @apply font-serif text-2xl md:text-3xl font-semibold;
+    letter-spacing: -0.015em;
   }
   
   .heading-sm {
     @apply font-serif text-xl md:text-2xl font-semibold;
+    letter-spacing: -0.01em;
   }
   
   .body-lg {
@@ -147,11 +160,11 @@
   }
   
   .content-area h2 {
-    @apply heading-md mt-12 mb-6;
+    @apply heading-md mt-16 mb-6;
   }
   
   .content-area h3 {
-    @apply heading-sm mt-8 mb-4;
+    @apply heading-sm mt-10 mb-4;
   }
   
   .content-area ul, .content-area ol {
@@ -164,6 +177,10 @@
   
   .content-area ol {
     @apply list-decimal;
+  }
+  
+  .content-area a {
+    @apply text-primary underline-offset-4 hover:underline;
   }
   
   /* Reveal animation container */
