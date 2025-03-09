@@ -13,38 +13,39 @@ interface ManifestoPointProps {
 }
 
 const ManifestoPoint = ({ icon, title, description, className }: ManifestoPointProps) => (
-  <div className={cn("flex space-x-4 p-4 rounded-lg hover:bg-primary/5 transition-colors duration-300", className)}>
-    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 flex-shrink-0 mt-1 text-primary shadow-sm">
+  <div className={cn("flex space-x-3 p-4 rounded-lg bg-white/40 backdrop-blur-sm border border-primary/5 hover:border-primary/10 transition-all duration-300 shadow-sm", className)}>
+    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-primary/10 flex-shrink-0 text-primary">
       {icon}
     </div>
     <div>
-      <h3 className="font-serif text-lg font-semibold mb-1">{title}</h3>
-      <p className="text-sm text-muted-foreground">{description}</p>
+      <h3 className="font-serif text-base font-semibold mb-1">{title}</h3>
+      <p className="text-xs text-muted-foreground">{description}</p>
     </div>
   </div>
 );
 
 const EntrepreneurshipPreview = () => {
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-20 relative overflow-hidden bg-gradient-to-br from-background to-amber-50/30">
       {/* Background decorative elements */}
-      <div className="absolute w-[600px] h-[600px] rounded-full bg-blue-50/30 top-20 -right-64 blur-3xl pointer-events-none"></div>
-      <div className="absolute w-[500px] h-[500px] rounded-full bg-amber-50/20 -bottom-64 -left-64 blur-3xl pointer-events-none"></div>
+      <div className="absolute w-[400px] h-[400px] rounded-full bg-blue-50/40 top-20 -right-64 blur-3xl pointer-events-none"></div>
+      <div className="absolute w-[300px] h-[300px] rounded-full bg-amber-50/30 -bottom-32 -left-32 blur-3xl pointer-events-none"></div>
       
       <div className="container-wide relative">
-        <div className="flex flex-col lg:flex-row gap-12 items-center">
-          <div className="lg:w-2/5 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-5">
             <BlurEffect>
               <div className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mb-2">
                 <Zap size={16} className="inline-block mr-1 mb-0.5" />
-                Entrepreneurship Philosophy
+                The Solopreneur's Manifesto
               </div>
-              <h2 className="heading-lg">The Solopreneur's Manifesto</h2>
+              <h2 className="heading-lg">Earning Time, Not Money</h2>
               <p className="body-md text-muted-foreground mt-4">
-                Prioritizing Freedom Through Entrepreneurship
+                Prioritizing freedom through smart, independent work.
               </p>
-              <p className="text-muted-foreground mt-2">
-                Recognizing that human life is inherently limited by time and that traditional work often consumes a disproportionate share, I currently prioritize entrepreneurship—particularly solopreneurship—as a means of eliminating unnecessary work. This focus allows me to cultivate greater freedom, enabling broader exploration and deeper connection aligned with my philosophy of life.
+              <p className="text-sm text-muted-foreground mt-2">
+                I view entrepreneurship as a path to freedom—creating space for exploration and connection 
+                by building lean, purposeful products that minimize unnecessary work.
               </p>
               <div className="pt-4">
                 <Link 
@@ -58,42 +59,39 @@ const EntrepreneurshipPreview = () => {
             </BlurEffect>
           </div>
           
-          <div className="lg:w-3/5">
-            <div className="glass p-8 border border-primary/10 shadow-lg">
-              <h3 className="text-2xl font-serif mb-6 text-center font-bold">Earning Time, Not Money</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <ManifestoPoint 
-                  icon={<Clock size={20} />}
-                  title="Lifestyle-Based"
-                  description="Earn time, not money—create freedom to choose how you spend your life."
-                  className="md:col-span-2"
-                />
-                <ManifestoPoint 
-                  icon={<Lock size={20} />}
-                  title="Bootstrapped"
-                  description="Stay independent and lean—maintain full control over your time and vision."
-                />
-                <ManifestoPoint 
-                  icon={<Wrench size={20} />}
-                  title="Product-Focused"
-                  description="Make things, not manage things—prioritize engineering over operations."
-                />
-                <ManifestoPoint 
-                  icon={<Code size={20} />}
-                  title="Solve Your Own Problems"
-                  description="Be your own first user—build tools that solve problems you personally have."
-                />
-                <ManifestoPoint 
-                  icon={<Shrink size={20} />}
-                  title="Start Small, Stay Small"
-                  description="Take a small bets approach—scaling complexity kills freedom."
-                />
-                <ManifestoPoint 
-                  icon={<Heart size={20} />}
-                  title="Ethical Development"
-                  description="Build open, build for impact—information should be free."
-                />
-              </div>
+          <div>
+            <div className="grid grid-cols-2 gap-3">
+              <ManifestoPoint 
+                icon={<Clock size={18} />}
+                title="Lifestyle-Based"
+                description="Earn time, not money—prioritize freedom."
+                className="col-span-2"
+              />
+              <ManifestoPoint 
+                icon={<Lock size={18} />}
+                title="Bootstrapped"
+                description="Stay independent—maintain full control."
+              />
+              <ManifestoPoint 
+                icon={<Wrench size={18} />}
+                title="Product-Focused"
+                description="Make things, not manage things."
+              />
+              <ManifestoPoint 
+                icon={<Code size={18} />}
+                title="Solve Your Problems"
+                description="Be your own first user and customer."
+              />
+              <ManifestoPoint 
+                icon={<Shrink size={18} />}
+                title="Start Small"
+                description="Take small bets—avoid scaling complexity."
+              />
+              <ManifestoPoint 
+                icon={<Heart size={18} />}
+                title="Build Open"
+                description="Create for impact—share information freely."
+              />
             </div>
           </div>
         </div>
