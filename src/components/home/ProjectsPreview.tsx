@@ -1,21 +1,14 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Github, ExternalLink, BookText, Cpu, Database, Code, Server } from 'lucide-react';
+import { ArrowRight, Github, BookText } from 'lucide-react';
 import BlurEffect from '../ui/BlurEffect';
 
 const projects = [
   {
     title: "AI Ebook System",
-    description: "An intelligent e-reader platform that extracts knowledge from books using AI to create summaries, flashcards, and concept maps.",
-    technologies: ["Node.js", "MongoDB", "Express", "OpenAI API"],
+    description: "An AI-powered ebook management system that extracts insights, creates summaries, and enables semantic search across your digital library.",
     github: "https://github.com/Angelguirao/ai-ebook-system",
-    live: "",
-    phases: [
-      "Core Ebook System",
-      "AI Summarization",
-      "Semantic Search"
-    ],
     icon: <BookText className="w-5 h-5" />
   }
 ];
@@ -55,35 +48,7 @@ const ProjectsPreview = () => {
                     <h3 className="font-serif text-xl font-semibold">{project.title}</h3>
                   </div>
                   
-                  <p className="text-muted-foreground mb-5">{project.description}</p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-                    <div className="bg-white/50 backdrop-blur-sm p-4 rounded-lg border border-primary/5">
-                      <Cpu size={18} className="text-primary mb-2" />
-                      <h4 className="font-medium text-sm mb-1">Phase 1</h4>
-                      <p className="text-xs text-muted-foreground">Core Ebook System with Node.js & MongoDB</p>
-                    </div>
-                    
-                    <div className="bg-white/50 backdrop-blur-sm p-4 rounded-lg border border-primary/5">
-                      <Database size={18} className="text-primary mb-2" />
-                      <h4 className="font-medium text-sm mb-1">Phase 2</h4>
-                      <p className="text-xs text-muted-foreground">AI Summarization & Knowledge Extraction</p>
-                    </div>
-                    
-                    <div className="bg-white/50 backdrop-blur-sm p-4 rounded-lg border border-primary/5">
-                      <Server size={18} className="text-primary mb-2" />
-                      <h4 className="font-medium text-sm mb-1">Phase 3</h4>
-                      <p className="text-xs text-muted-foreground">Semantic Search & AI Assistant</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {project.technologies.map((tech) => (
-                      <span key={tech} className="inline-flex items-center px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-medium">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+                  <p className="text-muted-foreground mb-6">{project.description}</p>
                   
                   <div className="flex items-center space-x-4">
                     {project.github && (
@@ -99,6 +64,13 @@ const ProjectsPreview = () => {
                         <ArrowRight size={14} className="ml-1 transition-transform group-hover:translate-x-0.5" />
                       </a>
                     )}
+                    <Link 
+                      to="/projects" 
+                      className="flex items-center text-sm text-primary hover:underline group"
+                    >
+                      Learn more
+                      <ArrowRight size={14} className="ml-1 transition-transform group-hover:translate-x-0.5" />
+                    </Link>
                   </div>
                 </div>
               </BlurEffect>
