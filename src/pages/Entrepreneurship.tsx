@@ -67,7 +67,7 @@ const Entrepreneurship = () => {
               </p>
               <ul>
                 <li><strong>Solve real problems</strong> (yours first, but useful to others).</li>
-                <li><strong>Build in public (audience-driven):</strong> Share your process through <strong>value-for-value content</strong> to give back to the community.</li>
+                <li><strong>Build in public (audience-driven):</strong> Share your process through <Link to="/blog" className="text-primary hover:underline">value-for-value content</Link> to give back to the community.</li>
                 <li><strong>Make open-source sustainable:</strong> Ensure financial independence while contributing to a freer, more open software ecosystem.</li>
               </ul>
               
