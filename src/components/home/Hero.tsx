@@ -27,12 +27,9 @@ const Hero = () => {
             </p>
           </BlurEffect>
           
-          <div className="pt-6 flex flex-col sm:flex-row gap-4 opacity-0 animate-fade-in animation-delay-700">
-            <Link to="/philosophy" className="inline-flex items-center justify-center px-6 py-3 border border-primary bg-primary text-primary-foreground font-medium rounded-lg transition-colors hover:bg-primary/90">
-              Explore Philosophy
-            </Link>
-            <Link to="/entrepreneurship" className="inline-flex items-center justify-center px-6 py-3 border border-border bg-transparent text-foreground font-medium rounded-lg transition-colors hover:bg-muted">
-              Solopreneur's Manifesto
+          <div className="pt-6 opacity-0 animate-fade-in animation-delay-700">
+            <Link to="/philosophy" className="inline-flex items-center justify-center px-8 py-3 border border-primary bg-primary text-primary-foreground font-medium rounded-lg transition-colors hover:bg-primary/90 text-base">
+              Explore All
             </Link>
           </div>
         </div>
