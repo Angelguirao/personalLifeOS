@@ -11,7 +11,7 @@ const Footer = () => {
       <div className="container-wide">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="space-y-4">
-            <h3 className="font-serif text-lg font-semibold">Firstname Lastname</h3>
+            <h3 className="font-serif text-lg font-semibold">Angel Guirao</h3>
             <p className="text-muted-foreground text-sm max-w-md">
               Pursuing information as a means of connecting deeply and meaningfully with people, nature, and the universe.
             </p>
@@ -24,6 +24,8 @@ const Footer = () => {
               <Link to="/philosophy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Philosophy</Link>
               <Link to="/entrepreneurship" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Entrepreneurship</Link>
               <Link to="/projects" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Projects</Link>
+              <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Blog</Link>
+              <Link to="/garden" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Digital Garden</Link>
               <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</Link>
             </nav>
           </div>
@@ -56,7 +58,7 @@ const Footer = () => {
         
         <div className="mt-10 pt-6 border-t border-border flex flex-col md:flex-row justify-between items-center">
           <p className="text-xs text-muted-foreground">
-            © {currentYear} Firstname Lastname. All rights reserved.
+            © {currentYear} Angel Guirao. All rights reserved.
           </p>
           <p className="text-xs text-muted-foreground mt-2 md:mt-0">
             Built with intention and purpose.

@@ -38,7 +38,7 @@ const Navbar = () => {
     )}>
       <div className="container-wide flex items-center justify-between">
         <Link to="/" className="font-serif text-xl font-semibold">
-          <span className="opacity-0 animate-fade-in">Firstname Lastname</span>
+          <span className="opacity-0 animate-fade-in">Angel Guirao</span>
         </Link>
         
         {/* Desktop Navigation */}
