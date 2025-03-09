@@ -60,37 +60,47 @@ const EntrepreneurshipPreview = () => {
           </div>
           
           <div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <ManifestoPoint 
                 icon={<Clock size={18} />}
                 title="Lifestyle-Based"
                 description="Earn time, not money—prioritize freedom."
-                className="col-span-2"
+                className="col-span-3 md:col-span-3"
               />
+              
               <ManifestoPoint 
                 icon={<Lock size={18} />}
                 title="Bootstrapped"
                 description="Stay independent—maintain full control."
+                className="col-span-3 md:col-span-1"
               />
+              
               <ManifestoPoint 
                 icon={<Wrench size={18} />}
                 title="Product-Focused"
                 description="Make things, not manage things."
+                className="col-span-3 md:col-span-1"
               />
+              
               <ManifestoPoint 
                 icon={<Code size={18} />}
                 title="Solve Your Problems"
                 description="Be your own first user and customer."
+                className="col-span-3 md:col-span-1"
               />
+              
               <ManifestoPoint 
                 icon={<Shrink size={18} />}
                 title="Start Small"
                 description="Take small bets—avoid scaling complexity."
+                className="col-span-3 md:col-span-3 lg:col-span-2"
               />
+              
               <ManifestoPoint 
                 icon={<Heart size={18} />}
                 title="Build Open"
                 description="Create for impact—share information freely."
+                className="col-span-3 md:col-span-3 lg:col-span-1"
               />
             </div>
           </div>
