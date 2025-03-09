@@ -11,12 +11,12 @@ const Hero = () => {
         <div className="space-y-8">
           <div className="space-y-3">
             <p className="text-sm uppercase tracking-wider text-muted-foreground opacity-0 animate-fade-in">
-              Philosophy • Entrepreneurship • Connection
+              CONSCIOUSNESS • INFORMATION • CONNECTION
             </p>
             <h1 className="heading-xl">
-              <RevealText>Connecting deeply</RevealText>
+              <RevealText>Discovering depth</RevealText>
               <RevealText delay="animation-delay-200">through information</RevealText>
-              <RevealText delay="animation-delay-300">and meaning</RevealText>
+              <RevealText delay="animation-delay-300">and consciousness</RevealText>
             </h1>
           </div>
           
@@ -25,6 +25,14 @@ const Hero = () => {
               My purpose is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration.
             </p>
           </BlurEffect>
+          
+          {/* Scroll indicator - now above the decorative elements and larger */}
+          <div className="mt-12 opacity-0 animate-fade-in animation-delay-700">
+            <a href="#philosophy-preview" className="inline-flex flex-col items-center text-foreground hover:text-primary transition-colors group">
+              <span className="text-base font-medium mb-3">Scroll to explore</span>
+              <ArrowDownIcon className="animate-bounce h-6 w-6 group-hover:text-primary" />
+            </a>
+          </div>
         </div>
       </div>
       
@@ -32,13 +40,7 @@ const Hero = () => {
       <div className="absolute top-1/2 right-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       
-      {/* Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 opacity-0 animate-fade-in animation-delay-1000">
-        <a href="#philosophy-preview" className="flex flex-col items-center text-muted-foreground hover:text-foreground transition-colors">
-          <span className="text-xs mb-2">Scroll to explore</span>
-          <ArrowDownIcon className="animate-bounce" size={16} />
-        </a>
-      </div>
+      {/* Removed the bottom scroll indicator since we moved it above */}
     </section>
   );
 };
