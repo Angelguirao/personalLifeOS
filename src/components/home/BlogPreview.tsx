@@ -21,9 +21,9 @@ const BlogPreview = () => {
           <div className="lg:w-1/2 space-y-6">
             <BlurEffect>
               <p className="text-sm uppercase tracking-wider text-muted-foreground">Blog</p>
-              <h2 className="heading-lg">Open-Ended Exploration</h2>
+              <h2 className="heading-lg">Blog</h2>
               <p className="body-md text-muted-foreground">
-                A playful journey into the mysteries of the world—reflections on philosophy, consciousness, and what it means to be human, all in my own words.
+                A playful journey into the mysteries of the world—playing language games with ideas and concepts, all in my own words.
               </p>
               <div className="pt-4">
                 <Link 
@@ -49,6 +49,9 @@ const BlogPreview = () => {
                   
                   <h3 className="font-serif text-lg font-semibold mb-2">{latestPost.title}</h3>
                   <p className="text-sm text-muted-foreground">{latestPost.summary}</p>
+                  <div className="mt-3">
+                    <span className="text-xs font-medium text-primary hover:underline">Read more</span>
+                  </div>
                 </Link>
               </BlurEffect>
             </div>
