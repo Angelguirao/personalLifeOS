@@ -1,37 +1,32 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Github, ExternalLink } from 'lucide-react';
+import { ArrowRight, Github, ExternalLink, BookText, Cpu, Database, Code, Server } from 'lucide-react';
 import BlurEffect from '../ui/BlurEffect';
 
 const projects = [
   {
-    title: "Open Source Project 1",
-    description: "A developer tool that helps with XYZ, built with React and TypeScript.",
-    technologies: ["React", "TypeScript", "Node.js"],
-    github: "https://github.com/",
-    live: "https://example.com/"
-  },
-  {
-    title: "SaaS Application",
-    description: "A minimalist SaaS tool designed to solve ABC problem for small businesses.",
-    technologies: ["Next.js", "Tailwind CSS", "Supabase"],
-    github: "",
-    live: "https://example.com/"
-  },
-  {
-    title: "AI Experiment",
-    description: "An experimental project exploring the intersection of AI and human creativity.",
-    technologies: ["Python", "TensorFlow", "React"],
-    github: "https://github.com/",
-    live: ""
+    title: "AI Ebook System",
+    description: "An intelligent e-reader platform that extracts knowledge from books using AI to create summaries, flashcards, and concept maps.",
+    technologies: ["Node.js", "MongoDB", "Express", "OpenAI API"],
+    github: "https://github.com/Angelguirao/ai-ebook-system",
+    live: "",
+    phases: [
+      "Core Ebook System",
+      "AI Summarization",
+      "Semantic Search"
+    ],
+    icon: <BookText className="w-5 h-5" />
   }
 ];
 
 const ProjectsPreview = () => {
   return (
-    <section className="py-20">
-      <div className="container-wide">
+    <section className="py-20 relative overflow-hidden">
+      <div className="absolute w-[500px] h-[500px] rounded-full bg-blue-50/20 top-20 -left-64 blur-3xl pointer-events-none"></div>
+      <div className="absolute w-[400px] h-[400px] rounded-full bg-purple-50/20 bottom-20 -right-32 blur-3xl pointer-events-none"></div>
+      
+      <div className="container-wide relative">
         <div className="flex flex-col lg:flex-row gap-10 items-start">
           <div className="lg:w-1/3 space-y-6 sticky top-32">
             <h2 className="heading-lg">Projects & Works</h2>
@@ -41,7 +36,7 @@ const ProjectsPreview = () => {
             <div className="pt-2">
               <Link 
                 to="/projects" 
-                className="inline-flex items-center text-sm font-medium hover:underline group"
+                className="inline-flex items-center px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium hover:bg-primary/20 transition-colors group"
               >
                 View all projects
                 <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-0.5" />
@@ -50,49 +45,64 @@ const ProjectsPreview = () => {
           </div>
           
           <div className="lg:w-2/3">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {projects.map((project, index) => (
-                <BlurEffect key={index} className={`animation-delay-${(index + 1) * 100}`}>
-                  <div className="glass p-6 flex flex-col h-full">
-                    <h3 className="font-serif text-lg font-semibold mb-3">{project.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 flex-grow">{project.description}</p>
-                    
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.technologies.map((tech) => (
-                        <span key={tech} className="inline-flex items-center px-2 py-1 rounded-full bg-secondary/50 text-muted-foreground text-xs">
-                          {tech}
-                        </span>
-                      ))}
+            {projects.map((project, index) => (
+              <BlurEffect key={index} className="animation-delay-200">
+                <div className="glass p-6 md:p-8 hover:shadow-md transition-all duration-300">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                      {project.icon}
+                    </div>
+                    <h3 className="font-serif text-xl font-semibold">{project.title}</h3>
+                  </div>
+                  
+                  <p className="text-muted-foreground mb-5">{project.description}</p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                    <div className="bg-white/50 backdrop-blur-sm p-4 rounded-lg border border-primary/5">
+                      <Cpu size={18} className="text-primary mb-2" />
+                      <h4 className="font-medium text-sm mb-1">Phase 1</h4>
+                      <p className="text-xs text-muted-foreground">Core Ebook System with Node.js & MongoDB</p>
                     </div>
                     
-                    <div className="flex items-center space-x-4 mt-auto">
-                      {project.github && (
-                        <a 
-                          href={project.github} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="text-muted-foreground hover:text-foreground transition-colors"
-                          aria-label="View GitHub repository"
-                        >
-                          <Github size={16} />
-                        </a>
-                      )}
-                      {project.live && (
-                        <a 
-                          href={project.live} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="text-muted-foreground hover:text-foreground transition-colors"
-                          aria-label="View live project"
-                        >
-                          <ExternalLink size={16} />
-                        </a>
-                      )}
+                    <div className="bg-white/50 backdrop-blur-sm p-4 rounded-lg border border-primary/5">
+                      <Database size={18} className="text-primary mb-2" />
+                      <h4 className="font-medium text-sm mb-1">Phase 2</h4>
+                      <p className="text-xs text-muted-foreground">AI Summarization & Knowledge Extraction</p>
+                    </div>
+                    
+                    <div className="bg-white/50 backdrop-blur-sm p-4 rounded-lg border border-primary/5">
+                      <Server size={18} className="text-primary mb-2" />
+                      <h4 className="font-medium text-sm mb-1">Phase 3</h4>
+                      <p className="text-xs text-muted-foreground">Semantic Search & AI Assistant</p>
                     </div>
                   </div>
-                </BlurEffect>
-              ))}
-            </div>
+                  
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {project.technologies.map((tech) => (
+                      <span key={tech} className="inline-flex items-center px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-medium">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <div className="flex items-center space-x-4">
+                    {project.github && (
+                      <a 
+                        href={project.github} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="flex items-center text-sm text-primary hover:underline group"
+                        aria-label="View GitHub repository"
+                      >
+                        <Github size={16} className="mr-1" />
+                        View on GitHub
+                        <ArrowRight size={14} className="ml-1 transition-transform group-hover:translate-x-0.5" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </BlurEffect>
+            ))}
           </div>
         </div>
       </div>

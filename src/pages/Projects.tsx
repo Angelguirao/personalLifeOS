@@ -1,8 +1,7 @@
-
 import React from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { ArrowLeft, Github, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Github, ExternalLink, BookText, Cpu, Server, Database, Code } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import BlurEffect from '../components/ui/BlurEffect';
 import RevealText from '../components/ui/RevealText';
@@ -14,9 +13,10 @@ interface ProjectCardProps {
   githubUrl?: string;
   liveUrl?: string;
   imageSrc?: string;
+  content?: React.ReactNode;
 }
 
-const ProjectCard = ({ title, description, tags, githubUrl, liveUrl, imageSrc }: ProjectCardProps) => (
+const ProjectCard = ({ title, description, tags, githubUrl, liveUrl, imageSrc, content }: ProjectCardProps) => (
   <div className="glass overflow-hidden flex flex-col h-full">
     {imageSrc && (
       <div className="h-48 overflow-hidden">
@@ -29,11 +29,13 @@ const ProjectCard = ({ title, description, tags, githubUrl, liveUrl, imageSrc }:
     )}
     <div className="p-6 flex flex-col flex-grow">
       <h3 className="font-serif text-xl font-semibold mb-3">{title}</h3>
-      <p className="text-sm text-muted-foreground flex-grow mb-4">{description}</p>
+      <p className="text-sm text-muted-foreground mb-4">{description}</p>
+      
+      {content}
       
       <div className="flex flex-wrap gap-2 mb-4">
         {tags.map((tag) => (
-          <span key={tag} className="px-2 py-1 text-xs rounded-full bg-secondary text-secondary-foreground">
+          <span key={tag} className="px-3 py-1 text-xs rounded-full bg-secondary text-secondary-foreground font-medium">
             {tag}
           </span>
         ))}
@@ -45,10 +47,10 @@ const ProjectCard = ({ title, description, tags, githubUrl, liveUrl, imageSrc }:
             href={githubUrl} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="text-sm flex items-center text-muted-foreground hover:text-foreground"
+            className="text-sm flex items-center text-primary hover:underline"
           >
             <Github size={16} className="mr-1" />
-            Source
+            View on GitHub
           </a>
         )}
         {liveUrl && (
@@ -56,10 +58,10 @@ const ProjectCard = ({ title, description, tags, githubUrl, liveUrl, imageSrc }:
             href={liveUrl} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="text-sm flex items-center text-muted-foreground hover:text-foreground"
+            className="text-sm flex items-center text-primary hover:underline"
           >
             <ExternalLink size={16} className="mr-1" />
-            Live
+            Live Demo
           </a>
         )}
       </div>
@@ -68,8 +70,50 @@ const ProjectCard = ({ title, description, tags, githubUrl, liveUrl, imageSrc }:
 );
 
 const Projects = () => {
-  // Sample projects - replace with your actual projects
+  const AiEbookContent = (
+    <div className="mb-5">
+      <div className="space-y-3 mb-4">
+        <div className="flex items-center space-x-2">
+          <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+            <Cpu size={14} />
+          </div>
+          <div>
+            <h4 className="text-sm font-medium">Phase 1: Core Ebook System</h4>
+            <p className="text-xs text-muted-foreground">Book storage, metadata extraction, text processing</p>
+          </div>
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+            <Database size={14} />
+          </div>
+          <div>
+            <h4 className="text-sm font-medium">Phase 2: AI Summarization</h4>
+            <p className="text-xs text-muted-foreground">AI-generated summaries, flashcards, concept maps</p>
+          </div>
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+            <Server size={14} />
+          </div>
+          <div>
+            <h4 className="text-sm font-medium">Phase 3: Semantic Search</h4>
+            <p className="text-xs text-muted-foreground">Vector DB, natural language queries, AI assistant</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+  
   const projects = [
+    {
+      title: "AI Ebook System",
+      description: "An intelligent e-reader platform that extracts knowledge from books using AI to create summaries, flashcards, and concept maps.",
+      tags: ["Node.js", "MongoDB", "Express", "OpenAI API", "Vector DB"],
+      githubUrl: "https://github.com/Angelguirao/ai-ebook-system",
+      content: AiEbookContent
+    },
     {
       title: "Project One",
       description: "An open-source tool that solves a personal problem while contributing to the broader development community.",
@@ -123,7 +167,7 @@ const Projects = () => {
             </BlurEffect>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
             {projects.map((project, index) => (
               <BlurEffect key={project.title} className={`animation-delay-${(index + 3) * 100}`}>
                 <ProjectCard {...project} />
