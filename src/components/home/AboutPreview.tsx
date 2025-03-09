@@ -14,16 +14,9 @@ const AboutPreview = () => {
               <div className="relative">
                 <div className="aspect-square overflow-hidden rounded-lg">
                   <img 
-                    src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=800&q=80" 
-                    alt="Angel Guirao" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="absolute -bottom-6 -right-6 w-32 h-32 border-4 border-background rounded-lg">
-                  <img 
-                    src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=400&q=80" 
-                    alt="Exploring nature" 
-                    className="w-full h-full object-cover rounded"
+                    src="/lovable-uploads/2da07e1c-3347-4f46-a181-e87596b5e596.png" 
+                    alt="Illustration of a person with tangled thoughts" 
+                    className="w-full h-full object-contain bg-white/5"
                   />
                 </div>
               </div>
@@ -34,17 +27,20 @@ const AboutPreview = () => {
             <p className="text-sm uppercase tracking-wider text-muted-foreground">About Me</p>
             <h2 className="heading-lg">Angel Guirao</h2>
             <p className="body-md text-muted-foreground">
-              I'm a philosopher, solopreneur, and interdisciplinary thinker dedicated to pursuing information as a means of connecting deeply and meaningfully with the world around me.
+              Here's where I'm supposed to include a narrative explaining how life experiences shaped my beliefs and intellectual trajectory, where I build meaning, personal branding or whatever.
             </p>
             <p className="body-md text-muted-foreground">
-              My intellectual journey began with a fascination for how complex systems emerge from simple rules, leading me to explore fields ranging from computer science to philosophy, ethics to machine learning, and economics to aesthetics.
+              But I don't even know what I am, if I have a self or whatever. Seems that I'm a human being at least, whatever that means. Maybe I just am what I do as Aristotle says, but that's changing constantly.
+            </p>
+            <p className="body-md text-muted-foreground">
+              I explore fields from philosophy to computer science, not because I have answers, but because I enjoy getting lost in questions. The tangled mess above is probably a more accurate representation of my thoughts than any polished biography.
             </p>
             <div className="pt-4">
               <Link 
                 to="/about" 
                 className="inline-flex items-center text-sm font-medium hover:underline group"
               >
-                Learn more about me
+                Learn more about me (or whatever "me" means)
                 <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>

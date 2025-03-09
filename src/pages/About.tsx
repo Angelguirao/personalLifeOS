@@ -29,9 +29,9 @@ const About = () => {
               <BlurEffect className="animation-delay-200">
                 <div className="aspect-square overflow-hidden rounded-lg mb-6">
                   <img 
-                    src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=800&q=80" 
-                    alt="Profile" 
-                    className="w-full h-full object-cover"
+                    src="/lovable-uploads/2da07e1c-3347-4f46-a181-e87596b5e596.png" 
+                    alt="Illustration of a person with tangled thoughts" 
+                    className="w-full h-full object-contain bg-white/5"
                   />
                 </div>
                 
@@ -88,38 +88,47 @@ const About = () => {
               <div className="content-area">
                 <BlurEffect className="animation-delay-300">
                   <p>
-                    I'm a philosopher, solopreneur, and interdisciplinary thinker dedicated to pursuing information as a means of connecting deeply and meaningfully with the world around me.
+                    Here's where I'm supposed to include a narrative explaining how life experiences shaped my beliefs and intellectual trajectory, where I build meaning, personal branding or whatever.
                   </p>
                   
                   <p>
-                    My intellectual journey began with a fascination for how complex systems emerge from simple rules, leading me to explore fields ranging from computer science to philosophy, ethics to machine learning, and economics to aesthetics.
+                    But I don't even know what I am, if I have a self or whatever. Seems that I'm a human being at least, whatever that means. Maybe I just am what I do as Aristotle says, but that's changing constantly.
                   </p>
                   
-                  <h2>Background & Journey</h2>
+                  <h2>The Tangled Mess of Identity</h2>
                   <p>
-                    With a background in [your background here], I've cultivated a unique perspective that brings together technical expertise with philosophical inquiry. My approach is characterized by a willingness to question established frameworks, embrace uncertainty, and seek out meaningful connections across seemingly disparate domains.
-                  </p>
-                  
-                  <p>
-                    Throughout my professional journey, I've been guided by the principle that technology should serve to enhance human freedom and connection, not diminish it. This has led me to focus on creating tools and systems that solve real problems while respecting individual autonomy and dignity.
-                  </p>
-                  
-                  <h2>Current Focus</h2>
-                  <p>
-                    Currently, I'm focused on solopreneurship as a means of creating greater freedom in my life while building useful tools for others. My projects reflect my commitment to ethical development, open-source principles, and the belief that information should be freely shared.
+                    The illustration you see represents my thought process better than any crafted biography could. A chaotic, interconnected web of ideas, questions, and occasional insights that somehow form what others might call "me."
                   </p>
                   
                   <p>
-                    When I'm not working on my various projects, you might find me exploring philosophy books, experimenting with new technologies, or engaged in deep conversations about consciousness, ethics, or the nature of reality.
+                    My interests jump from philosophy to computer science, from ethics to aesthetics, not because I'm particularly good at any of them, but because I enjoy the confusion that emerges when different domains collide.
                   </p>
                   
-                  <h2>Values & Approach</h2>
+                  <h2>Professional Confusion</h2>
                   <p>
-                    I value intellectual honesty, empathy, and a playful approach to exploration and learning. I believe that the most profound insights often come from crossing disciplinary boundaries and questioning fundamental assumptions.
+                    Professionally, I've wandered through several fields, leaving a trail of half-finished projects and overly ambitious ideas. Some might call this "interdisciplinary work" – I call it an inability to commit to a single path.
                   </p>
                   
                   <p>
-                    My work and life are guided by the principle that meaningful connection—to ideas, to nature, and to other people—is what gives life its richness and purpose. In all that I do, I strive to deepen these connections and to share the journey with others who are similarly curious about the world.
+                    I've built things, broken things, written things, and deleted things. The ones that survived this process are what you might find on the Projects page – survivors of my fickle attention, not necessarily my best work.
+                  </p>
+                  
+                  <h2>Philosophical Meanderings</h2>
+                  <p>
+                    Philosophy is my favorite playground for confusion. I'm drawn to questions that have no answers, or too many answers, or answers that lead to more questions. The kind of intellectual endeavors that make people at parties slowly back away.
+                  </p>
+                  
+                  <p>
+                    I find comfort in the contradiction between wanting to understand everything and knowing that complete understanding is impossible. It's in this tension that I find the motivation to keep exploring, even when (especially when) I have no idea where I'm going.
+                  </p>
+                  
+                  <h2>So, Who Am I?</h2>
+                  <p>
+                    I have no idea. And I'm increasingly convinced that having no idea is the most honest position to take. I am a collection of experiences, influences, contradictions, and questions – constantly changing, rarely consistent, and perpetually curious.
+                  </p>
+                  
+                  <p>
+                    If that sounds like a cop-out, you're probably right. But it's the most truthful cop-out I can offer. Maybe next year I'll have a more coherent story. But I doubt it.
                   </p>
                 </BlurEffect>
               </div>
