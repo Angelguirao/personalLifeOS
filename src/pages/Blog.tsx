@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -121,7 +120,7 @@ const Blog = () => {
                   </h2>
                   
                   <p className="text-muted-foreground mb-4">
-                    {post.summary.includes(post.bookInfo?.author) ? (
+                    {post.bookInfo ? (
                       <>
                         {post.summary.split(post.bookInfo.title)[0]}
                         <a 
@@ -133,19 +132,6 @@ const Blog = () => {
                           {post.bookInfo.title}
                         </a>
                         {post.summary.split(post.bookInfo.title)[1]}
-                      </>
-                    ) : post.bookInfo ? (
-                      <>
-                        {post.summary.split(post.bookInfo.author)[0]}
-                        <a 
-                          href={post.bookInfo.link} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-primary hover:underline"
-                        >
-                          {post.bookInfo.author}
-                        </a>
-                        {post.summary.split(post.bookInfo.author)[1]}
                       </>
                     ) : (
                       post.summary
