@@ -21,9 +21,9 @@ const BlogPreview = () => {
           <div className="lg:w-1/2 space-y-6">
             <BlurEffect>
               <p className="text-sm uppercase tracking-wider text-muted-foreground">Blog</p>
-              <h2 className="heading-lg">A playful journey</h2>
+              <h2 className="heading-lg">Blog</h2>
               <p className="body-md text-muted-foreground">
-                A playful journey into the mysteries of the world—playing language games with ideas and concepts, all in my own words.
+                A written journey into the mysteries of the world—playing language games with ideas and concepts, all in my own words.
               </p>
               <div className="pt-4">
                 <Link 
