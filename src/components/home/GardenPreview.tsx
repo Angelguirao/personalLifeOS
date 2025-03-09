@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sprout } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import RevealText from '../ui/RevealText';
 
 const GardenPreview = () => {
@@ -9,23 +9,12 @@ const GardenPreview = () => {
     <section className="py-20">
       <div className="container-narrow">
         <div className="flex flex-col items-center text-center">
-          <div className="mb-6">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium">
-              <Sprout size={12} className="mr-1" />
-              Philosophy & Ethics
-            </div>
-          </div>
-          
-          <div className="mb-4">
-            <p className="text-sm uppercase tracking-wider text-muted-foreground font-medium">Growing Collection</p>
-          </div>
-          
           <RevealText>
             <h2 className="heading-lg mb-6">Digital Garden</h2>
           </RevealText>
           
           <div className="mb-4">
-            <p className="text-sm uppercase tracking-wider text-muted-foreground font-medium">Nonlinear Knowledge Exploration</p>
+            <p className="text-sm uppercase tracking-wider text-muted-foreground font-medium">Non-Linear Exploration</p>
           </div>
           
           <p className="body-md text-muted-foreground mb-8 max-w-2xl">

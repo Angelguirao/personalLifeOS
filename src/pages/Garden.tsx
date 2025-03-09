@@ -53,7 +53,7 @@ const gardenNotes = [
     summary: "In an age of thoughtless actions, Arendt's The Human Condition urges us to reclaim our capacity for reflection. Are we mindlessly drifting, or consciously shaping our world?",
     stage: "seedling",
     lastUpdated: "2024-08-29",
-    connections: ["ethics", "reflection", "consciousness"],
+    connections: ["politics", "reflection", "consciousness"],
     bookInfo: {
       title: "The Human Condition",
       author: "Hannah Arendt",
@@ -95,17 +95,14 @@ const Garden = () => {
           </Link>
           
           <div className="space-y-4 mb-12">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium mb-2">
-              <Sprout size={12} className="mr-1" />
-              Philosophy & Ethics
-            </div>
             <h1 className="heading-lg">
               <RevealText>Digital Garden</RevealText>
             </h1>
             <p className="text-muted-foreground max-w-2xl">
               Unlike traditional blogs or essays, a digital garden embraces the messiness of thinking in public. 
               Ideas connect in unexpected ways, creating a rich network of concepts that evolve over time.
-              It grows organically over time and represents my continuous learning journey. 
+            </p>
+            <p className="text-xs text-muted-foreground italic mt-2">
               In the future, I intend to make it graph based for non-linear exploration and interconnectedness.
             </p>
           </div>
