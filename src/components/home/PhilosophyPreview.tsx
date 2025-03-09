@@ -32,7 +32,7 @@ const PhilosophyPreview = () => {
       <div className="container-wide relative">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           <div className="space-y-6 lg:col-span-1">
-            <h2 className="heading-lg">Philosophy of Life</h2>
+            <h2 className="heading-lg">Philosophy</h2>
             <p className="body-md text-muted-foreground">
               My philosophical framework guides how I interact with the world.
             </p>

@@ -1,10 +1,21 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Github, Twitter, Linkedin, Mail, Bitcoin } from 'lucide-react';
+import { Github, Twitter, Linkedin, Mail, Bitcoin, Copy } from 'lucide-react';
+import { toast } from "@/components/ui/use-toast";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  
+  const bitcoinAddress = "bc1qyt377nm9z7u0zmgpudxgk8cps6qpzjl68xfauy";
+  
+  const copyBitcoinAddress = () => {
+    navigator.clipboard.writeText(bitcoinAddress);
+    toast({
+      title: "Bitcoin address copied",
+      description: "The Bitcoin address has been copied to your clipboard",
+    });
+  };
   
   return (
     <footer className="border-t border-border py-12 mt-24">
@@ -21,12 +32,12 @@ const Footer = () => {
             <h3 className="font-serif text-lg font-semibold">Navigation</h3>
             <nav className="flex flex-col space-y-2">
               <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Home</Link>
-              <Link to="/philosophy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Philosophy of Life</Link>
+              <Link to="/philosophy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Philosophy</Link>
               <Link to="/entrepreneurship" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Solopreneurship</Link>
               <Link to="/projects" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Projects</Link>
               <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Blog</Link>
               <Link to="/garden" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Garden</Link>
-              <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About me</Link>
+              <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</Link>
             </nav>
           </div>
           
@@ -67,8 +78,15 @@ const Footer = () => {
               <div className="flex items-center mt-1">
                 <Bitcoin size={16} className="text-amber-500 mr-2" />
                 <p className="text-xs break-all font-mono">
-                  bc1qyt377nm9z7u0zmgpudxgk8cps6qpzjl68xfauy
+                  {bitcoinAddress}
                 </p>
+                <button 
+                  onClick={copyBitcoinAddress} 
+                  className="ml-2 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Copy Bitcoin address"
+                >
+                  <Copy size={14} />
+                </button>
               </div>
             </div>
           </div>
@@ -76,7 +94,7 @@ const Footer = () => {
         
         <div className="mt-10 pt-6 border-t border-border flex flex-col md:flex-row justify-between items-center">
           <p className="text-xs text-muted-foreground">
-            © {currentYear} Angel Guirao. All rights reserved.
+            © {currentYear} Angel Guirao. Open source work - freely share, adapt and build upon.
           </p>
           <p className="text-xs text-muted-foreground mt-2 md:mt-0">
             Built with intention and purpose.

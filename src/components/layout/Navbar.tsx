@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { Menu, X, Github, Twitter, Linkedin, Mail, Bitcoin } from 'lucide-react';
+import { Menu, X, Github, Twitter, Linkedin, Mail, Bitcoin, Copy } from 'lucide-react';
+import { toast } from "@/components/ui/use-toast";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -11,12 +12,12 @@ const Navbar = () => {
   
   const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'Philosophy of Life', path: '/philosophy' },
+    { name: 'Philosophy', path: '/philosophy' },
     { name: 'Solopreneurship', path: '/entrepreneurship' },
     { name: 'Projects', path: '/projects' },
     { name: 'Blog', path: '/blog' },
     { name: 'Garden', path: '/garden' },
-    { name: 'About me', path: '/about' },
+    { name: 'About', path: '/about' },
   ];
 
   const socialLinks = [
@@ -24,8 +25,17 @@ const Navbar = () => {
     { icon: <Twitter size={16} />, url: 'https://x.com/civicCogitation', label: 'Twitter' },
     { icon: <Linkedin size={16} />, url: 'https://www.linkedin.com/in/angelguirao/', label: 'LinkedIn' },
     { icon: <Mail size={16} />, url: 'mailto:angelguirao92@gmail.com', label: 'Email' },
-    { icon: <Bitcoin size={16} />, url: '#', label: 'Bitcoin', tooltip: 'bc1qyt377nm9z7u0zmgpudxgk8cps6qpzjl68xfauy' },
   ];
+
+  const bitcoinAddress = "bc1qyt377nm9z7u0zmgpudxgk8cps6qpzjl68xfauy";
+
+  const copyBitcoinAddress = () => {
+    navigator.clipboard.writeText(bitcoinAddress);
+    toast({
+      title: "Bitcoin address copied",
+      description: "The Bitcoin address has been copied to your clipboard",
+    });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,12 +88,20 @@ const Navbar = () => {
                 target={link.url.startsWith('mailto:') ? '_self' : '_blank'}
                 rel="noopener noreferrer"
                 aria-label={link.label}
-                title={link.tooltip || link.label}
+                title={link.label}
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 {link.icon}
               </a>
             ))}
+            <button
+              onClick={copyBitcoinAddress}
+              aria-label="Copy Bitcoin address"
+              title="Copy Bitcoin address"
+              className="text-amber-500 hover:text-amber-600 transition-colors cursor-pointer"
+            >
+              <Bitcoin size={16} />
+            </button>
           </div>
         </div>
         
@@ -126,12 +144,20 @@ const Navbar = () => {
               target={link.url.startsWith('mailto:') ? '_self' : '_blank'}
               rel="noopener noreferrer"
               aria-label={link.label}
-              title={link.tooltip || link.label}
+              title={link.label}
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               {link.icon}
             </a>
           ))}
+          <button
+            onClick={copyBitcoinAddress}
+            aria-label="Copy Bitcoin address"
+            title="Copy Bitcoin address"
+            className="text-amber-500 hover:text-amber-600 transition-colors cursor-pointer"
+          >
+            <Bitcoin size={16} />
+          </button>
         </div>
       </div>
     </header>
