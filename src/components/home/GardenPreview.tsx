@@ -31,6 +31,7 @@ const GardenPreview = () => {
           <Link 
             to="/garden" 
             className="inline-flex items-center text-sm font-medium text-primary hover:underline group"
+            onClick={() => window.scrollTo(0, 0)}
           >
             Explore the garden
             <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-0.5" />

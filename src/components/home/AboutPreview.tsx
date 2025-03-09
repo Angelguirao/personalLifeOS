@@ -38,6 +38,7 @@ const AboutPreview = () => {
               <Link 
                 to="/about" 
                 className="inline-flex items-center text-sm font-medium hover:underline group"
+                onClick={() => window.scrollTo(0, 0)}
               >
                 Learn more about "me" (or whatever "me" means)
                 <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-0.5" />

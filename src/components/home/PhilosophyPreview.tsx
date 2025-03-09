@@ -37,8 +37,9 @@ const PhilosophyPreview = () => {
               My philosophical framework guides how I interact with the world.
             </p>
             <Link 
-              to="/philosophy" 
+              to="/philosophy"
               className="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80 hover:underline group py-1"
+              onClick={() => window.scrollTo(0, 0)}
             >
               Explore in depth
               <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-1" />

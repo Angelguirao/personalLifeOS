@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { ArrowLeft } from 'lucide-react';
@@ -8,6 +8,11 @@ import BlurEffect from '../components/ui/BlurEffect';
 import RevealText from '../components/ui/RevealText';
 
 const Philosophy = () => {
+  useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Navbar />

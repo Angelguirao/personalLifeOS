@@ -30,6 +30,7 @@ const ProjectsPreview = () => {
               <Link 
                 to="/projects" 
                 className="inline-flex items-center px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium hover:bg-primary/20 transition-colors group"
+                onClick={() => window.scrollTo(0, 0)}
               >
                 View all projects
                 <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-0.5" />
@@ -67,6 +68,7 @@ const ProjectsPreview = () => {
                     <Link 
                       to="/projects" 
                       className="flex items-center text-sm text-primary hover:underline group"
+                      onClick={() => window.scrollTo(0, 0)}
                     >
                       Learn more
                       <ArrowRight size={14} className="ml-1 transition-transform group-hover:translate-x-0.5" />

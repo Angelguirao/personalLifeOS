@@ -28,6 +28,7 @@ const BlogPreview = () => {
                 <Link 
                   to="/blog" 
                   className="inline-flex items-center text-sm font-medium hover:underline group"
+                  onClick={() => window.scrollTo(0, 0)}
                 >
                   Read all entries
                   <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-0.5" />
@@ -39,7 +40,11 @@ const BlogPreview = () => {
           <div className="lg:w-1/2">
             <div className="space-y-5">
               <BlurEffect className="animation-delay-100">
-                <Link to="/blog" className="block glass p-6 transition-transform hover:-translate-y-1">
+                <Link 
+                  to="/blog" 
+                  className="block glass p-6 transition-transform hover:-translate-y-1"
+                  onClick={() => window.scrollTo(0, 0)}
+                >
                   <div className="mb-2 flex items-center text-xs text-muted-foreground">
                     <span className="font-medium text-primary">{latestPost.category}</span>
                     <span className="mx-2">•</span>

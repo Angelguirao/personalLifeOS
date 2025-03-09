@@ -51,6 +51,7 @@ const EntrepreneurshipPreview = () => {
                 <Link 
                   to="/entrepreneurship" 
                   className="inline-flex items-center text-sm font-medium px-4 py-2 bg-primary/10 text-primary rounded-full hover:bg-primary/20 transition-colors group"
+                  onClick={() => window.scrollTo(0, 0)}
                 >
                   Read the full manifesto
                   <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-0.5" />
