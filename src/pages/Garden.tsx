@@ -103,8 +103,9 @@ const Garden = () => {
               <RevealText>Digital Garden</RevealText>
             </h1>
             <p className="text-muted-foreground max-w-2xl">
-              Unlike a traditional blog, this digital garden is a living collection of interconnected ideas, 
-              notes, and explorations. It grows organically over time and represents my continuous learning journey.
+              Unlike traditional blogs or essays, a digital garden embraces the messiness of thinking in public. 
+              Ideas connect in unexpected ways, creating a rich network of concepts that evolve over time.
+              It grows organically over time and represents my continuous learning journey. 
               In the future, I intend to make it graph based for non-linear exploration and interconnectedness.
             </p>
           </div>

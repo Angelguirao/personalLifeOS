@@ -16,18 +16,21 @@ const GardenPreview = () => {
             </div>
           </div>
           
+          <div className="mb-4">
+            <p className="text-sm uppercase tracking-wider text-muted-foreground font-medium">Growing Collection</p>
+          </div>
+          
           <RevealText>
             <h2 className="heading-lg mb-6">Digital Garden</h2>
           </RevealText>
           
           <div className="mb-4">
-            <p className="text-sm uppercase tracking-wider text-muted-foreground font-medium">Philosophical Explorations</p>
+            <p className="text-sm uppercase tracking-wider text-muted-foreground font-medium">Nonlinear Knowledge Exploration</p>
           </div>
           
           <p className="body-md text-muted-foreground mb-8 max-w-2xl">
-            Unlike a traditional blog, this digital garden is a living collection of interconnected ideas, 
-            notes, and explorations. It grows organically over time and represents my continuous learning journey. 
-            In the future, I intend to make it graph based for non-linear exploration and interconnectedness.
+            Unlike traditional blogs or essays, a digital garden embraces the messiness of thinking in public. 
+            Ideas connect in unexpected ways, creating a rich network of concepts that evolve over time.
           </p>
           
           <Link 
