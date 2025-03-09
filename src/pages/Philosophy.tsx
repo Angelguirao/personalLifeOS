@@ -14,7 +14,7 @@ const Philosophy = () => {
   }, []);
 
   // Last modified date - update this when you make significant changes to your philosophy
-  const lastModified = new Date('2024-06-01');
+  const lastModified = new Date();
   const formattedDate = lastModified.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -37,17 +37,13 @@ const Philosophy = () => {
             </h1>
             <BlurEffect className="animation-delay-200">
               <p className="body-lg text-muted-foreground">
-                My purpose in life is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe.
+                My purpose is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration.
               </p>
             </BlurEffect>
           </div>
           
           <div className="content-area">
             <BlurEffect className="animation-delay-300">
-              <p>
-                I embrace narrative and playful exploration to deepen connection and understanding.
-              </p>
-              
               <h2>Metaphysical View</h2>
               <p>
                 Metaphysically, I adopt an agnostic and pragmatically idealist stance, considering the possibility that information or consciousness might be fundamental to reality, though I remain open about their relationship with physical existence. I value uncertainty, complexity, and chaos over deterministic, stable conceptions of the universe. Embracing free will, I believe that our choices actively shape our experience and understanding of the world, allowing us to participate meaningfully in reality's continual unfolding.
