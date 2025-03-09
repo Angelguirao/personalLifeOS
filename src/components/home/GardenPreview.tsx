@@ -25,7 +25,9 @@ const GardenPreview = () => {
           </div>
           
           <p className="body-md text-muted-foreground mb-8 max-w-2xl">
-            A collection of philosophical reflections on ethics, consciousness, and what it means to be human. These seedling ideas evolve over time as I continue to explore complex questions about our existence.
+            Unlike a traditional blog, this digital garden is a living collection of interconnected ideas, 
+            notes, and explorations. It grows organically over time and represents my continuous learning journey. 
+            In the future, I intend to make it graph based for non-linear exploration and interconnectedness.
           </p>
           
           <Link 
