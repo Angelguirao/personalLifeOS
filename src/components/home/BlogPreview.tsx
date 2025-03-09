@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import BlurEffect from '../ui/BlurEffect';
 
-// Use just one of the notes provided with today's date for the latest blog post
+// Use the most recent blog post
 const latestPost = {
   id: 1,
   title: "Beyond Happiness: Rethinking What Matters",
-  summary: "A critique against the simplistic \"happiness agenda\".",
-  date: new Date().toISOString().split('T')[0], // Today's date in YYYY-MM-DD format
+  summary: "The global pursuit of happiness overlooks justice and equality. Against Happiness by Owen Flanagan and co-authors critiques the simplistic 'happiness agenda,' urging us to rethink what truly makes a life worth living. Time to prioritize deeper values.",
+  date: "2024-09-01T10:23:00", // Updated date
   category: "Ethics"
 };
 
