@@ -5,8 +5,6 @@ import { Github, Twitter, Linkedin, Mail, Bitcoin, Copy } from 'lucide-react';
 import { toast } from "@/components/ui/use-toast";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-  
   const bitcoinAddress = "bc1qyt377nm9z7u0zmgpudxgk8cps6qpzjl68xfauy";
   
   const copyBitcoinAddress = () => {
@@ -62,16 +60,8 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="font-serif text-lg font-semibold">Support</h3>
             <p className="text-sm text-muted-foreground">
-              If you find value in my work, consider supporting through Value4Value.
+              If you find value in my work, consider supporting through <a href="https://value4value.info/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline transition-colors">Value4Value</a>.
             </p>
-            <a 
-              href="https://value4value.info/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-sm text-primary hover:underline transition-colors inline-block"
-            >
-              Learn about Value4Value
-            </a>
             
             <div className="pt-4">
               <p className="text-sm font-medium">Bitcoin Address:</p>
@@ -94,7 +84,7 @@ const Footer = () => {
         
         <div className="mt-10 pt-6 border-t border-border flex flex-col md:flex-row justify-between items-center">
           <p className="text-xs text-muted-foreground">
-            © {currentYear} Angel Guirao. Open source work - freely share, adapt and build upon.
+            Open source work - freely share, adapt and build upon.
           </p>
           <p className="text-xs text-muted-foreground mt-2 md:mt-0">
             Built with intention and purpose.
