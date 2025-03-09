@@ -28,12 +28,6 @@ const AboutPreview = () => {
             <p className="body-md text-muted-foreground">
               The illustration you see represents my thought process better than any crafted biography could—a chaotic, interconnected web of ideas, questions, and occasional insights that somehow form what others might call "me."
             </p>
-            <p className="body-md text-muted-foreground">
-              This is usually the part where I'd neatly weave together a narrative about how my life experiences shaped my beliefs, my intellectual journey, or perhaps even my identity. But truthfully, I'm not entirely sure what "I" even means—whether there's a fixed self or just an ever-changing collection of experiences.
-            </p>
-            <p className="body-md text-muted-foreground">
-              Maybe Aristotle had a point when he said we are what we repeatedly do, but then again, what I do keeps changing.
-            </p>
             <div className="pt-4">
               <Link 
                 to="/about" 
