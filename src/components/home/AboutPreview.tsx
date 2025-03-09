@@ -24,13 +24,12 @@ const AboutPreview = () => {
           </div>
           
           <div className="lg:w-1/2 space-y-6 order-1 lg:order-2">
-            <p className="text-sm uppercase tracking-wider text-muted-foreground">About Me</p>
-            <h2 className="heading-lg">About</h2>
+            <h2 className="heading-lg">About "Me"</h2>
             <p className="body-md text-muted-foreground">
-              This is usually the part where I'd neatly weave together a narrative about how my life experiences have shaped my beliefs, my intellectual journey, or perhaps even my personal brand. But truthfully, I'm not entirely sure what "I" even means—if there's a fixed self or just an ever-changing collection of experiences.
+              This is usually the part where I'd neatly weave together a narrative about how my life experiences have shaped my beliefs, my intellectual journey, or perhaps even my identity. But truthfully, I'm not entirely sure what "I" even means—if there's a fixed self or just an ever-changing collection of experiences. At the very least, it seems safe to say I'm a human being, though even that's open to interpretation.
             </p>
             <p className="body-md text-muted-foreground">
-              Maybe Aristotle had a point when he said we are what we repeatedly do, but then again, what I do keeps changing. For now, I spend most of my time thinking, writing human language as notes and articles, and machine language in the form of software.
+              Maybe Aristotle had a point when he said we are what we repeatedly do, but then again, what I do keeps changing. For now, I spend most of my time reading books, writing human language as notes and articles, and machine language in the form of software, building micro-startups, and, above all, having fun along the way.
             </p>
             <p className="body-md text-muted-foreground">
               The tangled mess above probably captures my true self far better than any polished biography could.
@@ -40,7 +39,7 @@ const AboutPreview = () => {
                 to="/about" 
                 className="inline-flex items-center text-sm font-medium hover:underline group"
               >
-                Learn more about me (or whatever "me" means)
+                Learn more about "me" (or whatever "me" means)
                 <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>

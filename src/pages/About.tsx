@@ -20,7 +20,7 @@ const About = () => {
           
           <div className="space-y-4 mb-12">
             <h1 className="heading-lg">
-              <RevealText>About</RevealText>
+              <RevealText>About "Me"</RevealText>
             </h1>
           </div>
           
@@ -88,11 +88,11 @@ const About = () => {
               <div className="content-area">
                 <BlurEffect className="animation-delay-300">
                   <p>
-                    This is usually the part where I'd neatly weave together a narrative about how my life experiences have shaped my beliefs, my intellectual journey, or perhaps even my personal brand. But truthfully, I'm not entirely sure what "I" even means—if there's a fixed self or just an ever-changing collection of experiences. At the very least, it seems safe to say I'm a human being, though even that's open to interpretation.
+                    This is usually the part where I'd neatly weave together a narrative about how my life experiences have shaped my beliefs, my intellectual journey, or perhaps even my identity. But truthfully, I'm not entirely sure what "I" even means—if there's a fixed self or just an ever-changing collection of experiences. At the very least, it seems safe to say I'm a human being, though even that's open to interpretation.
                   </p>
                   
                   <p>
-                    Maybe Aristotle had a point when he said we are what we repeatedly do, but then again, what I do keeps changing. For now, I spend most of my time thinking, writing human language as notes and articles, and machine language in the form of software. I read books, build products, and, above all, have fun along the way. My deep-rooted skepticism towards absolute truths means I rarely take life—or anything else—too seriously.
+                    Maybe Aristotle had a point when he said we are what we repeatedly do, but then again, what I do keeps changing. For now, I spend most of my time reading books, writing human language as notes and articles, and machine language in the form of software, building micro-startups, and, above all, having fun along the way. My deep-rooted skepticism towards absolute truths means I rarely take life—or anything else—too seriously.
                   </p>
                   
                   <h2>The Tangled Mess of Identity</h2>
@@ -101,7 +101,7 @@ const About = () => {
                   </p>
                   
                   <p>
-                    In a world where certainty is elusive, perhaps all we can do is play along with the spectacle of society while nurturing beautiful, meaningful relationships with my wife, family, and friends.
+                    Weaving through life's complexity, I try to simplify the non-negotiable aspects of existence through carefully crafted routines—balancing biological, cognitive, social, spatial, technological, and financial essentials efficiently. Yet, within these constraints, all there truly is left to do is play along with society's spectacle, building beautiful and meaningful relationships with my wife, family, and friends.
                   </p>
                   
                   <h2>Professional Confusion</h2>
