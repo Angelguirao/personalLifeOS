@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -13,10 +12,9 @@ interface ProjectCardProps {
   githubUrl?: string;
   liveUrl?: string;
   imageSrc?: string;
-  tags?: string[];
 }
 
-const ProjectCard = ({ title, description, githubUrl, liveUrl, imageSrc, tags }: ProjectCardProps) => (
+const ProjectCard = ({ title, description, githubUrl, liveUrl, imageSrc }: ProjectCardProps) => (
   <div className="glass rounded-2xl overflow-hidden flex flex-col h-full hover-lift">
     {imageSrc && (
       <div className="h-48 sm:h-64 overflow-hidden">
@@ -31,23 +29,13 @@ const ProjectCard = ({ title, description, githubUrl, liveUrl, imageSrc, tags }:
       <h3 className="font-serif text-xl font-semibold mb-3">{title}</h3>
       <p className="text-muted-foreground mb-6">{description}</p>
       
-      {tags && tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-6">
-          {tags.map((tag) => (
-            <span key={tag} className="px-3 py-1 bg-secondary/50 text-xs rounded-full">
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
-      
       <div className="flex flex-wrap items-center gap-4 mt-auto pt-4">
         {githubUrl && (
           <a 
             href={githubUrl} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-flex items-center text-sm text-primary hover:underline group"
+            className="inline-flex items-center text-sm text-primary hover:text-primary/80 transition-colors group"
           >
             <Github size={16} className="mr-1.5" />
             Code
@@ -58,7 +46,7 @@ const ProjectCard = ({ title, description, githubUrl, liveUrl, imageSrc, tags }:
             href={liveUrl} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-flex items-center text-sm text-primary hover:underline group"
+            className="inline-flex items-center text-sm text-primary hover:text-primary/80 transition-colors group"
           >
             <ExternalLink size={16} className="mr-1.5" />
             Live Demo

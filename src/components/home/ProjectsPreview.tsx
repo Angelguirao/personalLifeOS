@@ -7,7 +7,7 @@ import BlurEffect from '../ui/BlurEffect';
 const projects = [
   {
     title: "Scriptoria",
-    description: "An AI-powered ebook management system that extracts insights, creates summaries, and enables semantic search across your digital library.",
+    description: "An AI-powered ebook management system that extracts insights, creates summaries, and enables semantic search across your digital library. Because who doesn't love a good book chat with AI?",
     github: "https://github.com/Angelguirao/ai-ebook-system",
     icon: <BookText className="w-5 h-5" />
   }

@@ -21,7 +21,7 @@ const Footer = () => {
           <div className="space-y-4 md:col-span-1">
             <h3 className="font-serif text-lg font-semibold">Angel Guirao</h3>
             <p className="text-muted-foreground text-sm max-w-md">
-              Pursuing information as a means of connecting deeply and meaningfully with people, nature, and the universe.
+              Pursuing information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration.
             </p>
           </div>
           

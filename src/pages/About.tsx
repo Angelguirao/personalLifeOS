@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -42,35 +41,39 @@ const About = () => {
                   </p>
                   
                   <p>
-                    This is usually the part where I'd neatly weave together a narrative about how my life experiences shaped my beliefs, my intellectual journey, or perhaps even my identity. But truthfully, I'm not entirely sure what "I" even means—whether there's a fixed self or just an ever-changing collection of experiences. At the very least, it seems safe to say I'm a human being, though even that's open to interpretation.
+                    This is usually the part where I'd neatly weave together a narrative about who I am, but truthfully, I'm not entirely sure what "I" even means—whether there's a fixed self or just an ever-changing collection of experiences. And you know what? That's perfectly fine! After all, life's too short to take identity crises too seriously.
                   </p>
                   
                   <h2>What I Think</h2>
                   <p>
-                    Maybe Descartes was onto something when he claimed, "I think, therefore I am." Ideas, I believe, are among the most powerful forces shaping the world—and my identity. <Link to="/philosophy" className="text-primary hover:underline">Philosophy</Link> is my favorite playground, filled with questions that have no answers, too many answers, or answers that inevitably lead to more questions—the sort of intellectual adventures that can quickly clear a room.
+                    Maybe Descartes was onto something when he claimed, "I think, therefore I am." Ideas, I believe, are among the most powerful forces shaping the world—and my identity. <Link to="/philosophy" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">Philosophy</Link> is my favorite playground, filled with questions that have no answers, too many answers, or answers that inevitably lead to more questions—the sort of intellectual adventures that can quickly clear a room (but hey, that's part of the fun!).
                   </p>
                   
                   <p>
-                    I find comfort in the contradiction between wanting to understand everything and recognizing that complete understanding is impossible. It's in this tension that I find the motivation to keep exploring, even when (especially when) I have no idea where I'm going.
+                    I find comfort in the contradiction between wanting to understand everything and recognizing that complete understanding is impossible. It's in this tension that I find the motivation to keep exploring, even when (especially when) I have no idea where I'm going. And above all, having fun along the way—because my deep-rooted skepticism towards absolute truths means I rarely take life—or anything else—too seriously.
                   </p>
                   
                   <h2>What I Do</h2>
                   <p>
-                    Maybe Aristotle had a point when he said we are what we repeatedly do, but then again, what I do keeps changing. Currently, my life involves exploring consciousness through meditation, engaging in human movement practices inspired by embodied cognition, reading extensively, writing notes and articles, and building digital products and micro-startups. Yet, beneath all this intellectual exploration and life's unavoidable constraints, what truly matters to me is nurturing beautiful and meaningful relationships with my wife, family, and friends.
+                    Maybe Aristotle had a point when he said we are what we repeatedly do, but then again, what I do keeps changing (and that's the fun part!). Currently, my life involves exploring consciousness through meditation, engaging in human movement practices inspired by embodied cognition, reading extensively, writing notes and articles, and building digital products and micro-startups. You can explore more about these adventures in my <Link to="/garden" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">Digital Garden</Link>. Yet, beneath all this intellectual exploration and life's unavoidable constraints, what truly matters to me is nurturing beautiful and meaningful relationships with my wife, family, and friends.
                   </p>
                   
                   <h2>What I Do for a Living</h2>
                   <p>
-                    Still, the phrase "what I do for a living" feels strangely limiting—as if work alone could define someone. Although I studied law at university, I quickly discovered <Link to="/entrepreneurship" className="text-primary hover:underline">entrepreneurship</Link> as my natural habitat. Over the years, I've launched a travel blog, bought and operated a mobile game app, created a litigation finance marketplace, and ventured into solopreneurship. Alongside these entrepreneurial adventures, I also work as a software engineer in startup environments. Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas. The survivors of this ongoing experimentation are what you'll find on my <Link to="/projects" className="text-primary hover:underline">Projects</Link> page.
+                    Still, the phrase "what I do for a living" feels strangely limiting—as if work alone could define someone. Although I studied law at university, I quickly discovered <Link to="/entrepreneurship" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">entrepreneurship</Link> as my natural habitat. I started my journey as a venture analyst in a venture builder, where I learned the ins and outs of startup ecosystems. This experience eventually led me to venture into solopreneurship.
+                  </p>
+
+                  <p>
+                    Over the years, I've launched a travel blog, bought and operated a mobile game app, created a litigation finance marketplace, and explored various other ventures. Alongside these entrepreneurial adventures, I also work as a software engineer in startup environments, because why not add more chaos to the mix? Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas while playing along with society's spectacle. The survivors of this ongoing experimentation are what you'll find on my <Link to="/projects" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">Projects</Link> page.
                   </p>
                   
                   <h2>So, Who Am I?</h2>
                   <p>
-                    I have no idea. And I'm increasingly convinced that having no idea is the most honest position to take. I am a collection of experiences, influences, contradictions, and questions—constantly changing, rarely consistent, and perpetually curious.
+                    I have no idea. And I'm increasingly convinced that having no idea is the most honest position to take. I am a collection of experiences, influences, contradictions, and questions—constantly changing, rarely consistent, and perpetually curious. All there truly is left to do is play along with society's spectacle and have fun while doing it!
                   </p>
                   
                   <p>
-                    If that sounds like a cop-out, you're probably right. But it's the most truthful cop-out I can offer. Maybe next year I'll have a more coherent story. But I doubt it.
+                    If that sounds like a cop-out, you're probably right. But it's the most truthful cop-out I can offer. Maybe next year I'll have a more coherent story. But I doubt it, and that's perfectly okay!
                   </p>
                 </BlurEffect>
               </div>
