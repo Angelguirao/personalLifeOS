@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -61,10 +62,9 @@ const Projects = () => {
   const projects = [
     {
       title: "Scriptoria",
-      description: "An AI-powered ebook management system that extracts insights, creates summaries, and enables semantic search across your digital library.",
+      description: "An AI-powered ebook management system that finally brings true digital revolution to books, going beyond the simple digital copies that ebooks have been until now. It extracts insights, creates summaries, and enables semantic search across your digital library.",
       githubUrl: "https://github.com/Angelguirao/ai-ebook-system",
-      imageSrc: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=800&q=80",
-      tags: ["AI", "React", "Python", "NLP"]
+      imageSrc: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=800&q=80"
     }
   ];
   
@@ -88,7 +88,7 @@ const Projects = () => {
             </h1>
             <BlurEffect className="animation-delay-200">
               <p className="body-lg text-muted-foreground max-w-2xl">
-                A collection of software and open-source contributions that reflect my philosophy and approach to meaningful creation.
+                A collection of software and open-source contributions that reflect my philosophy and approach to meaningful creation. Just fun experiments, really - no need to take them too seriously!
               </p>
             </BlurEffect>
           </div>

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -60,11 +61,11 @@ const About = () => {
                   
                   <h2>What I Do for a Living</h2>
                   <p>
-                    Still, the phrase "what I do for a living" feels strangely limiting—as if work alone could define someone. Although I studied law at university, I quickly discovered <Link to="/entrepreneurship" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">entrepreneurship</Link> as my natural habitat. I started my journey as a venture analyst in a venture builder, where I learned the ins and outs of startup ecosystems. This experience eventually led me to venture into solopreneurship.
+                    Still, the phrase "what I do for a living" feels strangely limiting—as if work alone could define someone. Although I studied law at university, I quickly discovered <Link to="/entrepreneurship" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">entrepreneurship</Link> as my natural habitat. I've launched a travel blog, bought and operated a mobile game app, created a litigation finance marketplace, and explored various other ventures. Later, I worked as a venture analyst in a venture builder, where I learned the ins and outs of startup ecosystems.
                   </p>
 
                   <p>
-                    Over the years, I've launched a travel blog, bought and operated a mobile game app, created a litigation finance marketplace, and explored various other ventures. Alongside these entrepreneurial adventures, I also work as a software engineer in startup environments, because why not add more chaos to the mix? Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas while playing along with society's spectacle. The survivors of this ongoing experimentation are what you'll find on my <Link to="/projects" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">Projects</Link> page.
+                    Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas while playing along with society's spectacle. I also work as a software engineer in startup environments, because why not add more chaos to the mix? The survivors of this ongoing experimentation are what you'll find on my <Link to="/projects" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">Projects</Link> page.
                   </p>
                   
                   <h2>So, Who Am I?</h2>
