@@ -25,7 +25,7 @@ const Philosophy = () => {
     <>
       <Navbar />
       <main className="pt-28 pb-16">
-        <div className="container-narrow">
+        <div className="container-narrow px-5 sm:px-6">
           <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6">
             <ArrowLeft size={16} className="mr-1" />
             Back to home
@@ -77,7 +77,7 @@ const Philosophy = () => {
               </div>
               
               <div className="mt-16 pt-6 border-t border-border">
-                <p className="text-sm text-muted-foreground flex items-center">
+                <p className="text-sm text-muted-foreground flex items-center flex-wrap">
                   <History size={14} className="mr-2" />
                   Last modified: {formattedDate}
                 </p>

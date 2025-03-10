@@ -19,7 +19,7 @@ interface ProjectCardProps {
 const ProjectCard = ({ title, description, githubUrl, liveUrl, imageSrc, tags }: ProjectCardProps) => (
   <div className="glass rounded-2xl overflow-hidden flex flex-col h-full hover-lift">
     {imageSrc && (
-      <div className="h-64 overflow-hidden">
+      <div className="h-48 sm:h-64 overflow-hidden">
         <img 
           src={imageSrc} 
           alt={title} 
@@ -27,7 +27,7 @@ const ProjectCard = ({ title, description, githubUrl, liveUrl, imageSrc, tags }:
         />
       </div>
     )}
-    <div className="p-8 flex flex-col flex-grow">
+    <div className="p-6 sm:p-8 flex flex-col flex-grow">
       <h3 className="font-serif text-xl font-semibold mb-3">{title}</h3>
       <p className="text-muted-foreground mb-6">{description}</p>
       
@@ -41,7 +41,7 @@ const ProjectCard = ({ title, description, githubUrl, liveUrl, imageSrc, tags }:
         </div>
       )}
       
-      <div className="flex items-center space-x-4 mt-auto pt-4">
+      <div className="flex flex-wrap items-center gap-4 mt-auto pt-4">
         {githubUrl && (
           <a 
             href={githubUrl} 
@@ -58,7 +58,7 @@ const ProjectCard = ({ title, description, githubUrl, liveUrl, imageSrc, tags }:
             href={liveUrl} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-flex items-center text-sm text-primary hover:underline group ml-4"
+            className="inline-flex items-center text-sm text-primary hover:underline group"
           >
             <ExternalLink size={16} className="mr-1.5" />
             Live Demo
@@ -84,7 +84,7 @@ const Projects = () => {
     <>
       <Navbar />
       <main className="pt-28 pb-16 min-h-screen">
-        <div className="container-wide">
+        <div className="container-wide px-4 sm:px-6">
           <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors">
             <ArrowLeft size={16} className="mr-1.5" />
             Back to home
@@ -105,7 +105,7 @@ const Projects = () => {
             </BlurEffect>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-10 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
             {projects.map((project, index) => (
               <BlurEffect key={project.title} className={`animation-delay-${(index + 3) * 100}`}>
                 <ProjectCard {...project} />

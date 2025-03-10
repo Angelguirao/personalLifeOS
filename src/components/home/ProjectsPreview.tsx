@@ -20,8 +20,8 @@ const ProjectsPreview = () => {
       <div className="absolute w-[400px] h-[400px] rounded-full bg-purple-50/20 bottom-20 -right-32 blur-3xl pointer-events-none"></div>
       
       <div className="container-wide relative">
-        <div className="flex flex-col lg:flex-row gap-10 items-start">
-          <div className="lg:w-1/3 space-y-6 sticky top-32">
+        <div className="flex flex-col gap-10 items-start">
+          <div className="w-full space-y-6">
             <h2 className="heading-lg">Projects</h2>
             <p className="body-md text-muted-foreground">
               A selection of my software projects, open-source contributions, and other creative works that embody my philosophy and approach.
@@ -38,7 +38,7 @@ const ProjectsPreview = () => {
             </div>
           </div>
           
-          <div className="lg:w-2/3">
+          <div className="w-full">
             {projects.map((project, index) => (
               <BlurEffect key={index} className="animation-delay-200">
                 <div className="glass p-6 md:p-8 hover:shadow-md transition-all duration-300">
@@ -51,7 +51,7 @@ const ProjectsPreview = () => {
                   
                   <p className="text-muted-foreground mb-6">{project.description}</p>
                   
-                  <div className="flex items-center space-x-4">
+                  <div className="flex flex-wrap items-center gap-4">
                     {project.github && (
                       <a 
                         href={project.github} 

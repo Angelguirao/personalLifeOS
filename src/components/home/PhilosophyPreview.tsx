@@ -30,8 +30,8 @@ const PhilosophyPreview = () => {
       <div className="absolute w-[300px] h-[300px] rounded-full bg-blue-100/20 bottom-32 -left-32 blur-3xl pointer-events-none"></div>
       
       <div className="container-wide relative">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <div className="space-y-6 lg:col-span-1">
+        <div className="grid grid-cols-1 gap-8">
+          <div className="space-y-6">
             <h2 className="heading-lg">Philosophy</h2>
             <p className="body-md text-muted-foreground">
               My philosophical framework guides how I interact with the world.
@@ -46,9 +46,9 @@ const PhilosophyPreview = () => {
             </Link>
           </div>
           
-          <div className="lg:col-span-2">
-            <div className="grid grid-cols-3 gap-4">
-              {/* First row */}
+          <div className="w-full">
+            {/* Mobile-first grid that expands on larger screens */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <PhilosophyCard 
                 title="Metaphysics" 
                 description="Information and consciousness as fundamental aspects of reality, embracing complexity with an agnostic, pragmatic stance."
@@ -64,22 +64,16 @@ const PhilosophyPreview = () => {
                 description="Relativistic approach prioritizing empathy and meaningful dialogue across diverse moral frameworks."
                 icon={<HeartHandshake size={20} />}
               />
-              
-              {/* Second row */}
-              <div className="col-start-2 col-span-2">
-                <div className="grid grid-cols-2 gap-4">
-                  <PhilosophyCard 
-                    title="Politics" 
-                    description="Advocating for liberal ideals with libertarian influence, emphasizing freedom, dignity, and conditions that promote human flourishing."
-                    icon={<Flag size={20} />}
-                  />
-                  <PhilosophyCard 
-                    title="Aesthetics" 
-                    description="Finding beauty in complexity and everyday moments, encouraging interdisciplinary appreciation of the world."
-                    icon={<Palette size={20} />}
-                  />
-                </div>
-              </div>
+              <PhilosophyCard 
+                title="Politics" 
+                description="Advocating for liberal ideals with libertarian influence, emphasizing freedom, dignity, and conditions that promote human flourishing."
+                icon={<Flag size={20} />}
+              />
+              <PhilosophyCard 
+                title="Aesthetics" 
+                description="Finding beauty in complexity and everyday moments, encouraging interdisciplinary appreciation of the world."
+                icon={<Palette size={20} />}
+              />
             </div>
           </div>
         </div>
