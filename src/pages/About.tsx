@@ -47,7 +47,7 @@ const About = () => {
                   
                   <h2>What I Think</h2>
                   <p>
-                    Maybe Descartes was onto something when he claimed, "I think, therefore I am." Ideas, I believe, are among the most powerful forces shaping the world—and my identity. <Link to="/philosophy" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">Philosophy</Link> is my favorite playground, filled with questions that have no answers, too many answers, or answers that inevitably lead to more questions—the sort of intellectual adventures that can quickly clear a room (but hey, that's part of the fun!).
+                    Maybe Descartes was onto something when he claimed, "I think, therefore I am." Ideas, I believe, are among the most powerful forces shaping the world—and my identity. <Link to="/philosophy" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">Philosophy</Link> is my favorite playground, filled with questions that have no answers, too many answers, or answers that inevitably lead to more questions—the sort of intellectual adventures that can quickly clear a room.
                   </p>
                   
                   <p>
@@ -56,7 +56,7 @@ const About = () => {
                   
                   <h2>What I Do</h2>
                   <p>
-                    Maybe Aristotle had a point when he said we are what we repeatedly do, but then again, what I do keeps changing (and that's the fun part!). Currently, my life involves exploring consciousness through meditation, engaging in human movement practices inspired by embodied cognition, reading extensively, writing notes and articles, and building digital products and micro-startups. You can explore more about these adventures in my <Link to="/garden" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">Digital Garden</Link>. Yet, beneath all this intellectual exploration and life's unavoidable constraints, what truly matters to me is nurturing beautiful and meaningful relationships with my wife, family, and friends.
+                    Maybe Aristotle had a point when he said we are what we repeatedly do, but then again, what I do keeps changing (and that's the fun part!). Currently, my life involves meditation and movement practices inspired by embodied cognition, reading extensively, writing notes and articles, and building digital products and micro-startups.
                   </p>
                   
                   <h2>What I Do for a Living</h2>
@@ -65,7 +65,11 @@ const About = () => {
                   </p>
 
                   <p>
-                    Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas while playing along with society's spectacle. I also work as a software engineer in startup environments, because why not add more chaos to the mix? The survivors of this ongoing experimentation are what you'll find on my <Link to="/projects" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">Projects</Link> page.
+                    Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas. The survivors of this ongoing experimentation are what you'll find on my <Link to="/projects" className="text-primary font-medium hover:text-primary/80 underline underline-offset-4">Projects</Link> page.
+                  </p>
+                  
+                  <p>
+                    I also work as a software engineer in startup environments, because why not add more chaos to the mix?
                   </p>
                   
                   <h2>So, Who Am I?</h2>
