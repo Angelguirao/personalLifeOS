@@ -42,7 +42,7 @@ const About = () => {
                   </p>
                   
                   <p>
-                    This is usually the part where I'd neatly weave together a narrative about who I am, but truthfully, I'm not entirely sure what "I" even means—whether there's a fixed self or just an ever-changing collection of experiences. And you know what? That's perfectly fine! After all, life's too short to take identity crises too seriously.
+                    This is usually the part where I'd neatly weave together a narrative about who I am, but truthfully, I'm not entirely sure what "I" even means—whether there's a fixed self or just an ever-changing collection of experiences. And you know what? That's perfectly fine!
                   </p>
                   
                   <h2>What I Think</h2>
@@ -51,12 +51,20 @@ const About = () => {
                   </p>
                   
                   <p>
-                    I find comfort in the contradiction between wanting to understand everything and recognizing that complete understanding is impossible. It's in this tension that I find the motivation to keep exploring, even when (especially when) I have no idea where I'm going. And above all, having fun along the way—because my deep-rooted skepticism towards absolute truths means I rarely take life—or anything else—too seriously.
+                    I find comfort in the contradiction between wanting to understand everything and recognizing that complete understanding is impossible. It's in this tension that I find the motivation to keep exploring, even when (especially when) I have no idea where I'm going.
+                  </p>
+                  
+                  <p>
+                    At the end of the day, though, what matters most is enjoying the journey itself. My deep-rooted skepticism about finding absolute truths has led me to embrace a playful approach to life—if we can't reach definitive conclusions anyway, why not have fun while we search? Life's too brief and wonderful to be taken too seriously.
                   </p>
                   
                   <h2>What I Do</h2>
                   <p>
                     Maybe Aristotle had a point when he said we are what we repeatedly do, but then again, what I do keeps changing (and that's the fun part!). Currently, my life involves meditation and movement practices inspired by embodied cognition, reading extensively, writing notes and articles, and building digital products and micro-startups.
+                  </p>
+                  
+                  <p>
+                    Yet, beneath all this intellectual exploration and life's unavoidable constraints, what truly matters to me is nurturing beautiful and meaningful relationships with my wife, family, and friends.
                   </p>
                   
                   <h2>What I Do for a Living</h2>
