@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ArrowDownIcon, Atom } from 'lucide-react';
+import { ArrowDownIcon } from 'lucide-react';
 import RevealText from '../ui/RevealText';
 import BlurEffect from '../ui/BlurEffect';
 
@@ -10,9 +10,6 @@ const Hero = () => {
       <div className="container-narrow relative z-10">
         <div className="space-y-8">
           <div className="space-y-3">
-            <div className="flex justify-center opacity-0 animate-fade-in">
-              <Atom className="w-8 h-8 text-primary/60" />
-            </div>
             <h1 className="heading-xl">
               <RevealText>Hello, World</RevealText>
             </h1>
@@ -20,10 +17,10 @@ const Hero = () => {
           
           <BlurEffect className="animation-delay-400">
             <p className="body-lg text-muted-foreground max-w-2xl">
-              I'm Angel. My purpose is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration.
+              I'm Angel. My purpose is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration*
             </p>
-            <p className="body-sm italic text-muted-foreground/80 mt-4">
-              Don't take any of this too seriously though, we're all just figuring it out as we go.
+            <p className="body-sm italic text-muted-foreground/80 mt-6 border-l-2 border-primary/20 pl-4">
+              *Don't take any of this too seriously though, we're all just figuring it out as we go.
             </p>
           </BlurEffect>
           
@@ -40,8 +37,6 @@ const Hero = () => {
       {/* Decorative elements */}
       <div className="absolute top-1/2 right-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-      
-      {/* Removed the bottom scroll indicator since we moved it above */}
     </section>
   );
 };
