@@ -104,11 +104,48 @@ const gardenConnections: Connection[] = [
   { id: 6, sourceId: 5, targetId: 3, strength: 0.5, relationship: "questions" },
 ];
 
-// Initialize Supabase client
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Initialize Supabase client with error handling
+let supabase;
+try {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    console.warn('Supabase credentials not found in environment variables. Using fallback data.');
+  } else {
+    supabase = createClient(supabaseUrl, supabaseKey);
+    console.log('Supabase client initialized successfully');
+  }
+} catch (error) {
+  console.error('Failed to initialize Supabase client:', error);
+}
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Helper function to check if a table exists
+const tableExists = async (tableName: string): Promise<boolean> => {
+  if (!supabase) return false;
+  
+  try {
+    // Try to fetch a single record from the table
+    const { error } = await supabase
+      .from(tableName)
+      .select('id')
+      .limit(1);
+    
+    // If there's a PostgreSQL error about the relation not existing, the table doesn't exist
+    if (error && (
+      error.message.includes('relation') && 
+      error.message.includes('does not exist')
+    )) {
+      console.warn(`Table ${tableName} does not exist in Supabase`);
+      return false;
+    }
+    
+    return true;
+  } catch (error) {
+    console.error(`Error checking if table ${tableName} exists:`, error);
+    return false;
+  }
+};
 
 // Helper function to transform data from Supabase to match our interfaces
 const transformNoteFromSupabase = (data: any): GardenNote => {
@@ -138,15 +175,23 @@ const transformNoteToSupabase = (note: Omit<GardenNote, 'id'>) => {
 };
 
 export const getNotes = async (): Promise<GardenNote[]> => {
-  console.log('Fetching notes from Supabase...');
+  console.log('Fetching notes...');
+  
+  // If Supabase is not initialized or the table doesn't exist, return fallback data
+  if (!supabase || !(await tableExists('garden_notes'))) {
+    console.log('Using fallback notes data');
+    return gardenNotes;
+  }
+  
   try {
+    console.log('Fetching notes from Supabase...');
     const { data, error } = await supabase
       .from('garden_notes')
       .select('*');
     
     if (error) {
       console.error('Supabase error:', error);
-      throw error;
+      return gardenNotes; // Return fallback data on error
     }
     
     console.log('Supabase notes data:', data);
@@ -167,15 +212,23 @@ export const getNotes = async (): Promise<GardenNote[]> => {
 };
 
 export const getConnections = async (): Promise<Connection[]> => {
-  console.log('Fetching connections from Supabase...');
+  console.log('Fetching connections...');
+  
+  // If Supabase is not initialized or the table doesn't exist, return fallback data
+  if (!supabase || !(await tableExists('garden_connections'))) {
+    console.log('Using fallback connections data');
+    return gardenConnections;
+  }
+  
   try {
+    console.log('Fetching connections from Supabase...');
     const { data, error } = await supabase
       .from('garden_connections')
       .select('*');
     
     if (error) {
       console.error('Supabase error:', error);
-      throw error;
+      return gardenConnections; // Return fallback data on error
     }
     
     console.log('Supabase connections data:', data);
@@ -195,10 +248,21 @@ export const getConnections = async (): Promise<Connection[]> => {
 
 // Seed initial data into Supabase if tables are empty
 const seedInitialData = async () => {
+  if (!supabase) return;
+  
   console.log('Seeding initial data to Supabase...');
   
   try {
-    // First, insert notes
+    // First, check if tables exist
+    const notesTableExists = await tableExists('garden_notes');
+    const connectionsTableExists = await tableExists('garden_connections');
+    
+    if (!notesTableExists || !connectionsTableExists) {
+      console.warn('One or more required tables do not exist in Supabase. Skipping data seeding.');
+      return;
+    }
+    
+    // Insert notes
     const notesData = gardenNotes.map(note => ({
       title: note.title,
       summary: note.summary,
@@ -218,7 +282,7 @@ const seedInitialData = async () => {
       return;
     }
     
-    // Then, insert connections
+    // Insert connections
     const { error: connectionsError } = await supabase
       .from('garden_connections')
       .insert(gardenConnections);
@@ -235,6 +299,11 @@ const seedInitialData = async () => {
 };
 
 export const getNoteById = async (id: number): Promise<GardenNote | undefined> => {
+  if (!supabase || !(await tableExists('garden_notes'))) {
+    console.log('Using fallback for note details');
+    return gardenNotes.find(note => note.id === id);
+  }
+  
   try {
     const { data, error } = await supabase
       .from('garden_notes')
@@ -252,6 +321,10 @@ export const getNoteById = async (id: number): Promise<GardenNote | undefined> =
 };
 
 export const createNote = async (note: Omit<GardenNote, 'id'>): Promise<GardenNote> => {
+  if (!supabase || !(await tableExists('garden_notes'))) {
+    throw new Error('Cannot create note: Supabase connection or table not available');
+  }
+  
   const supabaseNote = transformNoteToSupabase(note);
   
   const { data, error } = await supabase
@@ -265,6 +338,10 @@ export const createNote = async (note: Omit<GardenNote, 'id'>): Promise<GardenNo
 };
 
 export const updateNote = async (id: number, note: Partial<GardenNote>): Promise<GardenNote> => {
+  if (!supabase || !(await tableExists('garden_notes'))) {
+    throw new Error('Cannot update note: Supabase connection or table not available');
+  }
+  
   const supabaseNote: any = {};
   
   if (note.title) supabaseNote.title = note.title;
@@ -287,6 +364,10 @@ export const updateNote = async (id: number, note: Partial<GardenNote>): Promise
 };
 
 export const createConnection = async (connection: Omit<Connection, 'id'>): Promise<Connection> => {
+  if (!supabase || !(await tableExists('garden_connections'))) {
+    throw new Error('Cannot create connection: Supabase connection or table not available');
+  }
+  
   const { data, error } = await supabase
     .from('garden_connections')
     .insert(connection)
