@@ -10,7 +10,12 @@ try {
   if (!supabaseUrl || !supabaseKey) {
     console.warn('Supabase credentials not found in environment variables. Using fallback data.');
   } else {
-    supabase = createClient(supabaseUrl, supabaseKey);
+    supabase = createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+      },
+    });
     console.log('Supabase client initialized successfully');
   }
 } catch (error) {

@@ -22,16 +22,21 @@ export const seedInitialData = async () => {
       }
     }
     
-    // Check column structure
-    const { data: notesColumns, error: columnsError } = await supabase
-      .rpc('get_table_columns', { table_name: 'garden_notes' });
+    // Directly check if the notes table has data instead of querying column metadata
+    const { count: notesCount, error: countError } = await supabase
+      .from('garden_notes')
+      .select('*', { count: 'exact', head: true });
     
-    if (columnsError) {
-      console.error('Error checking table columns:', columnsError);
+    if (countError) {
+      console.error('Error checking table data:', countError);
       return;
     }
     
-    console.log('Table columns:', notesColumns);
+    // If we have data, no need to seed
+    if (notesCount && notesCount > 0) {
+      console.log('Tables already contain data. Skipping seed operation.');
+      return;
+    }
     
     // Insert notes
     const notesData = gardenNotes.map(note => ({

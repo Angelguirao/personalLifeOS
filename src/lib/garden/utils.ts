@@ -34,17 +34,67 @@ export const createTablesIfNotExist = async (): Promise<boolean> => {
   if (!supabase) return false;
   
   try {
-    // Create garden_notes table
-    const { error: notesError } = await supabase.rpc('create_garden_notes_if_not_exists');
-    if (notesError) {
-      console.error('Error creating garden_notes table:', notesError);
-      return false;
+    // SQL queries to create tables directly if they don't exist
+    const createNotesTableQuery = `
+      CREATE TABLE IF NOT EXISTS garden_notes (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        summary TEXT,
+        full_content TEXT,
+        stage TEXT DEFAULT 'seedling',
+        last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        connections TEXT[] DEFAULT '{}',
+        book_info JSONB
+      );
+    `;
+    
+    const createConnectionsTableQuery = `
+      CREATE TABLE IF NOT EXISTS garden_connections (
+        id SERIAL PRIMARY KEY,
+        source_id INTEGER NOT NULL,
+        target_id INTEGER NOT NULL,
+        strength INTEGER DEFAULT 1,
+        relationship TEXT
+      );
+    `;
+    
+    // Execute the SQL queries
+    const { error: notesTableError } = await supabase.rpc('exec_sql', { 
+      sql_query: createNotesTableQuery 
+    });
+    
+    if (notesTableError) {
+      console.error('Error creating notes table:', notesTableError);
+      
+      // Fallback approach using simpler schema without jsonb
+      const simplifiedCreateNotesTableQuery = `
+        CREATE TABLE IF NOT EXISTS garden_notes (
+          id SERIAL PRIMARY KEY,
+          title TEXT NOT NULL,
+          summary TEXT,
+          full_content TEXT,
+          stage TEXT DEFAULT 'seedling',
+          last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+          connections TEXT[] DEFAULT '{}'
+        );
+      `;
+      
+      const { error: simplifiedNotesTableError } = await supabase.rpc('exec_sql', { 
+        sql_query: simplifiedCreateNotesTableQuery 
+      });
+      
+      if (simplifiedNotesTableError) {
+        console.error('Error creating simplified notes table:', simplifiedNotesTableError);
+        return false;
+      }
     }
     
-    // Create garden_connections table
-    const { error: connectionsError } = await supabase.rpc('create_garden_connections_if_not_exists');
-    if (connectionsError) {
-      console.error('Error creating garden_connections table:', connectionsError);
+    const { error: connectionsTableError } = await supabase.rpc('exec_sql', { 
+      sql_query: createConnectionsTableQuery 
+    });
+    
+    if (connectionsTableError) {
+      console.error('Error creating connections table:', connectionsTableError);
       return false;
     }
     
