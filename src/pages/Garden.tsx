@@ -226,7 +226,7 @@ const Garden = () => {
                     )}
                   </p>
                   
-                  <div className="flex flex-wrap gap-4 items-center">
+                  <div className="flex flex-col space-y-4">
                     <div className="flex flex-wrap gap-2">
                       {note.connections && note.connections.map((tag) => (
                         <span key={tag} className="inline-flex items-center px-2 py-1 rounded-full bg-secondary/50 text-muted-foreground text-xs">
