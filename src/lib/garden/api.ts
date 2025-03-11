@@ -1,4 +1,3 @@
-
 // This file will be replaced with actual Supabase calls after Supabase integration
 
 export interface BookInfo {
@@ -105,34 +104,72 @@ const gardenConnections: Connection[] = [
   { id: 6, sourceId: 5, targetId: 3, strength: 0.5, relationship: "questions" },
 ];
 
-// These functions simulate API calls but will be replaced with actual Supabase queries
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
+
 export const getNotes = async (): Promise<GardenNote[]> => {
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  return gardenNotes;
+  const { data, error } = await supabase
+    .from('garden_notes')
+    .select('*');
+  
+  if (error) throw error;
+  return data || [];
 };
 
 export const getConnections = async (): Promise<Connection[]> => {
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 700));
-  return gardenConnections;
+  const { data, error } = await supabase
+    .from('garden_connections')
+    .select('*');
+  
+  if (error) throw error;
+  return data || [];
 };
 
 export const getNoteById = async (id: number): Promise<GardenNote | undefined> => {
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 300));
-  return gardenNotes.find(note => note.id === id);
+  const { data, error } = await supabase
+    .from('garden_notes')
+    .select('*')
+    .eq('id', id)
+    .single();
+  
+  if (error) throw error;
+  return data;
 };
 
-// These functions will be implemented after Supabase integration
 export const createNote = async (note: Omit<GardenNote, 'id'>): Promise<GardenNote> => {
-  throw new Error('Not implemented - requires Supabase integration');
+  const { data, error } = await supabase
+    .from('garden_notes')
+    .insert(note)
+    .select()
+    .single();
+  
+  if (error) throw error;
+  return data;
 };
 
 export const updateNote = async (id: number, note: Partial<GardenNote>): Promise<GardenNote> => {
-  throw new Error('Not implemented - requires Supabase integration');
+  const { data, error } = await supabase
+    .from('garden_notes')
+    .update(note)
+    .eq('id', id)
+    .select()
+    .single();
+  
+  if (error) throw error;
+  return data;
 };
 
 export const createConnection = async (connection: Omit<Connection, 'id'>): Promise<Connection> => {
-  throw new Error('Not implemented - requires Supabase integration');
+  const { data, error } = await supabase
+    .from('garden_connections')
+    .insert(connection)
+    .select()
+    .single();
+  
+  if (error) throw error;
+  return data;
 };
