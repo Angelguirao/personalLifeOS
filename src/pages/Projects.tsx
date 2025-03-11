@@ -88,7 +88,7 @@ const Projects = () => {
             </h1>
             <BlurEffect className="animation-delay-200">
               <p className="body-lg text-muted-foreground max-w-2xl">
-                A collection of software and open-source contributions that reflect my philosophy and approach to meaningful creation. Just fun experiments, really - no need to take them too seriously!
+                A selection of my software projects, open-source contributions, and other creative works that embody my philosophy and approach.
               </p>
             </BlurEffect>
           </div>

@@ -42,7 +42,7 @@ const About = () => {
                   </p>
                   
                   <p>
-                    This is usually the part where I'd neatly weave together a narrative about who I am, but truthfully, I'm not entirely sure what "I" even means—whether there's a fixed self or just an ever-changing collection of experiences. And you know what? That's perfectly fine!
+                    This is usually the part where I'd neatly weave together a narrative about who I am, but truthfully, I'm not entirely sure what "I" even means—whether there's a fixed self or just an ever-changing collection of experiences. And you know what? That's perfectly fine! Life's too brief to take identity crises too seriously.
                   </p>
                   
                   <h2>What I Think</h2>
@@ -54,13 +54,9 @@ const About = () => {
                     I find comfort in the contradiction between wanting to understand everything and recognizing that complete understanding is impossible. It's in this tension that I find the motivation to keep exploring, even when (especially when) I have no idea where I'm going.
                   </p>
                   
-                  <p>
-                    At the end of the day, though, what matters most is enjoying the journey itself. My deep-rooted skepticism about finding absolute truths has led me to embrace a playful approach to life—if we can't reach definitive conclusions anyway, why not have fun while we search? Life's too brief and wonderful to be taken too seriously.
-                  </p>
-                  
                   <h2>What I Do</h2>
                   <p>
-                    Maybe Aristotle had a point when he said we are what we repeatedly do, but then again, what I do keeps changing (and that's the fun part!). Currently, my life involves meditation and movement practices inspired by embodied cognition, reading extensively, writing notes and articles, and building digital products and micro-startups.
+                    Maybe Aristotle had a point when he said we are what we repeatedly do, but then again, what I do keeps changing. Currently, my life involves meditation and movement practices inspired by embodied cognition, reading extensively, writing notes and articles, and building digital products and micro-startups.
                   </p>
                   
                   <p>
@@ -82,11 +78,11 @@ const About = () => {
                   
                   <h2>So, Who Am I?</h2>
                   <p>
-                    I have no idea. And I'm increasingly convinced that having no idea is the most honest position to take. I am a collection of experiences, influences, contradictions, and questions—constantly changing, rarely consistent, and perpetually curious. All there truly is left to do is play along with society's spectacle and have fun while doing it!
+                    I have no idea. And I'm increasingly convinced that having no idea is the most honest position to take. I am a collection of experiences, influences, contradictions, and questions—constantly changing, rarely consistent, and perpetually curious.
                   </p>
                   
                   <p>
-                    If that sounds like a cop-out, you're probably right. But it's the most truthful cop-out I can offer. Maybe next year I'll have a more coherent story. But I doubt it, and that's perfectly okay!
+                    If that sounds like a cop-out, you're probably right. But it's the most truthful cop-out I can offer. Maybe next year I'll have a more coherent story.
                   </p>
                 </BlurEffect>
               </div>
