@@ -1,5 +1,4 @@
-
-// This file will be replaced with actual Supabase calls after Supabase integration
+import { createClient } from '@supabase/supabase-js';
 
 export interface BookInfo {
   title: string;
@@ -26,7 +25,7 @@ export interface Connection {
   relationship: string;
 }
 
-// Temporary hardcoded data - will be replaced with Supabase queries
+// Temporary hardcoded data as fallback
 const gardenNotes: GardenNote[] = [
   {
     id: 1,
@@ -105,32 +104,11 @@ const gardenConnections: Connection[] = [
   { id: 6, sourceId: 5, targetId: 3, strength: 0.5, relationship: "questions" },
 ];
 
-import { createClient } from '@supabase/supabase-js';
+// Initialize Supabase client
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
-
-/**
- * Supabase Database Schema Guide:
- * 1. Create a 'garden_notes' table with columns:
- *    - id: int8 (primary key, auto-increment)
- *    - title: text
- *    - summary: text
- *    - full_content: text
- *    - stage: text (with check constraint to only allow 'seedling', 'growing', 'evergreen')
- *    - last_updated: timestamp
- *    - connections: text[] (array type)
- *    - book_info: jsonb (for storing the book information)
- * 
- * 2. Create a 'garden_connections' table with columns:
- *    - id: int8 (primary key, auto-increment)
- *    - source_id: int8 (references garden_notes.id)
- *    - target_id: int8 (references garden_notes.id)
- *    - strength: float8
- *    - relationship: text
- */
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Helper function to transform data from Supabase to match our interfaces
 const transformNoteFromSupabase = (data: any): GardenNote => {
@@ -138,11 +116,11 @@ const transformNoteFromSupabase = (data: any): GardenNote => {
     id: data.id,
     title: data.title,
     summary: data.summary,
-    fullContent: data.full_content || data.fullContent,
-    stage: data.stage as 'seedling' | 'growing' | 'evergreen',
-    lastUpdated: data.last_updated || data.lastUpdated,
+    fullContent: data.full_content,
+    stage: data.stage,
+    lastUpdated: data.last_updated,
     connections: data.connections || [],
-    bookInfo: data.book_info || data.bookInfo
+    bookInfo: data.book_info
   };
 };
 
@@ -160,32 +138,99 @@ const transformNoteToSupabase = (note: Omit<GardenNote, 'id'>) => {
 };
 
 export const getNotes = async (): Promise<GardenNote[]> => {
+  console.log('Fetching notes from Supabase...');
   try {
     const { data, error } = await supabase
       .from('garden_notes')
       .select('*');
     
-    if (error) throw error;
-    return data ? data.map(transformNoteFromSupabase) : [];
+    if (error) {
+      console.error('Supabase error:', error);
+      throw error;
+    }
+    
+    console.log('Supabase notes data:', data);
+    
+    if (!data || data.length === 0) {
+      console.log('No notes found in Supabase, using fallback data');
+      // If the table exists but has no data, seed it with our sample data
+      await seedInitialData();
+      return gardenNotes;
+    }
+    
+    return data.map(transformNoteFromSupabase);
   } catch (error) {
     console.error('Error fetching notes:', error);
-    // Fallback to the sample data if the Supabase table doesn't exist yet
+    // Fallback to the sample data if there's an error
     return gardenNotes;
   }
 };
 
 export const getConnections = async (): Promise<Connection[]> => {
+  console.log('Fetching connections from Supabase...');
   try {
     const { data, error } = await supabase
       .from('garden_connections')
       .select('*');
     
-    if (error) throw error;
-    return data || [];
+    if (error) {
+      console.error('Supabase error:', error);
+      throw error;
+    }
+    
+    console.log('Supabase connections data:', data);
+    
+    if (!data || data.length === 0) {
+      console.log('No connections found in Supabase, using fallback data');
+      return gardenConnections;
+    }
+    
+    return data;
   } catch (error) {
     console.error('Error fetching connections:', error);
-    // Fallback to the sample data if the Supabase table doesn't exist yet
+    // Fallback to the sample data if there's an error
     return gardenConnections;
+  }
+};
+
+// Seed initial data into Supabase if tables are empty
+const seedInitialData = async () => {
+  console.log('Seeding initial data to Supabase...');
+  
+  try {
+    // First, insert notes
+    const notesData = gardenNotes.map(note => ({
+      title: note.title,
+      summary: note.summary,
+      full_content: note.fullContent,
+      stage: note.stage,
+      last_updated: note.lastUpdated,
+      connections: note.connections,
+      book_info: note.bookInfo
+    }));
+    
+    const { error: notesError } = await supabase
+      .from('garden_notes')
+      .insert(notesData);
+    
+    if (notesError) {
+      console.error('Error seeding notes:', notesError);
+      return;
+    }
+    
+    // Then, insert connections
+    const { error: connectionsError } = await supabase
+      .from('garden_connections')
+      .insert(gardenConnections);
+    
+    if (connectionsError) {
+      console.error('Error seeding connections:', connectionsError);
+      return;
+    }
+    
+    console.log('Initial data seeded successfully');
+  } catch (error) {
+    console.error('Error during seeding process:', error);
   }
 };
 
