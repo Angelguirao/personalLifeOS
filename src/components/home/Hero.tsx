@@ -8,7 +8,7 @@ const Hero = () => {
   return (
     <section className="min-h-screen pt-32 pb-20 flex flex-col justify-center relative overflow-hidden">
       <div className="container-narrow relative z-10">
-        <div className="space-y-8">
+        <div className="space-y-8 text-center sm:text-left">
           <div className="space-y-3">
             <h1 className="heading-xl">
               <RevealText>Hello, World</RevealText>
@@ -16,15 +16,14 @@ const Hero = () => {
           </div>
           
           <BlurEffect className="animation-delay-400">
-            <p className="body-lg text-muted-foreground max-w-2xl">
+            <p className="body-lg text-muted-foreground max-w-2xl mx-auto sm:mx-0">
               I'm Angel. My purpose is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration*
             </p>
-            <p className="body-sm italic text-muted-foreground/80 mt-6 border-l-2 border-primary/20 pl-4">
+            <p className="body-sm italic text-muted-foreground/80 mt-6 border-l-2 border-primary/20 pl-4 max-w-2xl mx-auto sm:mx-0">
               *Don't take any of this too seriously though, we're all just figuring it out as we go.
             </p>
           </BlurEffect>
           
-          {/* Scroll indicator - now above the decorative elements and larger */}
           <div className="mt-12 opacity-0 animate-fade-in animation-delay-700">
             <a href="#philosophy-preview" className="inline-flex flex-col items-center text-foreground hover:text-primary transition-colors group">
               <span className="text-base font-medium mb-3">Scroll to explore</span>
