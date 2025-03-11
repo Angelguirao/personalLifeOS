@@ -1,3 +1,4 @@
+
 import { createClient } from '@supabase/supabase-js';
 
 export interface BookInfo {
@@ -147,15 +148,42 @@ const tableExists = async (tableName: string): Promise<boolean> => {
   }
 };
 
+// Create necessary tables in Supabase if they don't exist
+const createTablesIfNotExist = async (): Promise<boolean> => {
+  if (!supabase) return false;
+  
+  try {
+    // Create garden_notes table
+    const { error: notesError } = await supabase.rpc('create_garden_notes_if_not_exists');
+    if (notesError) {
+      console.error('Error creating garden_notes table:', notesError);
+      return false;
+    }
+    
+    // Create garden_connections table
+    const { error: connectionsError } = await supabase.rpc('create_garden_connections_if_not_exists');
+    if (connectionsError) {
+      console.error('Error creating garden_connections table:', connectionsError);
+      return false;
+    }
+    
+    console.log('Tables created or already exist');
+    return true;
+  } catch (error) {
+    console.error('Error creating tables:', error);
+    return false;
+  }
+};
+
 // Helper function to transform data from Supabase to match our interfaces
 const transformNoteFromSupabase = (data: any): GardenNote => {
   return {
     id: data.id,
-    title: data.title,
-    summary: data.summary,
-    fullContent: data.full_content,
-    stage: data.stage,
-    lastUpdated: data.last_updated,
+    title: data.title || '',
+    summary: data.summary || '',
+    fullContent: data.full_content || '',
+    stage: data.stage || 'seedling',
+    lastUpdated: data.last_updated || new Date().toISOString(),
     connections: data.connections || [],
     bookInfo: data.book_info
   };
@@ -177,13 +205,23 @@ const transformNoteToSupabase = (note: Omit<GardenNote, 'id'>) => {
 export const getNotes = async (): Promise<GardenNote[]> => {
   console.log('Fetching notes...');
   
-  // If Supabase is not initialized or the table doesn't exist, return fallback data
-  if (!supabase || !(await tableExists('garden_notes'))) {
+  // If Supabase is not initialized, return fallback data
+  if (!supabase) {
     console.log('Using fallback notes data');
     return gardenNotes;
   }
   
   try {
+    // Check if tables exist, if not, try to create them
+    const notesExist = await tableExists('garden_notes');
+    if (!notesExist) {
+      console.log('Notes table does not exist, attempting to create tables...');
+      if (!(await createTablesIfNotExist())) {
+        console.log('Failed to create tables, using fallback data');
+        return gardenNotes;
+      }
+    }
+    
     console.log('Fetching notes from Supabase...');
     const { data, error } = await supabase
       .from('garden_notes')
@@ -214,13 +252,20 @@ export const getNotes = async (): Promise<GardenNote[]> => {
 export const getConnections = async (): Promise<Connection[]> => {
   console.log('Fetching connections...');
   
-  // If Supabase is not initialized or the table doesn't exist, return fallback data
-  if (!supabase || !(await tableExists('garden_connections'))) {
+  // If Supabase is not initialized, return fallback data
+  if (!supabase) {
     console.log('Using fallback connections data');
     return gardenConnections;
   }
   
   try {
+    // Check if tables exist
+    const connectionsExist = await tableExists('garden_connections');
+    if (!connectionsExist) {
+      console.log('Connections table does not exist, using fallback data');
+      return gardenConnections;
+    }
+    
     console.log('Fetching connections from Supabase...');
     const { data, error } = await supabase
       .from('garden_connections')
@@ -258,9 +303,23 @@ const seedInitialData = async () => {
     const connectionsTableExists = await tableExists('garden_connections');
     
     if (!notesTableExists || !connectionsTableExists) {
-      console.warn('One or more required tables do not exist in Supabase. Skipping data seeding.');
+      console.warn('One or more required tables do not exist in Supabase. Attempting to create...');
+      if (!(await createTablesIfNotExist())) {
+        console.warn('Failed to create tables. Skipping data seeding.');
+        return;
+      }
+    }
+    
+    // Check column structure
+    const { data: notesColumns, error: columnsError } = await supabase
+      .rpc('get_table_columns', { table_name: 'garden_notes' });
+    
+    if (columnsError) {
+      console.error('Error checking table columns:', columnsError);
       return;
     }
+    
+    console.log('Table columns:', notesColumns);
     
     // Insert notes
     const notesData = gardenNotes.map(note => ({
@@ -279,7 +338,24 @@ const seedInitialData = async () => {
     
     if (notesError) {
       console.error('Error seeding notes:', notesError);
-      return;
+      // Try a simpler approach - without the book_info
+      const simplifiedNotesData = gardenNotes.map(note => ({
+        title: note.title,
+        summary: note.summary,
+        full_content: note.fullContent,
+        stage: note.stage,
+        last_updated: note.lastUpdated,
+        connections: note.connections
+      }));
+      
+      const { error: simplifiedNotesError } = await supabase
+        .from('garden_notes')
+        .insert(simplifiedNotesData);
+      
+      if (simplifiedNotesError) {
+        console.error('Error seeding simplified notes:', simplifiedNotesError);
+        return;
+      }
     }
     
     // Insert connections
