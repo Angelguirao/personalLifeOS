@@ -1,3 +1,4 @@
+
 // This file will be replaced with actual Supabase calls after Supabase integration
 
 export interface BookInfo {
@@ -111,56 +112,133 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
+/**
+ * Supabase Database Schema Guide:
+ * 1. Create a 'garden_notes' table with columns:
+ *    - id: int8 (primary key, auto-increment)
+ *    - title: text
+ *    - summary: text
+ *    - full_content: text
+ *    - stage: text (with check constraint to only allow 'seedling', 'growing', 'evergreen')
+ *    - last_updated: timestamp
+ *    - connections: text[] (array type)
+ *    - book_info: jsonb (for storing the book information)
+ * 
+ * 2. Create a 'garden_connections' table with columns:
+ *    - id: int8 (primary key, auto-increment)
+ *    - source_id: int8 (references garden_notes.id)
+ *    - target_id: int8 (references garden_notes.id)
+ *    - strength: float8
+ *    - relationship: text
+ */
+
+// Helper function to transform data from Supabase to match our interfaces
+const transformNoteFromSupabase = (data: any): GardenNote => {
+  return {
+    id: data.id,
+    title: data.title,
+    summary: data.summary,
+    fullContent: data.full_content || data.fullContent,
+    stage: data.stage as 'seedling' | 'growing' | 'evergreen',
+    lastUpdated: data.last_updated || data.lastUpdated,
+    connections: data.connections || [],
+    bookInfo: data.book_info || data.bookInfo
+  };
+};
+
+// Helper function to transform data to Supabase format
+const transformNoteToSupabase = (note: Omit<GardenNote, 'id'>) => {
+  return {
+    title: note.title,
+    summary: note.summary,
+    full_content: note.fullContent,
+    stage: note.stage,
+    last_updated: note.lastUpdated,
+    connections: note.connections || [],
+    book_info: note.bookInfo
+  };
+};
+
 export const getNotes = async (): Promise<GardenNote[]> => {
-  const { data, error } = await supabase
-    .from('garden_notes')
-    .select('*');
-  
-  if (error) throw error;
-  return data || [];
+  try {
+    const { data, error } = await supabase
+      .from('garden_notes')
+      .select('*');
+    
+    if (error) throw error;
+    return data ? data.map(transformNoteFromSupabase) : [];
+  } catch (error) {
+    console.error('Error fetching notes:', error);
+    // Fallback to the sample data if the Supabase table doesn't exist yet
+    return gardenNotes;
+  }
 };
 
 export const getConnections = async (): Promise<Connection[]> => {
-  const { data, error } = await supabase
-    .from('garden_connections')
-    .select('*');
-  
-  if (error) throw error;
-  return data || [];
+  try {
+    const { data, error } = await supabase
+      .from('garden_connections')
+      .select('*');
+    
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error fetching connections:', error);
+    // Fallback to the sample data if the Supabase table doesn't exist yet
+    return gardenConnections;
+  }
 };
 
 export const getNoteById = async (id: number): Promise<GardenNote | undefined> => {
-  const { data, error } = await supabase
-    .from('garden_notes')
-    .select('*')
-    .eq('id', id)
-    .single();
-  
-  if (error) throw error;
-  return data;
+  try {
+    const { data, error } = await supabase
+      .from('garden_notes')
+      .select('*')
+      .eq('id', id)
+      .single();
+    
+    if (error) throw error;
+    return data ? transformNoteFromSupabase(data) : undefined;
+  } catch (error) {
+    console.error('Error fetching note by id:', error);
+    // Fallback to finding the note in the sample data
+    return gardenNotes.find(note => note.id === id);
+  }
 };
 
 export const createNote = async (note: Omit<GardenNote, 'id'>): Promise<GardenNote> => {
+  const supabaseNote = transformNoteToSupabase(note);
+  
   const { data, error } = await supabase
     .from('garden_notes')
-    .insert(note)
+    .insert(supabaseNote)
     .select()
     .single();
   
   if (error) throw error;
-  return data;
+  return transformNoteFromSupabase(data);
 };
 
 export const updateNote = async (id: number, note: Partial<GardenNote>): Promise<GardenNote> => {
+  const supabaseNote: any = {};
+  
+  if (note.title) supabaseNote.title = note.title;
+  if (note.summary) supabaseNote.summary = note.summary;
+  if (note.fullContent) supabaseNote.full_content = note.fullContent;
+  if (note.stage) supabaseNote.stage = note.stage;
+  if (note.lastUpdated) supabaseNote.last_updated = note.lastUpdated;
+  if (note.connections) supabaseNote.connections = note.connections;
+  if (note.bookInfo) supabaseNote.book_info = note.bookInfo;
+  
   const { data, error } = await supabase
     .from('garden_notes')
-    .update(note)
+    .update(supabaseNote)
     .eq('id', id)
     .select()
     .single();
   
   if (error) throw error;
-  return data;
+  return transformNoteFromSupabase(data);
 };
 
 export const createConnection = async (connection: Omit<Connection, 'id'>): Promise<Connection> => {
