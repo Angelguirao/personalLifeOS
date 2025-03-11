@@ -14,15 +14,13 @@ const Hero = () => {
               CONSCIOUSNESS • INFORMATION • CONNECTION
             </p>
             <h1 className="heading-xl">
-              <RevealText>Navigating Ideas,</RevealText>
-              <RevealText delay="animation-delay-200">Deepening</RevealText>
-              <RevealText delay="animation-delay-300">Relationships</RevealText>
+              <RevealText>Hello, World</RevealText>
             </h1>
           </div>
           
           <BlurEffect className="animation-delay-400">
             <p className="body-lg text-muted-foreground max-w-2xl">
-              My purpose is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration.
+              I'm Angel. My purpose is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration. Don't take any of this too seriously though, we're all just figuring it out as we go.
             </p>
           </BlurEffect>
           
