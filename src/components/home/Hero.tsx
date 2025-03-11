@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { ArrowDownIcon } from 'lucide-react';
+import { ArrowDownIcon, Binary } from 'lucide-react';
 import RevealText from '../ui/RevealText';
 import BlurEffect from '../ui/BlurEffect';
 
@@ -9,6 +10,9 @@ const Hero = () => {
       <div className="container-narrow relative z-10">
         <div className="space-y-8">
           <div className="space-y-3">
+            <div className="flex justify-center opacity-0 animate-fade-in">
+              <Binary className="w-8 h-8 text-primary/60" />
+            </div>
             <h1 className="heading-xl">
               <RevealText>Hello, World</RevealText>
             </h1>
