@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ArrowDownIcon } from 'lucide-react';
 import RevealText from '../ui/RevealText';
@@ -10,9 +9,6 @@ const Hero = () => {
       <div className="container-narrow relative z-10">
         <div className="space-y-8">
           <div className="space-y-3">
-            <p className="text-sm uppercase tracking-wider text-muted-foreground opacity-0 animate-fade-in">
-              CONSCIOUSNESS • INFORMATION • CONNECTION
-            </p>
             <h1 className="heading-xl">
               <RevealText>Hello, World</RevealText>
             </h1>
