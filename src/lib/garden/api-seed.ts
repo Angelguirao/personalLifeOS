@@ -1,0 +1,87 @@
+
+import supabase from './client';
+import { gardenNotes, gardenConnections } from './data';
+import { tableExists, createTablesIfNotExist } from './utils';
+
+// Seed initial data into Supabase if tables are empty
+export const seedInitialData = async () => {
+  if (!supabase) return;
+  
+  console.log('Seeding initial data to Supabase...');
+  
+  try {
+    // First, check if tables exist
+    const notesTableExists = await tableExists('garden_notes');
+    const connectionsTableExists = await tableExists('garden_connections');
+    
+    if (!notesTableExists || !connectionsTableExists) {
+      console.warn('One or more required tables do not exist in Supabase. Attempting to create...');
+      if (!(await createTablesIfNotExist())) {
+        console.warn('Failed to create tables. Skipping data seeding.');
+        return;
+      }
+    }
+    
+    // Check column structure
+    const { data: notesColumns, error: columnsError } = await supabase
+      .rpc('get_table_columns', { table_name: 'garden_notes' });
+    
+    if (columnsError) {
+      console.error('Error checking table columns:', columnsError);
+      return;
+    }
+    
+    console.log('Table columns:', notesColumns);
+    
+    // Insert notes
+    const notesData = gardenNotes.map(note => ({
+      title: note.title,
+      summary: note.summary,
+      full_content: note.fullContent,
+      stage: note.stage,
+      last_updated: note.lastUpdated,
+      connections: note.connections,
+      book_info: note.bookInfo
+    }));
+    
+    const { error: notesError } = await supabase
+      .from('garden_notes')
+      .insert(notesData);
+    
+    if (notesError) {
+      console.error('Error seeding notes:', notesError);
+      // Try a simpler approach - without the book_info
+      const simplifiedNotesData = gardenNotes.map(note => ({
+        title: note.title,
+        summary: note.summary,
+        full_content: note.fullContent,
+        stage: note.stage,
+        last_updated: note.lastUpdated,
+        connections: note.connections
+      }));
+      
+      const { error: simplifiedNotesError } = await supabase
+        .from('garden_notes')
+        .insert(simplifiedNotesData);
+      
+      if (simplifiedNotesError) {
+        console.error('Error seeding simplified notes:', simplifiedNotesError);
+        return;
+      }
+    }
+    
+    // Insert connections
+    const { error: connectionsError } = await supabase
+      .from('garden_connections')
+      .insert(gardenConnections);
+    
+    if (connectionsError) {
+      console.error('Error seeding connections:', connectionsError);
+      return;
+    }
+    
+    console.log('Initial data seeded successfully');
+  } catch (error) {
+    console.error('Error during seeding process:', error);
+  }
+};
