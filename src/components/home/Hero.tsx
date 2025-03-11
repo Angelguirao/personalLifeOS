@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ArrowDownIcon, Binary } from 'lucide-react';
+import { ArrowDownIcon, Qubit } from 'lucide-react';
 import RevealText from '../ui/RevealText';
 import BlurEffect from '../ui/BlurEffect';
 
@@ -11,7 +11,7 @@ const Hero = () => {
         <div className="space-y-8">
           <div className="space-y-3">
             <div className="flex justify-center opacity-0 animate-fade-in">
-              <Binary className="w-8 h-8 text-primary/60" />
+              <Qubit className="w-8 h-8 text-primary/60" />
             </div>
             <h1 className="heading-xl">
               <RevealText>Hello, World</RevealText>
@@ -20,7 +20,10 @@ const Hero = () => {
           
           <BlurEffect className="animation-delay-400">
             <p className="body-lg text-muted-foreground max-w-2xl">
-              I'm Angel. My purpose is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration. Don't take any of this too seriously though, we're all just figuring it out as we go.
+              I'm Angel. My purpose is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration.
+            </p>
+            <p className="body-sm italic text-muted-foreground/80 mt-4">
+              Don't take any of this too seriously though, we're all just figuring it out as we go.
             </p>
           </BlurEffect>
           
