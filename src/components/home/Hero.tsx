@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ArrowDownIcon, Qubit } from 'lucide-react';
+import { ArrowDownIcon, Atom } from 'lucide-react';
 import RevealText from '../ui/RevealText';
 import BlurEffect from '../ui/BlurEffect';
 
@@ -11,7 +11,7 @@ const Hero = () => {
         <div className="space-y-8">
           <div className="space-y-3">
             <div className="flex justify-center opacity-0 animate-fade-in">
-              <Qubit className="w-8 h-8 text-primary/60" />
+              <Atom className="w-8 h-8 text-primary/60" />
             </div>
             <h1 className="heading-xl">
               <RevealText>Hello, World</RevealText>
