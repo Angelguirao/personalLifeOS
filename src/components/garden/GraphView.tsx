@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { 
   ReactFlow, 
@@ -77,6 +78,11 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
   
   // Transform connections into React Flow edges
   const initialEdges: Edge[] = connections.map((connection) => {
+    // Ensure strength is a number and calculate the appropriate stroke width
+    const strengthValue = typeof connection.strength === 'number' 
+      ? connection.strength 
+      : Number(connection.strength);
+      
     console.log('Creating edge:', connection);
     return {
       id: `e${connection.sourceId}-${connection.targetId}`,
@@ -86,7 +92,7 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
       animated: true,
       style: { 
         stroke: '#94a3b8', 
-        strokeWidth: connection.strength * 2 || 1.5 
+        strokeWidth: strengthValue * 2 || 1.5 
       },
       label: connection.relationship,
       labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12 },

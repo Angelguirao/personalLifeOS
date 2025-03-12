@@ -1,4 +1,3 @@
-
 import { GardenNote, Connection } from './types';
 
 // Temporary hardcoded data as fallback
@@ -70,7 +69,7 @@ export const gardenNotes: GardenNote[] = [
   }
 ];
 
-// Generate some sample connections between notes
+// Generate some sample connections between notes with strengths as numbers, not strings
 export const gardenConnections: Connection[] = [
   { id: 1, sourceId: 1, targetId: 2, strength: 0.7, relationship: "related" },
   { id: 2, sourceId: 1, targetId: 3, strength: 0.5, relationship: "inspires" },

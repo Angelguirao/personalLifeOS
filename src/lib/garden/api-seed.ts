@@ -84,15 +84,20 @@ export const seedInitialData = async () => {
 // Helper function to seed only connections
 const seedConnections = async () => {
   // Transform connections to snake_case for Supabase
-  // Ensure strength is a number, not a string
-  const connectionsData = gardenConnections.map(conn => ({
-    source_id: conn.sourceId,
-    target_id: conn.targetId,
-    strength: Number(conn.strength), // Convert to number to ensure proper format
-    relationship: conn.relationship
-  }));
+  // Convert strength to integers (0-10 scale) for Supabase
+  const connectionsData = gardenConnections.map(conn => {
+    // Multiply decimal strength by 10 and round to get an integer
+    const strengthAsInteger = Math.round(Number(conn.strength) * 10);
+    
+    return {
+      source_id: conn.sourceId,
+      target_id: conn.targetId,
+      strength: strengthAsInteger, // Store as integer
+      relationship: conn.relationship
+    };
+  });
   
-  console.log('Seeding connections:', connectionsData);
+  console.log('Seeding connections with data:', connectionsData);
   
   // Insert connections
   const { error: connectionsError } = await supabase

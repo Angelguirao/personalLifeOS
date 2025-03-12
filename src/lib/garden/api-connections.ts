@@ -64,9 +64,11 @@ export const createConnection = async (connection: Omit<Connection, 'id'>): Prom
   const supabaseConnection = {
     source_id: connection.sourceId,
     target_id: connection.targetId,
-    strength: Number(connection.strength), // Convert to number to ensure proper format
+    strength: Math.round(Number(connection.strength) * 10), // Convert to integer (0-10 scale)
     relationship: connection.relationship
   };
+  
+  console.log('Creating connection with data:', supabaseConnection);
   
   const { data, error } = await supabase
     .from('garden_connections')
@@ -74,14 +76,17 @@ export const createConnection = async (connection: Omit<Connection, 'id'>): Prom
     .select()
     .single();
   
-  if (error) throw error;
+  if (error) {
+    console.error('Error creating connection:', error);
+    throw error;
+  }
   
   // Transform back to camelCase
   return {
     id: data.id,
     sourceId: data.source_id,
     targetId: data.target_id,
-    strength: Number(data.strength), // Ensure strength is a number
+    strength: Number(data.strength) / 10, // Convert back to decimal for frontend
     relationship: data.relationship
   };
 };
