@@ -13,8 +13,8 @@ import {
   Panel
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
-import { GardenNote, Connection } from '../../lib/garden/api';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../ui/dialog';
+import { GardenNote, Connection } from '../../lib/garden/types';
 import { Sprout } from 'lucide-react';
 
 interface GraphViewProps {
@@ -54,8 +54,13 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
   const [selectedNode, setSelectedNode] = useState<GardenNote | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
+  // Console log the connections for debugging
+  useEffect(() => {
+    console.log('Connections in GraphView:', connections);
+  }, [connections]);
+  
   // Transform garden notes into React Flow nodes
-  const initialNodes: Node[] = nodes.map((note, index) => ({
+  const initialNodes: Node[] = nodes.map((note) => ({
     id: note.id.toString(),
     type: 'note',
     data: note,
@@ -66,14 +71,23 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
   }));
   
   // Transform connections into React Flow edges
-  const initialEdges: Edge[] = connections.map((connection, index) => ({
-    id: `e${connection.sourceId}-${connection.targetId}`,
-    source: connection.sourceId.toString(),
-    target: connection.targetId.toString(),
-    type: 'smoothstep',
-    animated: true,
-    style: { stroke: '#94a3b8', strokeWidth: 1.5 },
-  }));
+  const initialEdges: Edge[] = connections.map((connection) => {
+    console.log('Creating edge:', connection);
+    return {
+      id: `e${connection.sourceId}-${connection.targetId}`,
+      source: connection.sourceId.toString(),
+      target: connection.targetId.toString(),
+      type: 'smoothstep',
+      animated: true,
+      style: { 
+        stroke: '#94a3b8', 
+        strokeWidth: connection.strength * 2 || 1.5 
+      },
+      label: connection.relationship,
+      labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12 },
+      labelBgStyle: { fill: 'rgba(255, 255, 255, 0.75)' },
+    };
+  });
   
   const [nodes_, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -136,6 +150,9 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
           <DialogContent className="max-w-3xl overflow-y-auto max-h-[90vh]">
             <DialogHeader>
               <DialogTitle className="font-serif text-xl font-semibold">{selectedNode.title}</DialogTitle>
+              <DialogDescription>
+                A note in your digital garden
+              </DialogDescription>
             </DialogHeader>
             <div className="mb-3 flex items-center text-xs text-muted-foreground">
               <div className="flex items-center">
