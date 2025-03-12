@@ -35,16 +35,16 @@ export const createTablesIfNotExist = async (): Promise<boolean> => {
   
   try {
     // SQL queries to create tables directly if they don't exist
+    // Updated schema to match column names in Supabase
     const createNotesTableQuery = `
       CREATE TABLE IF NOT EXISTS garden_notes (
         id SERIAL PRIMARY KEY,
         title TEXT NOT NULL,
         summary TEXT,
-        full_content TEXT,
+        content TEXT,
         stage TEXT DEFAULT 'seedling',
         last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        connections TEXT[] DEFAULT '{}',
-        book_info JSONB
+        connections TEXT[] DEFAULT '{}'
       );
     `;
     
@@ -65,28 +65,7 @@ export const createTablesIfNotExist = async (): Promise<boolean> => {
     
     if (notesTableError) {
       console.error('Error creating notes table:', notesTableError);
-      
-      // Fallback approach using simpler schema without jsonb
-      const simplifiedCreateNotesTableQuery = `
-        CREATE TABLE IF NOT EXISTS garden_notes (
-          id SERIAL PRIMARY KEY,
-          title TEXT NOT NULL,
-          summary TEXT,
-          full_content TEXT,
-          stage TEXT DEFAULT 'seedling',
-          last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-          connections TEXT[] DEFAULT '{}'
-        );
-      `;
-      
-      const { error: simplifiedNotesTableError } = await supabase.rpc('exec_sql', { 
-        sql_query: simplifiedCreateNotesTableQuery 
-      });
-      
-      if (simplifiedNotesTableError) {
-        console.error('Error creating simplified notes table:', simplifiedNotesTableError);
-        return false;
-      }
+      return false;
     }
     
     const { error: connectionsTableError } = await supabase.rpc('exec_sql', { 
@@ -112,11 +91,11 @@ export const transformNoteFromSupabase = (data: any): GardenNote => {
     id: data.id,
     title: data.title || '',
     summary: data.summary || '',
-    fullContent: data.full_content || '',
+    fullContent: data.content || '', // Changed from full_content to content
     stage: data.stage || 'seedling',
     lastUpdated: data.last_updated || new Date().toISOString(),
     connections: data.connections || [],
-    bookInfo: data.book_info
+    // Removed bookInfo as it doesn't exist in the database schema
   };
 };
 
@@ -125,10 +104,10 @@ export const transformNoteToSupabase = (note: Omit<GardenNote, 'id'>) => {
   return {
     title: note.title,
     summary: note.summary,
-    full_content: note.fullContent,
+    content: note.fullContent, // Changed from full_content to content
     stage: note.stage,
     last_updated: note.lastUpdated,
     connections: note.connections || [],
-    book_info: note.bookInfo
+    // Removed book_info as it doesn't exist in the database schema
   };
 };

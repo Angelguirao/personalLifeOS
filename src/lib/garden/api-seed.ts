@@ -38,15 +38,15 @@ export const seedInitialData = async () => {
       return;
     }
     
-    // Insert notes
+    // Insert notes with adjusted field names to match Supabase schema
     const notesData = gardenNotes.map(note => ({
       title: note.title,
       summary: note.summary,
-      full_content: note.fullContent,
+      content: note.fullContent, // Changed from full_content to content
       stage: note.stage,
       last_updated: note.lastUpdated,
       connections: note.connections,
-      book_info: note.bookInfo
+      // Removed book_info field
     }));
     
     const { error: notesError } = await supabase
@@ -55,24 +55,7 @@ export const seedInitialData = async () => {
     
     if (notesError) {
       console.error('Error seeding notes:', notesError);
-      // Try a simpler approach - without the book_info
-      const simplifiedNotesData = gardenNotes.map(note => ({
-        title: note.title,
-        summary: note.summary,
-        full_content: note.fullContent,
-        stage: note.stage,
-        last_updated: note.lastUpdated,
-        connections: note.connections
-      }));
-      
-      const { error: simplifiedNotesError } = await supabase
-        .from('garden_notes')
-        .insert(simplifiedNotesData);
-      
-      if (simplifiedNotesError) {
-        console.error('Error seeding simplified notes:', simplifiedNotesError);
-        return;
-      }
+      return;
     }
     
     // Insert connections
