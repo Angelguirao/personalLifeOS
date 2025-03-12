@@ -9,11 +9,9 @@ import RevealText from '../components/ui/RevealText';
 
 const Philosophy = () => {
   useEffect(() => {
-    // Scroll to top when component mounts
     window.scrollTo(0, 0);
   }, []);
 
-  // Last modified date - update this when you make significant changes to your philosophy
   const lastModified = new Date();
   const formattedDate = lastModified.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -37,7 +35,7 @@ const Philosophy = () => {
             </h1>
             <BlurEffect className="animation-delay-200">
               <p className="body-lg text-muted-foreground">
-                My purpose is to pursue information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration.
+                I explore and share information to build meaningful connections - embracing wonder, narrative, and play*
               </p>
             </BlurEffect>
           </div>
@@ -66,13 +64,13 @@ const Philosophy = () => {
               
               <h2>Aesthetic Approach</h2>
               <p>
-                Aesthetically, I cherish the beauty inherent in complexity, finding awe in the ordinary moments and subtle intricacies of everyday life. My aesthetic approach encourages broad, interdisciplinary appreciation, inspiring wonder and deepening my connection to the world around me.
+                I cherish finding beauty in complexity and everyday moments, celebrating the small wonders that make life fascinating.
               </p>
               
               <div className="mt-12 pt-8 border-t border-border">
-                <h2>Current Focus: Freedom Through <Link to="/entrepreneurship" className="text-primary hover:underline">Solopreneurship</Link></h2>
+                <h2>Current Focus: Freedom Through <Link to="/entrepreneurship" className="text-primary hover:underline">Micropreneurship</Link></h2>
                 <p>
-                  Recognizing that human life is inherently limited by time and that traditional work often consumes a disproportionate share, I currently prioritize entrepreneurship—particularly solopreneurship—as a means of eliminating unnecessary work. This focus allows me to cultivate greater freedom, enabling broader exploration and deeper connection aligned with my philosophy of life.
+                  Recognizing that human life is inherently limited by time and that traditional work often consumes a disproportionate share, I currently prioritize micropreneurship as a means of eliminating unnecessary work. This focus allows me to cultivate greater freedom, enabling broader exploration and deeper connection aligned with my philosophy of life.
                 </p>
               </div>
               
@@ -81,8 +79,8 @@ const Philosophy = () => {
                   <History size={14} className="mr-2" />
                   Last modified: {formattedDate}
                 </p>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  As I navigate the marketplace of ideas, I remain committed to an ongoing process of reflection, refinement, and adaptation, open to new perspectives and continually reshaping my views to deepen understanding and enhance my capacity for meaningful connection.
+                <p className="mt-2 text-sm text-muted-foreground italic">
+                  *But let's not take any of this too seriously—we're all just figuring it out as we go! 😉
                 </p>
               </div>
             </BlurEffect>

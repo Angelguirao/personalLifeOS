@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -111,7 +110,7 @@ const Garden = () => {
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-16">
+      <main className="pt-28 pb-16 px-4 sm:px-6">
         <div className="container-narrow">
           <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6">
             <ArrowLeft size={16} className="mr-1" />
@@ -128,31 +127,31 @@ const Garden = () => {
             </p>
           </div>
           
-          <div className="flex justify-between items-center mb-8">
-            <div className="glass p-4 border-l-4 border-green-500">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+            <div className="glass p-4 border-l-4 border-green-500 w-full sm:w-auto">
               <h3 className="font-serif text-sm font-semibold mb-1">How to navigate this garden:</h3>
               <ul className="text-xs text-muted-foreground space-y-1">
                 <li className="flex items-center">
-                  <Sprout size={12} className="text-green-400 mr-2" /> 
+                  <Sprout size={12} className="text-green-400 mr-2 flex-shrink-0" /> 
                   <span><strong>Seedlings</strong>: Early-stage ideas, still taking shape</span>
                 </li>
                 <li className="flex items-center">
-                  <Sprout size={12} className="text-green-500 mr-2" /> 
-                  <span><strong>Growing</strong>: Developing thoughts with some substantial content</span>
+                  <Sprout size={12} className="text-green-500 mr-2 flex-shrink-0" /> 
+                  <span><strong>Growing</strong>: Developing thoughts with some substance</span>
                 </li>
                 <li className="flex items-center">
-                  <Sprout size={12} className="text-green-600 mr-2" /> 
+                  <Sprout size={12} className="text-green-600 mr-2 flex-shrink-0" /> 
                   <span><strong>Evergreen</strong>: Well-developed, mature ideas</span>
                 </li>
               </ul>
             </div>
             
-            <div className="flex space-x-2">
+            <div className="flex space-x-2 w-full sm:w-auto">
               <Button 
                 variant={viewMode === 'list' ? 'default' : 'outline'} 
                 size="sm"
                 onClick={() => setViewMode('list')}
-                className="flex items-center"
+                className="flex items-center flex-1 sm:flex-initial justify-center"
               >
                 <Sprout size={16} className="mr-2" />
                 List View
@@ -161,7 +160,7 @@ const Garden = () => {
                 variant={viewMode === 'graph' ? 'default' : 'outline'} 
                 size="sm"
                 onClick={() => setViewMode('graph')}
-                className="flex items-center"
+                className="flex items-center flex-1 sm:flex-initial justify-center"
               >
                 <Network size={16} className="mr-2" />
                 Graph View
@@ -188,10 +187,10 @@ const Garden = () => {
           {!isLoading && !hasError && (
             <>
               {viewMode === 'list' && (
-                <div className="space-y-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {notes.map((note, index) => (
                     <BlurEffect key={note.id} className={`animation-delay-${(index + 1) * 100}`}>
-                      <article className="glass p-8 transition-transform hover:-translate-y-1">
+                      <article className="glass p-6 h-full transition-transform hover:-translate-y-1">
                         <div className="mb-3 flex items-center text-xs text-muted-foreground">
                           <div className="flex items-center">
                             {getStageIcon(note.stage)}
@@ -243,7 +242,7 @@ const Garden = () => {
               )}
               
               {viewMode === 'graph' && (
-                <div className="glass p-4 rounded-md">
+                <div className="glass p-4 rounded-md h-[60vh] sm:h-[70vh] md:h-[80vh]">
                   <GraphView nodes={notes} connections={connections} />
                 </div>
               )}

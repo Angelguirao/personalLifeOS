@@ -39,12 +39,12 @@ const EntrepreneurshipPreview = () => {
                 <Clock size={16} className="inline-block mr-1 mb-0.5" />
                 Earning Time, Not Money
               </div>
-              <h2 className="heading-lg">The Solopreneur's Manifesto</h2>
+              <h2 className="heading-lg">The Micropreneur's Manifesto</h2>
               <p className="body-md text-muted-foreground mt-4">
                 Prioritizing freedom through smart, independent work.
               </p>
               <p className="text-sm text-muted-foreground mt-2">
-                I view entrepreneurship as a path to freedom—creating space for exploration and connection 
+                I view micropreneurship as a path to freedom—creating space for exploration and connection 
                 by building lean, purposeful products that minimize unnecessary work.
               </p>
               <div className="pt-4">
