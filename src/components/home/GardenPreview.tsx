@@ -1,27 +1,19 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sprout } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import RevealText from '../ui/RevealText';
 import BlurEffect from '../ui/BlurEffect';
 
 const GardenPreview = () => {
   return (
-    <section className="py-20 relative overflow-hidden">
-      <div className="absolute w-[400px] h-[400px] rounded-full bg-green-50/10 top-20 -left-64 blur-3xl pointer-events-none"></div>
+    <section className="py-20 relative overflow-hidden bg-gradient-to-br from-background via-background to-blue-50/10">
+      <div className="absolute w-[400px] h-[400px] rounded-full bg-blue-50/5 top-20 -left-64 blur-3xl pointer-events-none"></div>
       <div className="absolute w-[300px] h-[300px] rounded-full bg-blue-50/5 bottom-20 -right-32 blur-3xl pointer-events-none"></div>
       
       <div className="container-narrow relative">
-        <div className="flex flex-col md:flex-row items-center gap-10 text-center md:text-left">
-          <div className="md:w-1/3 flex justify-center">
-            <BlurEffect>
-              <div className="w-20 h-20 flex items-center justify-center">
-                <Sprout className="w-8 h-8 text-primary/70" />
-              </div>
-            </BlurEffect>
-          </div>
-          
-          <div className="md:w-2/3">
+        <div className="flex flex-col md:flex-row items-center gap-10 text-center md:text-left">          
+          <div className="md:w-2/3 mx-auto">
             <RevealText>
               <h2 className="heading-lg mb-6">Digital Garden</h2>
             </RevealText>
