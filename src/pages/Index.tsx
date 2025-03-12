@@ -21,9 +21,9 @@ const Index = () => {
       <main className="overflow-hidden">
         <Hero />
         <PhilosophyPreview />
+        <EntrepreneurshipPreview />
         <ProjectsPreview />
         <GardenPreview />
-        <EntrepreneurshipPreview />
         <AboutPreview />
       </main>
       <Footer />

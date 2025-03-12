@@ -16,9 +16,9 @@ const projects = [
 
 const ProjectsPreview = () => {
   return (
-    <section className="py-20 relative overflow-hidden bg-gradient-to-br from-background to-blue-50/30">
-      <div className="absolute w-[500px] h-[500px] rounded-full bg-blue-50/20 top-20 -left-64 blur-3xl pointer-events-none"></div>
-      <div className="absolute w-[400px] h-[400px] rounded-full bg-purple-50/20 bottom-20 -right-32 blur-3xl pointer-events-none"></div>
+    <section className="py-20 relative overflow-hidden">
+      <div className="absolute w-[500px] h-[500px] rounded-full bg-blue-50/5 top-20 -left-64 blur-3xl pointer-events-none"></div>
+      <div className="absolute w-[400px] h-[400px] rounded-full bg-purple-50/5 bottom-20 -right-32 blur-3xl pointer-events-none"></div>
       
       <div className="container-wide relative">
         <div className="flex flex-col gap-10 items-start">
@@ -32,7 +32,7 @@ const ProjectsPreview = () => {
             <div className="pt-2">
               <Link 
                 to="/projects" 
-                className="inline-flex items-center px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium hover:bg-primary/20 transition-colors group"
+                className="inline-flex items-center px-4 py-2 bg-primary/5 text-primary rounded-full text-sm font-medium hover:bg-primary/10 transition-colors group"
                 onClick={() => window.scrollTo(0, 0)}
               >
                 View all projects
@@ -44,9 +44,9 @@ const ProjectsPreview = () => {
           <div className="w-full">
             {projects.map((project, index) => (
               <BlurEffect key={index} className="animation-delay-200">
-                <div className="glass p-6 md:p-8 hover:shadow-md transition-all duration-300 border-l-4 border-primary/20">
+                <div className="p-6 md:p-8 hover:shadow-sm transition-all duration-300 border border-primary/5 rounded-xl">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                    <div className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary/70">
                       {project.icon}
                     </div>
                     <h3 className="font-serif text-xl font-semibold">{project.title}</h3>

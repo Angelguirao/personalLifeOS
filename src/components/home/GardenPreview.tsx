@@ -8,15 +8,15 @@ import BlurEffect from '../ui/BlurEffect';
 const GardenPreview = () => {
   return (
     <section className="py-20 relative overflow-hidden">
-      <div className="absolute w-[400px] h-[400px] rounded-full bg-green-50/20 top-20 -left-64 blur-3xl pointer-events-none"></div>
-      <div className="absolute w-[300px] h-[300px] rounded-full bg-blue-50/10 bottom-20 -right-32 blur-3xl pointer-events-none"></div>
+      <div className="absolute w-[400px] h-[400px] rounded-full bg-green-50/10 top-20 -left-64 blur-3xl pointer-events-none"></div>
+      <div className="absolute w-[300px] h-[300px] rounded-full bg-blue-50/5 bottom-20 -right-32 blur-3xl pointer-events-none"></div>
       
       <div className="container-narrow relative">
         <div className="flex flex-col md:flex-row items-center gap-10 text-center md:text-left">
           <div className="md:w-1/3 flex justify-center">
             <BlurEffect>
-              <div className="w-32 h-32 rounded-full bg-primary/5 flex items-center justify-center">
-                <Sprout className="w-14 h-14 text-primary/60" />
+              <div className="w-28 h-28 rounded-full bg-primary/5 flex items-center justify-center">
+                <Sprout className="w-12 h-12 text-primary/70" />
               </div>
             </BlurEffect>
           </div>
@@ -37,7 +37,7 @@ const GardenPreview = () => {
             
             <Link 
               to="/garden" 
-              className="inline-flex items-center px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium hover:bg-primary/20 transition-colors group"
+              className="inline-flex items-center px-4 py-2 bg-primary/5 text-primary rounded-full text-sm font-medium hover:bg-primary/10 transition-colors group"
               onClick={() => window.scrollTo(0, 0)}
             >
               Explore the garden
