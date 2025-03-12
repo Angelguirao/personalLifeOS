@@ -9,64 +9,24 @@ import {
   Edge, 
   ConnectionLineType, 
   useNodesState, 
-  useEdgesState,
-  Panel,
-  Handle,
-  Position
+  useEdgesState
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../ui/dialog';
 import { GardenNote, Connection, RelationshipType } from '../../lib/garden/types';
-import { Sprout } from 'lucide-react';
+
+// Import refactored components
+import NoteNode from './NoteNode';
+import NoteDetailDialog from './NoteDetailDialog';
+import LegendPanel from './LegendPanel';
+import { getRelationshipColor } from './relationshipUtils';
 
 interface GraphViewProps {
   nodes: GardenNote[];
   connections: Connection[];
 }
 
-// Custom node for garden notes
-const NoteNode = ({ data }: { data: any }) => {
-  const getStageColor = (stage: string) => {
-    switch(stage) {
-      case "seedling": return "bg-green-400";
-      case "growing": return "bg-green-500";
-      case "evergreen": return "bg-green-600";
-      default: return "bg-gray-400";
-    }
-  };
-
-  return (
-    <div className={`p-3 rounded-md bg-background border border-muted shadow-md w-48 hover:shadow-lg transition-shadow`}>
-      <div className="flex items-center mb-2">
-        <div className={`w-2 h-2 rounded-full ${getStageColor(data.stage)} mr-2`}></div>
-        <span className="text-xs text-muted-foreground">{data.stage}</span>
-      </div>
-      <div className="font-serif font-medium text-sm truncate" title={data.title}>
-        {data.title}
-      </div>
-      
-      {/* Adding handles for connections */}
-      <Handle type="target" position={Position.Top} />
-      <Handle type="source" position={Position.Bottom} />
-    </div>
-  );
-};
-
 const nodeTypes = {
   note: NoteNode,
-};
-
-// Map relationship types to colors for better visualization
-const getRelationshipColor = (relationship: RelationshipType): string => {
-  switch (relationship) {
-    case 'related': return '#94a3b8'; // slate
-    case 'inspires': return '#60a5fa'; // blue
-    case 'builds_on': return '#34d399'; // emerald
-    case 'contrasts': return '#f87171'; // red
-    case 'references': return '#c084fc'; // purple
-    case 'questions': return '#facc15'; // yellow
-    default: return '#94a3b8'; // default slate
-  }
 };
 
 const GraphView = ({ nodes, connections }: GraphViewProps) => {
@@ -161,81 +121,14 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
           }}
           maskColor="#0f172a20"
         />
-        <Panel position="top-right" className="bg-background p-2 rounded-md shadow-md text-xs">
-          <div className="flex flex-col space-y-1">
-            <div className="flex items-center">
-              <div className="w-2 h-2 rounded-full bg-green-400 mr-2"></div>
-              <span>Seedling</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
-              <span>Growing</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 rounded-full bg-green-600 mr-2"></div>
-              <span>Evergreen</span>
-            </div>
-          </div>
-        </Panel>
+        <LegendPanel />
       </ReactFlow>
       
-      {selectedNode && (
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-3xl overflow-y-auto max-h-[90vh]">
-            <DialogHeader>
-              <DialogTitle className="font-serif text-xl font-semibold">{selectedNode.title}</DialogTitle>
-              <DialogDescription>
-                A note in your digital garden
-              </DialogDescription>
-            </DialogHeader>
-            <div className="mb-3 flex items-center text-xs text-muted-foreground">
-              <div className="flex items-center">
-                <Sprout size={16} className={selectedNode.stage === 'seedling' ? 'text-green-400' : selectedNode.stage === 'growing' ? 'text-green-500' : 'text-green-600'} />
-                <span className="ml-1 capitalize">{selectedNode.stage}</span>
-              </div>
-              <span className="mx-2">•</span>
-              <time dateTime={selectedNode.lastUpdated}>
-                Updated: {new Date(selectedNode.lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-              </time>
-            </div>
-            
-            <div className="mt-4 space-y-4">
-              <p className="text-muted-foreground">
-                {selectedNode.bookInfo ? (
-                  <>
-                    {selectedNode.fullContent.split(selectedNode.bookInfo.title)[0]}
-                    <a 
-                      href={selectedNode.bookInfo.link} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline"
-                    >
-                      {selectedNode.bookInfo.title}
-                    </a>
-                    {selectedNode.fullContent.split(selectedNode.bookInfo.title)[1]}
-                  </>
-                ) : (
-                  selectedNode.fullContent
-                )}
-              </p>
-              
-              {selectedNode.connections && selectedNode.connections.length > 0 && (
-                <div className="flex flex-wrap gap-2 pt-4">
-                  <span className="text-xs text-muted-foreground mr-2">Connected ideas:</span>
-                  {selectedNode.connections.map((tag) => (
-                    <span key={tag} className="inline-flex items-center px-2 py-1 rounded-full bg-secondary/50 text-muted-foreground text-xs">
-                      <svg className="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 12H16M12 8V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
+      <NoteDetailDialog 
+        note={selectedNode} 
+        isOpen={isDialogOpen} 
+        onOpenChange={setIsDialogOpen} 
+      />
     </div>
   );
 };
