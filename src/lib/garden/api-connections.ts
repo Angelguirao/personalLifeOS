@@ -40,12 +40,12 @@ export const getConnections = async (): Promise<Connection[]> => {
       return gardenConnections;
     }
     
-    // Transform from snake_case to camelCase
+    // Transform from snake_case to camelCase and ensure strength is a number
     return data.map(conn => ({
       id: conn.id,
       sourceId: conn.source_id,
       targetId: conn.target_id,
-      strength: conn.strength,
+      strength: Number(conn.strength), // Ensure strength is a number
       relationship: conn.relationship
     }));
   } catch (error) {
@@ -60,11 +60,11 @@ export const createConnection = async (connection: Omit<Connection, 'id'>): Prom
     throw new Error('Cannot create connection: Supabase connection or table not available');
   }
   
-  // Transform to snake_case for Supabase
+  // Transform to snake_case for Supabase and ensure strength is a number
   const supabaseConnection = {
     source_id: connection.sourceId,
     target_id: connection.targetId,
-    strength: connection.strength,
+    strength: Number(connection.strength), // Convert to number to ensure proper format
     relationship: connection.relationship
   };
   
@@ -81,7 +81,7 @@ export const createConnection = async (connection: Omit<Connection, 'id'>): Prom
     id: data.id,
     sourceId: data.source_id,
     targetId: data.target_id,
-    strength: data.strength,
+    strength: Number(data.strength), // Ensure strength is a number
     relationship: data.relationship
   };
 };

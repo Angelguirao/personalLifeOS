@@ -84,10 +84,11 @@ export const seedInitialData = async () => {
 // Helper function to seed only connections
 const seedConnections = async () => {
   // Transform connections to snake_case for Supabase
+  // Ensure strength is a number, not a string
   const connectionsData = gardenConnections.map(conn => ({
     source_id: conn.sourceId,
     target_id: conn.targetId,
-    strength: conn.strength,
+    strength: Number(conn.strength), // Convert to number to ensure proper format
     relationship: conn.relationship
   }));
   

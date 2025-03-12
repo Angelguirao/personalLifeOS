@@ -22,6 +22,6 @@ export interface Connection {
   id: number;
   sourceId: number;
   targetId: number;
-  strength: number;
+  strength: number; // Explicitly defined as number
   relationship: string;
 }
