@@ -20,7 +20,9 @@ const Index = () => {
       <Navbar />
       <main className="overflow-hidden">
         <Hero />
-        <PhilosophyPreview />
+        <div id="philosophy-preview">
+          <PhilosophyPreview />
+        </div>
         <EntrepreneurshipPreview />
         <ProjectsPreview />
         <GardenPreview />

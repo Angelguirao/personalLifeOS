@@ -15,8 +15,8 @@ const GardenPreview = () => {
         <div className="flex flex-col md:flex-row items-center gap-10 text-center md:text-left">
           <div className="md:w-1/3 flex justify-center">
             <BlurEffect>
-              <div className="w-28 h-28 rounded-full bg-primary/5 flex items-center justify-center">
-                <Sprout className="w-12 h-12 text-primary/70" />
+              <div className="w-20 h-20 flex items-center justify-center">
+                <Sprout className="w-8 h-8 text-primary/70" />
               </div>
             </BlurEffect>
           </div>

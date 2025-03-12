@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ArrowDownIcon, Sparkles } from 'lucide-react';
+import { ArrowDownIcon } from 'lucide-react';
 import RevealText from '../ui/RevealText';
 import BlurEffect from '../ui/BlurEffect';
 
@@ -9,11 +9,6 @@ const Hero = () => {
     <section className="min-h-screen pt-32 pb-20 flex flex-col justify-center relative overflow-hidden">
       <div className="container-narrow relative z-10">
         <div className="space-y-8 text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 text-primary/70 mb-3 opacity-0 animate-fade-in">
-            <Sparkles size={18} className="text-primary/90" />
-            <span className="text-sm font-medium tracking-wide uppercase">Thoughts & Explorations</span>
-          </div>
-          
           <div className="space-y-3">
             <h1 className="heading-xl">
               <RevealText>Hello, World</RevealText>
