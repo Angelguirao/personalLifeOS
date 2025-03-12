@@ -16,7 +16,7 @@ import {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../ui/dialog';
-import { GardenNote, Connection } from '../../lib/garden/types';
+import { GardenNote, Connection, RelationshipType } from '../../lib/garden/types';
 import { Sprout } from 'lucide-react';
 
 interface GraphViewProps {
@@ -56,6 +56,19 @@ const nodeTypes = {
   note: NoteNode,
 };
 
+// Map relationship types to colors for better visualization
+const getRelationshipColor = (relationship: RelationshipType): string => {
+  switch (relationship) {
+    case 'related': return '#94a3b8'; // slate
+    case 'inspires': return '#60a5fa'; // blue
+    case 'builds_on': return '#34d399'; // emerald
+    case 'contrasts': return '#f87171'; // red
+    case 'references': return '#c084fc'; // purple
+    case 'questions': return '#facc15'; // yellow
+    default: return '#94a3b8'; // default slate
+  }
+};
+
 const GraphView = ({ nodes, connections }: GraphViewProps) => {
   const [selectedNode, setSelectedNode] = useState<GardenNote | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -82,7 +95,10 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
     const strengthValue = typeof connection.strength === 'number' 
       ? connection.strength 
       : Number(connection.strength);
-      
+    
+    // Get edge color based on relationship type  
+    const edgeColor = getRelationshipColor(connection.relationship as RelationshipType);
+    
     console.log('Creating edge:', connection);
     return {
       id: `e${connection.sourceId}-${connection.targetId}`,
@@ -91,7 +107,7 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
       type: 'default', // Changed from 'smoothstep' to ensure basic compatibility
       animated: true,
       style: { 
-        stroke: '#94a3b8', 
+        stroke: edgeColor, 
         strokeWidth: strengthValue * 2 || 1.5 
       },
       label: connection.relationship,

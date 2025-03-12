@@ -3,6 +3,7 @@ import supabase from './client';
 import { gardenNotes, gardenConnections } from './data';
 import { tableExists, transformNoteToSupabase } from './utils';
 import { toast } from 'sonner';
+import { SupabaseConnection } from './types';
 
 export const seedInitialData = async () => {
   if (!supabase) return;
@@ -85,7 +86,7 @@ export const seedInitialData = async () => {
 const seedConnections = async () => {
   // Transform connections to snake_case for Supabase
   // Convert strength to integers (0-10 scale) for Supabase
-  const connectionsData = gardenConnections.map(conn => {
+  const connectionsData: Omit<SupabaseConnection, 'id'>[] = gardenConnections.map(conn => {
     // Multiply decimal strength by 10 and round to get an integer
     const strengthAsInteger = Math.round(Number(conn.strength) * 10);
     

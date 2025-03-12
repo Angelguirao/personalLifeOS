@@ -19,7 +19,10 @@ export {
 // Export connections API functions
 export {
   getConnections,
-  createConnection
+  createConnection,
+  getNoteConnections,
+  updateConnection,
+  deleteConnection
 } from './api-connections';
 
 // Export utility functions if needed externally
