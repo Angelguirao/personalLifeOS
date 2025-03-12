@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Github, BookText } from 'lucide-react';
 import BlurEffect from '../ui/BlurEffect';
+import RevealText from '../ui/RevealText';
 
 const projects = [
   {
@@ -15,16 +16,18 @@ const projects = [
 
 const ProjectsPreview = () => {
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-20 relative overflow-hidden bg-gradient-to-br from-background to-blue-50/30">
       <div className="absolute w-[500px] h-[500px] rounded-full bg-blue-50/20 top-20 -left-64 blur-3xl pointer-events-none"></div>
       <div className="absolute w-[400px] h-[400px] rounded-full bg-purple-50/20 bottom-20 -right-32 blur-3xl pointer-events-none"></div>
       
       <div className="container-wide relative">
         <div className="flex flex-col gap-10 items-start">
           <div className="w-full space-y-6">
-            <h2 className="heading-lg">Projects</h2>
-            <p className="body-md text-muted-foreground">
-              A selection of my software projects, open-source contributions, and other creative works that embody my philosophy and approach.
+            <RevealText>
+              <h2 className="heading-lg">Projects</h2>
+            </RevealText>
+            <p className="body-md text-muted-foreground max-w-xl">
+              A collection of software experiments, tools, and creative works that embody my approach to building meaningful solutions.
             </p>
             <div className="pt-2">
               <Link 
@@ -41,7 +44,7 @@ const ProjectsPreview = () => {
           <div className="w-full">
             {projects.map((project, index) => (
               <BlurEffect key={index} className="animation-delay-200">
-                <div className="glass p-6 md:p-8 hover:shadow-md transition-all duration-300">
+                <div className="glass p-6 md:p-8 hover:shadow-md transition-all duration-300 border-l-4 border-primary/20">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                       {project.icon}

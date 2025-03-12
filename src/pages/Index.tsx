@@ -18,12 +18,12 @@ const Index = () => {
   return (
     <>
       <Navbar />
-      <main>
+      <main className="overflow-hidden">
         <Hero />
         <PhilosophyPreview />
-        <EntrepreneurshipPreview />
         <ProjectsPreview />
         <GardenPreview />
+        <EntrepreneurshipPreview />
         <AboutPreview />
       </main>
       <Footer />
