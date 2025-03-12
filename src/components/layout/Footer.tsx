@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Github, Twitter, Linkedin, Mail, Bitcoin, Copy } from 'lucide-react';
@@ -21,7 +22,7 @@ const Footer = () => {
           <div className="space-y-4 md:col-span-1">
             <h3 className="font-serif text-lg font-semibold">Angel Guirao</h3>
             <p className="text-muted-foreground text-sm max-w-md">
-              Pursuing information as a means of connecting deeply and meaningfully with people, nature, and the universe—embracing narrative and playful exploration.
+              I explore and share information to build meaningful connections - embracing wonder, narrative, and play.
             </p>
           </div>
           
@@ -30,7 +31,7 @@ const Footer = () => {
             <nav className="flex flex-col space-y-2">
               <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Home</Link>
               <Link to="/philosophy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Philosophy</Link>
-              <Link to="/entrepreneurship" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Solopreneurship</Link>
+              <Link to="/entrepreneurship" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Micropreneurship</Link>
               <Link to="/projects" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Projects</Link>
               <Link to="/garden" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Garden</Link>
               <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</Link>

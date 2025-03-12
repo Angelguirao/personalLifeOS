@@ -35,7 +35,7 @@ const Philosophy = () => {
             </h1>
             <BlurEffect className="animation-delay-200">
               <p className="body-lg text-muted-foreground">
-                I explore and share information to build meaningful connections - embracing wonder, narrative, and play*
+                I explore and share information to build meaningful connections - embracing wonder, narrative, and play.
               </p>
             </BlurEffect>
           </div>
@@ -79,8 +79,8 @@ const Philosophy = () => {
                   <History size={14} className="mr-2" />
                   Last modified: {formattedDate}
                 </p>
-                <p className="mt-2 text-sm text-muted-foreground italic">
-                  *But let's not take any of this too seriously—we're all just figuring it out as we go! 😉
+                <p className="mt-2 text-sm text-muted-foreground">
+                  I'm browsing the marketplace of ideas with an open mind, trying things out, and adjusting as I go. No big deal, just having fun while figuring stuff out! 🤔
                 </p>
               </div>
             </BlurEffect>

@@ -20,7 +20,7 @@ const Entrepreneurship = () => {
           
           <div className="space-y-4 mb-12">
             <h1 className="heading-lg">
-              <RevealText>The Solopreneur's Manifesto</RevealText>
+              <RevealText>The Micropreneur's Manifesto</RevealText>
             </h1>
             <BlurEffect className="animation-delay-200">
               <p className="body-lg text-muted-foreground">
@@ -33,7 +33,7 @@ const Entrepreneurship = () => {
             <BlurEffect className="animation-delay-300">
               <h2>1. Lifestyle-Based → Earn Time, Not Money</h2>
               <p>
-                Solopreneurship is about minimizing the necessity of work, not maximizing income. The goal is <strong>to create freedom</strong>—financial, mental, and creative. <strong>What you do with that time is your choice.</strong>
+                Micropreneurship is about minimizing the necessity of work, not maximizing income. The goal is <strong>to create freedom</strong>—financial, mental, and creative. <strong>What you do with that time is your choice.</strong>
               </p>
               
               <h2>2. Bootstrapped → Stay Independent & Lean</h2>
@@ -43,7 +43,7 @@ const Entrepreneurship = () => {
               
               <h2>3. Product-Focused → Build with an Engineering Mindset</h2>
               <p>
-                Solopreneurship is about <strong>making things, not managing things</strong>. Prioritize <strong>indie hacking, AI-driven automation, and software product engineering</strong> over marketing-heavy, service-based, or operationally complex businesses.
+                Micropreneurship is about <strong>making things, not managing things</strong>. Prioritize <strong>indie hacking, AI-driven automation, and software product engineering</strong> over marketing-heavy, service-based, or operationally complex businesses.
               </p>
               
               <h2>4. Solve Your Own Problems First → Reduce Complexity</h2>
@@ -63,7 +63,7 @@ const Entrepreneurship = () => {
               
               <h2>6. Ethical Development → Build Open, Build for Impact</h2>
               <p>
-                Software is information, and <strong>information should be free</strong>. As a solopreneur, this means <strong>building open-source tools</strong> that allow others to use, modify, and learn from them freely. Monetization should come from <strong>convenience, not control</strong>—charging for premium features, hosting, or ease-of-use, while keeping the core technology accessible.
+                Software is information, and <strong>information should be free</strong>. As a micropreneur, this means <strong>building open-source tools</strong> that allow others to use, modify, and learn from them freely. Monetization should come from <strong>convenience, not control</strong>—charging for premium features, hosting, or ease-of-use, while keeping the core technology accessible.
               </p>
               <ul>
                 <li><strong>Solve real problems</strong> (yours first, but useful to others).</li>
