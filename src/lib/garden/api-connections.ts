@@ -30,7 +30,7 @@ export const getConnections = async (): Promise<Connection[]> => {
     if (error) {
       console.error('Supabase error:', error);
       toast.error('Failed to load connections from database');
-      return gardenConnections; // Return fallback data on error
+      return gardenConnections;
     }
     
     console.log('Supabase connections data:', data);
@@ -40,11 +40,17 @@ export const getConnections = async (): Promise<Connection[]> => {
       return gardenConnections;
     }
     
-    return data;
+    // Transform from snake_case to camelCase
+    return data.map(conn => ({
+      id: conn.id,
+      sourceId: conn.source_id,
+      targetId: conn.target_id,
+      strength: conn.strength,
+      relationship: conn.relationship
+    }));
   } catch (error) {
     console.error('Error fetching connections:', error);
     toast.error('Error fetching connections');
-    // Fallback to the sample data if there's an error
     return gardenConnections;
   }
 };
@@ -54,12 +60,28 @@ export const createConnection = async (connection: Omit<Connection, 'id'>): Prom
     throw new Error('Cannot create connection: Supabase connection or table not available');
   }
   
+  // Transform to snake_case for Supabase
+  const supabaseConnection = {
+    source_id: connection.sourceId,
+    target_id: connection.targetId,
+    strength: connection.strength,
+    relationship: connection.relationship
+  };
+  
   const { data, error } = await supabase
     .from('garden_connections')
-    .insert(connection)
+    .insert(supabaseConnection)
     .select()
     .single();
   
   if (error) throw error;
-  return data;
+  
+  // Transform back to camelCase
+  return {
+    id: data.id,
+    sourceId: data.source_id,
+    targetId: data.target_id,
+    strength: data.strength,
+    relationship: data.relationship
+  };
 };

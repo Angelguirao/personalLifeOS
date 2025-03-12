@@ -3,7 +3,6 @@ import supabase from './client';
 import { gardenNotes, gardenConnections } from './data';
 import { tableExists, transformNoteToSupabase } from './utils';
 
-// Seed initial data into Supabase if tables are empty
 export const seedInitialData = async () => {
   if (!supabase) return;
   
@@ -38,7 +37,6 @@ export const seedInitialData = async () => {
     
     // Transform notes to Supabase format
     const notesData = gardenNotes.map(note => transformNoteToSupabase(note));
-    console.log('notesData', notesData);
     
     // Insert notes
     const { error: notesError } = await supabase
@@ -50,10 +48,20 @@ export const seedInitialData = async () => {
       return;
     }
     
+    // Transform connections to snake_case for Supabase
+    const connectionsData = gardenConnections.map(conn => ({
+      source_id: conn.sourceId,
+      target_id: conn.targetId,
+      strength: conn.strength,
+      relationship: conn.relationship
+    }));
+    
+    console.log('Seeding connections:', connectionsData);
+    
     // Insert connections
     const { error: connectionsError } = await supabase
       .from('garden_connections')
-      .insert(gardenConnections);
+      .insert(connectionsData);
     
     if (connectionsError) {
       console.error('Error seeding connections:', connectionsError);
