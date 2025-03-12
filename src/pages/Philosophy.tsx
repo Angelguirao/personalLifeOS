@@ -80,7 +80,7 @@ const Philosophy = () => {
                   Last modified: {formattedDate}
                 </p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  I'm browsing the marketplace of ideas with an open mind, trying things out, and adjusting as I go. No big deal, just having fun while figuring stuff out! 🤔
+                  The older this date gets, the more worried both you and I should be - it would mean I'm not exploring new ideas with an open mind! 🤔
                 </p>
               </div>
             </BlurEffect>

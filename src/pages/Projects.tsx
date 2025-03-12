@@ -62,7 +62,7 @@ const Projects = () => {
   const projects = [
     {
       title: "Scriptoria",
-      description: "An AI-powered ebook management system that finally brings true digital revolution to books, going beyond the simple digital copies that ebooks have been until now. Because who doesn't love a good book chat with AI?",
+      description: "An AI-powered ebook management system that finally brings true digital revolution to books, going beyond the simple digital copies that ebooks have been until now. Because who doesn't love a good book empowered by AI?",
       githubUrl: "https://github.com/Angelguirao/ai-ebook-system",
       imageSrc: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=800&q=80"
     }
