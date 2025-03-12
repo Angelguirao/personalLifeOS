@@ -10,7 +10,9 @@ import {
   ConnectionLineType, 
   useNodesState, 
   useEdgesState,
-  Panel
+  Panel,
+  Handle,
+  Position
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../ui/dialog';
@@ -42,6 +44,10 @@ const NoteNode = ({ data }: { data: any }) => {
       <div className="font-serif font-medium text-sm truncate" title={data.title}>
         {data.title}
       </div>
+      
+      {/* Adding handles for connections */}
+      <Handle type="target" position={Position.Top} />
+      <Handle type="source" position={Position.Bottom} />
     </div>
   );
 };
@@ -77,7 +83,7 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
       id: `e${connection.sourceId}-${connection.targetId}`,
       source: connection.sourceId.toString(),
       target: connection.targetId.toString(),
-      type: 'smoothstep',
+      type: 'default', // Changed from 'smoothstep' to ensure basic compatibility
       animated: true,
       style: { 
         stroke: '#94a3b8', 
@@ -112,6 +118,10 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
         fitView
         attributionPosition="bottom-right"
         connectionLineType={ConnectionLineType.SmoothStep}
+        defaultEdgeOptions={{
+          type: 'default',
+          animated: true
+        }}
       >
         <Background color="#94a3b8" gap={16} />
         <Controls />
