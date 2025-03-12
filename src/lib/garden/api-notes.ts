@@ -2,8 +2,9 @@
 import supabase from './client';
 import { gardenNotes } from './data';
 import { GardenNote } from './types';
-import { tableExists, createTablesIfNotExist, transformNoteFromSupabase, transformNoteToSupabase } from './utils';
+import { tableExists, transformNoteFromSupabase, transformNoteToSupabase } from './utils';
 import { seedInitialData } from './api-seed';
+import { toast } from 'sonner';
 
 export const getNotes = async (): Promise<GardenNote[]> => {
   console.log('Fetching notes...');
@@ -15,14 +16,12 @@ export const getNotes = async (): Promise<GardenNote[]> => {
   }
   
   try {
-    // Check if tables exist, if not, try to create them
+    // Check if tables exist
     const notesExist = await tableExists('garden_notes');
     if (!notesExist) {
-      console.log('Notes table does not exist, attempting to create tables...');
-      if (!(await createTablesIfNotExist())) {
-        console.log('Failed to create tables, using fallback data');
-        return gardenNotes;
-      }
+      console.log('Notes table does not exist');
+      toast.info('Digital Garden is running in offline mode. Connect to Supabase for persistent storage.');
+      return gardenNotes;
     }
     
     console.log('Fetching notes from Supabase...');
@@ -32,6 +31,7 @@ export const getNotes = async (): Promise<GardenNote[]> => {
     
     if (error) {
       console.error('Supabase error:', error);
+      toast.error('Failed to load notes from database');
       return gardenNotes; // Return fallback data on error
     }
     
@@ -47,6 +47,7 @@ export const getNotes = async (): Promise<GardenNote[]> => {
     return data.map(transformNoteFromSupabase);
   } catch (error) {
     console.error('Error fetching notes:', error);
+    toast.error('Error fetching notes');
     // Fallback to the sample data if there's an error
     return gardenNotes;
   }

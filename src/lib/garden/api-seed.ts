@@ -1,7 +1,7 @@
 
 import supabase from './client';
 import { gardenNotes, gardenConnections } from './data';
-import { tableExists, createTablesIfNotExist } from './utils';
+import { tableExists, transformNoteToSupabase } from './utils';
 
 // Seed initial data into Supabase if tables are empty
 export const seedInitialData = async () => {
@@ -15,14 +15,12 @@ export const seedInitialData = async () => {
     const connectionsTableExists = await tableExists('garden_connections');
     
     if (!notesTableExists || !connectionsTableExists) {
-      console.warn('One or more required tables do not exist in Supabase. Attempting to create...');
-      if (!(await createTablesIfNotExist())) {
-        console.warn('Failed to create tables. Skipping data seeding.');
-        return;
-      }
+      console.warn('Required tables do not exist in Supabase. Please create them manually in the Supabase dashboard.');
+      console.warn('Using fallback data for now.');
+      return;
     }
     
-    // Directly check if the notes table has data instead of querying column metadata
+    // Check if the notes table has data
     const { count: notesCount, error: countError } = await supabase
       .from('garden_notes')
       .select('*', { count: 'exact', head: true });
@@ -38,17 +36,11 @@ export const seedInitialData = async () => {
       return;
     }
     
-    // Insert notes with proper fields
-    const notesData = gardenNotes.map(note => ({
-      title: note.title,
-      summary: note.summary,
-      full_content: note.fullContent,
-      stage: note.stage,
-      last_updated: note.lastUpdated,
-      connections: note.connections,
-      book_info: note.bookInfo
-    }));
+    // Transform notes to Supabase format
+    const notesData = gardenNotes.map(note => transformNoteToSupabase(note));
+    console.log('notesData', notesData);
     
+    // Insert notes
     const { error: notesError } = await supabase
       .from('garden_notes')
       .insert(notesData);

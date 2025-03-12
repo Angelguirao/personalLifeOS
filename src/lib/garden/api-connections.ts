@@ -3,6 +3,7 @@ import supabase from './client';
 import { gardenConnections } from './data';
 import { Connection } from './types';
 import { tableExists } from './utils';
+import { toast } from 'sonner';
 
 export const getConnections = async (): Promise<Connection[]> => {
   console.log('Fetching connections...');
@@ -28,6 +29,7 @@ export const getConnections = async (): Promise<Connection[]> => {
     
     if (error) {
       console.error('Supabase error:', error);
+      toast.error('Failed to load connections from database');
       return gardenConnections; // Return fallback data on error
     }
     
@@ -41,6 +43,7 @@ export const getConnections = async (): Promise<Connection[]> => {
     return data;
   } catch (error) {
     console.error('Error fetching connections:', error);
+    toast.error('Error fetching connections');
     // Fallback to the sample data if there's an error
     return gardenConnections;
   }

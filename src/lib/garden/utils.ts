@@ -34,24 +34,15 @@ export const createTablesIfNotExist = async (): Promise<boolean> => {
   if (!supabase) return false;
   
   try {
-    // First, drop existing tables to ensure clean schema
-    const dropTablesQuery = `
-      DROP TABLE IF EXISTS garden_connections;
-      DROP TABLE IF EXISTS garden_notes;
-    `;
+    console.log('Creating tables using Supabase API instead of SQL commands');
     
-    const { error: dropError } = await supabase.rpc('exec_sql', { 
-      sql_query: dropTablesQuery 
-    });
+    // For Supabase, we need to create tables through the Supabase dashboard or using migrations
+    // Here we will just log a message that the user needs to create the tables manually
     
-    if (dropError) {
-      console.error('Error dropping tables:', dropError);
-      return false;
-    }
-    
-    // SQL queries to create tables with proper schema
-    const createNotesTableQuery = `
-      CREATE TABLE garden_notes (
+    console.log(`
+      To create required tables, please go to your Supabase dashboard and run these SQL commands:
+      
+      CREATE TABLE IF NOT EXISTS garden_notes (
         id SERIAL PRIMARY KEY,
         title TEXT NOT NULL,
         summary TEXT,
@@ -61,39 +52,19 @@ export const createTablesIfNotExist = async (): Promise<boolean> => {
         connections TEXT[] DEFAULT '{}',
         book_info JSONB
       );
-    `;
-    
-    const createConnectionsTableQuery = `
-      CREATE TABLE garden_connections (
+      
+      CREATE TABLE IF NOT EXISTS garden_connections (
         id SERIAL PRIMARY KEY,
         source_id INTEGER NOT NULL REFERENCES garden_notes(id),
         target_id INTEGER NOT NULL REFERENCES garden_notes(id),
         strength INTEGER DEFAULT 1,
         relationship TEXT
       );
-    `;
+    `);
     
-    // Execute the SQL queries
-    const { error: notesTableError } = await supabase.rpc('exec_sql', { 
-      sql_query: createNotesTableQuery 
-    });
-    
-    if (notesTableError) {
-      console.error('Error creating notes table:', notesTableError);
-      return false;
-    }
-    
-    const { error: connectionsTableError } = await supabase.rpc('exec_sql', { 
-      sql_query: createConnectionsTableQuery 
-    });
-    
-    if (connectionsTableError) {
-      console.error('Error creating connections table:', connectionsTableError);
-      return false;
-    }
-    
-    console.log('Tables created successfully');
-    return true;
+    // We'll consider this a success so the app can use fallback data
+    // You'll need to create the tables manually in the Supabase dashboard
+    return false;
   } catch (error) {
     console.error('Error creating tables:', error);
     return false;
