@@ -257,7 +257,7 @@ const Garden = () => {
               )}
               
               {viewMode === 'graph' && (
-                <div className="glass p-4 rounded-md h-[60vh] sm:h-[70vh] md:h-[80vh]">
+                <div className="glass p-4 rounded-md h-[80vh] md:h-[85vh] lg:h-[90vh] w-full">
                   <GraphView nodes={notes} connections={connections} />
                 </div>
               )}

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { 
   ReactFlow, 
@@ -107,7 +106,7 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
   };
 
   return (
-    <div className="w-full h-[600px]">
+    <div className="w-full h-full">
       <ReactFlow
         nodes={nodes_}
         edges={edges}
@@ -116,6 +115,9 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
         onNodeClick={onNodeClick}
         nodeTypes={nodeTypes}
         fitView
+        fitViewOptions={{ padding: 0.2 }}
+        minZoom={0.1}
+        maxZoom={4}
         attributionPosition="bottom-right"
         connectionLineType={ConnectionLineType.SmoothStep}
         defaultEdgeOptions={{
