@@ -17,7 +17,7 @@ const Hero = () => {
           
           <BlurEffect className="animation-delay-400">
             <p className="body-lg text-muted-foreground max-w-2xl mx-auto sm:mx-0">
-              I'm Angel. I explore and share information to build meaningful connections - embracing wonder, narrative, and play.
+              I'm Angel. I explore and share information to build meaningful connections - embracing wonder, narrative, and play*
             </p>
             <p className="body-sm italic text-muted-foreground/80 mt-6 border-l-2 border-primary/20 pl-4 max-w-2xl mx-auto sm:mx-0">
               *Don't take any of this too seriously though, we're all just figuring it out as we go.
