@@ -100,11 +100,11 @@ export const updateNote = async (id: number, note: Partial<GardenNote>): Promise
   
   if (note.title) supabaseNote.title = note.title;
   if (note.summary) supabaseNote.summary = note.summary;
-  if (note.fullContent) supabaseNote.content = note.fullContent; // Changed from full_content to content
+  if (note.fullContent) supabaseNote.full_content = note.fullContent;
   if (note.stage) supabaseNote.stage = note.stage;
   if (note.lastUpdated) supabaseNote.last_updated = note.lastUpdated;
   if (note.connections) supabaseNote.connections = note.connections;
-  // Removed book_info field
+  if (note.bookInfo) supabaseNote.book_info = note.bookInfo;
   
   const { data, error } = await supabase
     .from('garden_notes')

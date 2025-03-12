@@ -35,24 +35,25 @@ export const createTablesIfNotExist = async (): Promise<boolean> => {
   
   try {
     // SQL queries to create tables directly if they don't exist
-    // Updated schema to match column names in Supabase
+    // Using the proper schema with full_content and book_info
     const createNotesTableQuery = `
       CREATE TABLE IF NOT EXISTS garden_notes (
         id SERIAL PRIMARY KEY,
         title TEXT NOT NULL,
         summary TEXT,
-        content TEXT,
+        full_content TEXT,
         stage TEXT DEFAULT 'seedling',
         last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        connections TEXT[] DEFAULT '{}'
+        connections TEXT[] DEFAULT '{}',
+        book_info JSONB
       );
     `;
     
     const createConnectionsTableQuery = `
       CREATE TABLE IF NOT EXISTS garden_connections (
         id SERIAL PRIMARY KEY,
-        source_id INTEGER NOT NULL,
-        target_id INTEGER NOT NULL,
+        source_id INTEGER NOT NULL REFERENCES garden_notes(id),
+        target_id INTEGER NOT NULL REFERENCES garden_notes(id),
         strength INTEGER DEFAULT 1,
         relationship TEXT
       );
@@ -91,11 +92,11 @@ export const transformNoteFromSupabase = (data: any): GardenNote => {
     id: data.id,
     title: data.title || '',
     summary: data.summary || '',
-    fullContent: data.content || '', // Changed from full_content to content
+    fullContent: data.full_content || '', 
     stage: data.stage || 'seedling',
     lastUpdated: data.last_updated || new Date().toISOString(),
     connections: data.connections || [],
-    // Removed bookInfo as it doesn't exist in the database schema
+    bookInfo: data.book_info
   };
 };
 
@@ -104,10 +105,10 @@ export const transformNoteToSupabase = (note: Omit<GardenNote, 'id'>) => {
   return {
     title: note.title,
     summary: note.summary,
-    content: note.fullContent, // Changed from full_content to content
+    full_content: note.fullContent,
     stage: note.stage,
     last_updated: note.lastUpdated,
     connections: note.connections || [],
-    // Removed book_info as it doesn't exist in the database schema
+    book_info: note.bookInfo
   };
 };

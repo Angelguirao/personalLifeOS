@@ -38,15 +38,15 @@ export const seedInitialData = async () => {
       return;
     }
     
-    // Insert notes with adjusted field names to match Supabase schema
+    // Insert notes with proper fields
     const notesData = gardenNotes.map(note => ({
       title: note.title,
       summary: note.summary,
-      content: note.fullContent, // Changed from full_content to content
+      full_content: note.fullContent,
       stage: note.stage,
       last_updated: note.lastUpdated,
       connections: note.connections,
-      // Removed book_info field
+      book_info: note.bookInfo
     }));
     
     const { error: notesError } = await supabase
