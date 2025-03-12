@@ -34,10 +34,24 @@ export const createTablesIfNotExist = async (): Promise<boolean> => {
   if (!supabase) return false;
   
   try {
-    // SQL queries to create tables directly if they don't exist
-    // Using the proper schema with full_content and book_info
+    // First, drop existing tables to ensure clean schema
+    const dropTablesQuery = `
+      DROP TABLE IF EXISTS garden_connections;
+      DROP TABLE IF EXISTS garden_notes;
+    `;
+    
+    const { error: dropError } = await supabase.rpc('exec_sql', { 
+      sql_query: dropTablesQuery 
+    });
+    
+    if (dropError) {
+      console.error('Error dropping tables:', dropError);
+      return false;
+    }
+    
+    // SQL queries to create tables with proper schema
     const createNotesTableQuery = `
-      CREATE TABLE IF NOT EXISTS garden_notes (
+      CREATE TABLE garden_notes (
         id SERIAL PRIMARY KEY,
         title TEXT NOT NULL,
         summary TEXT,
@@ -50,7 +64,7 @@ export const createTablesIfNotExist = async (): Promise<boolean> => {
     `;
     
     const createConnectionsTableQuery = `
-      CREATE TABLE IF NOT EXISTS garden_connections (
+      CREATE TABLE garden_connections (
         id SERIAL PRIMARY KEY,
         source_id INTEGER NOT NULL REFERENCES garden_notes(id),
         target_id INTEGER NOT NULL REFERENCES garden_notes(id),
@@ -78,7 +92,7 @@ export const createTablesIfNotExist = async (): Promise<boolean> => {
       return false;
     }
     
-    console.log('Tables created or already exist');
+    console.log('Tables created successfully');
     return true;
   } catch (error) {
     console.error('Error creating tables:', error);
