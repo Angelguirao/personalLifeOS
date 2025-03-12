@@ -8,8 +8,9 @@ import BlurEffect from '../components/ui/BlurEffect';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '../components/ui/button';
-import { GardenNote, getNotes, getConnections } from '../lib/garden/api';
+import { GardenNote, getNotes, getConnections, seedInitialData } from '../lib/garden/api';
 import GraphView from '../components/garden/GraphView';
+import { toast } from 'sonner';
 
 const getStageIcon = (stage: string) => {
   switch(stage) {
@@ -85,6 +86,20 @@ const NoteDialog = ({ note }: { note: GardenNote }) => {
 
 const Garden = () => {
   const [viewMode, setViewMode] = useState<'list' | 'graph'>('list');
+  
+  // Seed initial data when component mounts
+  useEffect(() => {
+    const seedData = async () => {
+      try {
+        await seedInitialData();
+      } catch (error) {
+        console.error('Error seeding initial data:', error);
+        toast.error('Error setting up the garden. Using local data.');
+      }
+    };
+    
+    seedData();
+  }, []);
   
   const { 
     data: notes = [], 
