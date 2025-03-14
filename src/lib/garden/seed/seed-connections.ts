@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 export const seedConnections = async () => {
   // Check if we already have connection data
   const { count, error: countError } = await supabase
-    .from('garden_connections')
+    .from('connections')
     .select('*', { count: 'exact', head: true });
   
   if (countError) {
@@ -40,7 +40,7 @@ export const seedConnections = async () => {
   
   // Insert connections
   const { error: connectionsError } = await supabase
-    .from('garden_connections')
+    .from('connections')
     .insert(connectionsData);
   
   if (connectionsError) {

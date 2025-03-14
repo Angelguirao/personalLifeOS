@@ -34,14 +34,14 @@ export const getConnections = async (): Promise<Connection[]> => {
   
   try {
     // Check if table exists
-    const connectionsExist = await tableExists('garden_connections');
+    const connectionsExist = await tableExists('connections');
     if (!connectionsExist) {
       throw new Error('Connections table does not exist');
     }
     
     console.log('Fetching connections from Supabase...');
     const { data, error } = await supabase
-      .from('garden_connections')
+      .from('connections')
       .select('*');
     
     if (error) {
@@ -67,7 +67,7 @@ export const getConnections = async (): Promise<Connection[]> => {
 };
 
 export const createConnection = async (connection: Omit<Connection, 'id'>): Promise<Connection> => {
-  if (!supabase || !(await tableExists('garden_connections'))) {
+  if (!supabase || !(await tableExists('connections'))) {
     throw new Error('Cannot create connection: Supabase connection or table not available');
   }
   
@@ -77,7 +77,7 @@ export const createConnection = async (connection: Omit<Connection, 'id'>): Prom
   console.log('Creating connection with data:', supabaseConnection);
   
   const { data, error } = await supabase
-    .from('garden_connections')
+    .from('connections')
     .insert(supabaseConnection)
     .select()
     .single();
@@ -93,12 +93,12 @@ export const createConnection = async (connection: Omit<Connection, 'id'>): Prom
 
 // Get all connections for a specific model (either as source or target)
 export const getNoteConnections = async (modelId: string): Promise<Connection[]> => {
-  if (!supabase || !(await tableExists('garden_connections'))) {
+  if (!supabase || !(await tableExists('connections'))) {
     throw new Error('Supabase connection or table not available');
   }
   
   const { data, error } = await supabase
-    .from('garden_connections')
+    .from('connections')
     .select('*')
     .or(`source_id.eq.${modelId},target_id.eq.${modelId}`);
   
@@ -112,12 +112,12 @@ export const getNoteConnections = async (modelId: string): Promise<Connection[]>
 
 // Delete a connection
 export const deleteConnection = async (connectionId: number): Promise<void> => {
-  if (!supabase || !(await tableExists('garden_connections'))) {
+  if (!supabase || !(await tableExists('connections'))) {
     throw new Error('Cannot delete connection: Supabase connection or table not available');
   }
   
   const { error } = await supabase
-    .from('garden_connections')
+    .from('connections')
     .delete()
     .eq('id', connectionId);
   
@@ -132,7 +132,7 @@ export const updateConnection = async (
   connectionId: number, 
   updates: Partial<Omit<Connection, 'id'>>
 ): Promise<Connection> => {
-  if (!supabase || !(await tableExists('garden_connections'))) {
+  if (!supabase || !(await tableExists('connections'))) {
     throw new Error('Cannot update connection: Supabase connection or table not available');
   }
   
@@ -147,7 +147,7 @@ export const updateConnection = async (
   }
   
   const { data, error } = await supabase
-    .from('garden_connections')
+    .from('connections')
     .update(supabaseUpdates)
     .eq('id', connectionId)
     .select()

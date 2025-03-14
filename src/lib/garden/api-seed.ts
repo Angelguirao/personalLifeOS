@@ -7,6 +7,7 @@ import { seedMentalModels } from './seed/seed-models';
 import { seedModelVersions } from './seed/seed-versions';
 import { seedQuestions } from './seed/seed-questions';
 import { seedInspirations } from './seed/seed-inspirations';
+import { seedConnections } from './seed/seed-connections';
 
 export const seedInitialData = async () => {
   if (!supabase) return;
@@ -16,7 +17,7 @@ export const seedInitialData = async () => {
   try {
     // First, check if tables exist (legacy tables)
     const notesTableExists = await tableExists('garden_notes');
-    const connectionsTableExists = await tableExists('garden_connections');
+    const connectionsTableExists = await tableExists('connections');
     
     // Check if new tables exist
     const mentalModelsTableExists = await tableExists('mental_models');
@@ -33,13 +34,17 @@ export const seedInitialData = async () => {
     }
     
     // Handle legacy tables first for backward compatibility
-    if (notesTableExists && connectionsTableExists) {
+    if (notesTableExists) {
       await seedLegacyData();
     }
     
     // Handle new tables if they exist
     if (mentalModelsTableExists) {
       await seedMentalModels();
+      
+      if (connectionsTableExists) {
+        await seedConnections();
+      }
       
       if (versionsTableExists) {
         await seedModelVersions();
