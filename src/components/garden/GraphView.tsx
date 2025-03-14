@@ -9,7 +9,8 @@ import {
   Edge, 
   ConnectionLineType, 
   useNodesState, 
-  useEdgesState
+  useEdgesState,
+  MarkerType
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { GardenNote } from '../../lib/garden/types/legacy-types';
@@ -82,7 +83,7 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
         labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12, fontWeight: 500 },
         labelBgStyle: { fill: 'rgba(255, 255, 255, 0.75)', rx: 4, padding: 2 },
         markerEnd: {
-          type: 'arrowclosed',
+          type: MarkerType.ArrowClosed,
           color: edgeColor,
         },
       };
