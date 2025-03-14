@@ -19,7 +19,8 @@ export class DataModelAdapter {
       stage: this.normalizeDevelopmentStage(model.developmentStage || model.stage),
       lastUpdated: model.timestamps?.modified || model.lastUpdated || new Date().toISOString(),
       connections: model.tags || [],
-      bookInfo: model.bookInfo
+      // Only add bookInfo if it exists in the model
+      ...(model.bookInfo ? { bookInfo: model.bookInfo } : {})
     };
   }
 
@@ -52,7 +53,9 @@ export class DataModelAdapter {
       visibility: 'public',
       latchAttributes: {
         hierarchyLevel: 3
-      }
+      },
+      // Only add bookInfo if it exists in the note
+      ...(note.bookInfo ? { bookInfo: note.bookInfo } : {})
     };
   }
 
