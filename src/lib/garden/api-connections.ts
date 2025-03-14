@@ -1,4 +1,3 @@
-
 import supabase from './client';
 import { connections } from './data';
 import { Connection, SupabaseConnection, RelationshipType } from './types/connection-types';
