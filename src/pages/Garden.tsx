@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import Navbar from '@/components/layout/Navbar';
@@ -110,9 +109,9 @@ const Garden = () => {
                 {activeView === 'graph' && (
                   <div className="h-[600px] rounded-xl border shadow-sm overflow-hidden">
                     <GraphView 
-                      nodes={gardenNotes} 
-                      models={models}
+                      nodes={gardenNotes}
                       connections={connections} 
+                      models={models}
                     />
                   </div>
                 )}

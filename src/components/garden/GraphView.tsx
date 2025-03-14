@@ -46,68 +46,105 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
     }
   }, [connections, nodes, models]);
   
-  // Transform garden notes into React Flow nodes
-  const initialNodes: Node[] = nodes.map((note) => ({
-    id: note.id.toString(),
-    type: 'note',
-    data: note,
-    position: { 
-      x: 100 + Math.random() * 500, 
-      y: 100 + Math.random() * 500 
-    },
-  }));
+  // Create initial nodes with fixed positions for better debugging
+  const initialNodes: Node[] = nodes.map((note, index) => {
+    // Create a grid layout
+    const row = Math.floor(index / 3);
+    const col = index % 3;
+    
+    return {
+      id: note.id.toString(),
+      type: 'note',
+      data: note,
+      position: { 
+        x: 100 + col * 250, 
+        y: 100 + row * 250 
+      },
+    };
+  });
   
-  // Transform connections to edges function
-  const createEdgesFromConnections = useCallback((connections: Connection[]) => {
-    return connections.map((connection) => {
-      // Ensure strength is a number and calculate the appropriate stroke width
-      const strengthValue = typeof connection.strength === 'number' 
-        ? connection.strength 
-        : Number(connection.strength);
-      
-      // Get edge color based on relationship type  
-      const edgeColor = getRelationshipColor(connection.relationship as RelationshipType);
-      
-      // Convert to string IDs if they aren't already
-      const sourceId = connection.sourceId.toString();
-      const targetId = connection.targetId.toString();
-      
-      console.log(`Creating edge from ${sourceId} to ${targetId} with relationship ${connection.relationship}`);
-      
-      return {
-        id: `e${sourceId}-${targetId}`,
-        source: sourceId,
-        target: targetId,
-        type: 'smoothstep', // use smoothstep for better visualization
-        animated: true,
-        style: { 
-          stroke: edgeColor, 
-          strokeWidth: Math.max(1, strengthValue * 3) // Increase visibility by using larger stroke width
-        },
-        label: connection.relationship,
-        labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12, fontWeight: 500 },
-        labelBgStyle: { fill: 'rgba(255, 255, 255, 0.75)', rx: 4, padding: 2 },
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          color: edgeColor,
-        },
-      };
-    });
-  }, []);
+  // Create initial edges
+  const initialEdges: Edge[] = connections.map((connection) => {
+    // Ensure IDs are strings
+    const sourceId = connection.sourceId.toString();
+    const targetId = connection.targetId.toString();
+    
+    // Get strength as a number
+    const strengthValue = typeof connection.strength === 'number' 
+      ? connection.strength 
+      : Number(connection.strength);
+    
+    // Get color based on relationship type
+    const edgeColor = getRelationshipColor(connection.relationship as RelationshipType);
+    
+    console.log(`Creating edge from ${sourceId} to ${targetId} with relationship ${connection.relationship}`);
+    
+    return {
+      id: `edge-${connection.id}`,
+      source: sourceId,
+      target: targetId,
+      type: 'smoothstep',
+      animated: true,
+      style: { 
+        stroke: edgeColor, 
+        strokeWidth: Math.max(1, strengthValue * 3)
+      },
+      label: connection.relationship,
+      labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12, fontWeight: 500 },
+      labelBgStyle: { fill: 'rgba(255, 255, 255, 0.75)', rx: 4, padding: 2 },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        color: edgeColor,
+      },
+    };
+  });
   
+  // Use ReactFlow hooks with initial data
   const [rfNodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [rfEdges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   
   // Update edges when connections change
   useEffect(() => {
     if (connections && connections.length > 0) {
-      const newEdges = createEdgesFromConnections(connections);
+      const newEdges = connections.map((connection) => {
+        // Ensure IDs are strings
+        const sourceId = connection.sourceId.toString();
+        const targetId = connection.targetId.toString();
+        
+        // Get strength as a number
+        const strengthValue = typeof connection.strength === 'number' 
+          ? connection.strength 
+          : Number(connection.strength);
+        
+        // Get color based on relationship type
+        const edgeColor = getRelationshipColor(connection.relationship as RelationshipType);
+        
+        return {
+          id: `edge-${connection.id}`,
+          source: sourceId,
+          target: targetId,
+          type: 'smoothstep',
+          animated: true,
+          style: { 
+            stroke: edgeColor, 
+            strokeWidth: Math.max(1, strengthValue * 3)
+          },
+          label: connection.relationship,
+          labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12, fontWeight: 500 },
+          labelBgStyle: { fill: 'rgba(255, 255, 255, 0.75)', rx: 4, padding: 2 },
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            color: edgeColor,
+          },
+        };
+      });
+      
       console.log('Setting new edges:', newEdges);
       setEdges(newEdges);
     } else {
       console.log('No connections to render');
     }
-  }, [connections, createEdgesFromConnections, setEdges]);
+  }, [connections, setEdges]);
   
   // Update nodes when the nodes prop changes
   useEffect(() => {
@@ -146,7 +183,7 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
     <div className="w-full h-full">
       <ReactFlow
         nodes={rfNodes}
-        edges={edges}
+        edges={rfEdges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onNodeClick={onNodeClick}
