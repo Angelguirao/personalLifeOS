@@ -12,13 +12,14 @@ export class DataModelAdapter {
    */
   static modelToNote(model: MentalModel): GardenNote {
     return {
-      id: model.id, // Keep ID exactly as is
+      id: typeof model.id === 'string' ? parseInt(model.id, 10) || 0 : model.id as unknown as number, // Convert string ID to number
       title: model.title,
-      content: model.fullContent || model.summary || '',
-      stage: model.developmentStage || model.stage || 'seedling',
-      tags: model.tags || [],
+      summary: model.summary || '',
+      fullContent: model.fullContent || model.summary || '',
+      stage: this.normalizeDevelopmentStage(model.developmentStage || model.stage),
       lastUpdated: model.timestamps?.modified || model.lastUpdated || new Date().toISOString(),
-      url: '', // Not applicable in new model
+      connections: model.tags || [],
+      bookInfo: model.bookInfo
     };
   }
 
@@ -34,21 +35,24 @@ export class DataModelAdapter {
    */
   static noteToModel(note: GardenNote): MentalModel {
     return {
-      id: note.id, // Keep ID exactly as is
+      id: note.id.toString(), // Convert number ID to string
       title: note.title,
       subtitle: '',
-      summary: note.content,
-      fullContent: note.content,
-      developmentStage: note.stage,
+      summary: note.summary || '',
+      fullContent: note.fullContent || note.summary || '',
+      developmentStage: this.normalizeStage(note.stage),
       stage: note.stage, // For backward compatibility
       confidenceLevel: 'working',
-      tags: note.tags || [],
+      tags: note.connections || [],
       timestamps: {
         created: note.lastUpdated,
         modified: note.lastUpdated
       },
       lastUpdated: note.lastUpdated,
-      visibility: 'public'
+      visibility: 'public',
+      latchAttributes: {
+        hierarchyLevel: 3
+      }
     };
   }
 
@@ -57,5 +61,39 @@ export class DataModelAdapter {
    */
   static notesToModels(notes: GardenNote[]): MentalModel[] {
     return notes.map(note => this.noteToModel(note));
+  }
+
+  /**
+   * Helper to normalize development stage to ensure compatibility
+   */
+  private static normalizeDevelopmentStage(stage: string | undefined): 'seedling' | 'growing' | 'evergreen' {
+    if (!stage) return 'seedling';
+    
+    if (stage === 'mature' || stage === 'refined') {
+      return 'evergreen';
+    }
+    
+    if (stage === 'seedling' || stage === 'growing' || stage === 'evergreen') {
+      return stage;
+    }
+    
+    return 'seedling'; // Default fallback
+  }
+
+  /**
+   * Helper to normalize stage to full development stage type
+   */
+  private static normalizeStage(stage: string | undefined): 'seedling' | 'growing' | 'evergreen' | 'mature' | 'refined' {
+    if (!stage) return 'seedling';
+    
+    if (stage === 'seedling' || 
+        stage === 'growing' || 
+        stage === 'evergreen' || 
+        stage === 'mature' || 
+        stage === 'refined') {
+      return stage as 'seedling' | 'growing' | 'evergreen' | 'mature' | 'refined';
+    }
+    
+    return 'seedling'; // Default fallback
   }
 }
