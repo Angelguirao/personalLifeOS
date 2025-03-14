@@ -6,24 +6,24 @@ import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 export type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart';
 
 interface ViewModeSelectorProps {
-  viewMode: ViewMode;
-  setViewMode: (mode: ViewMode) => void;
+  activeView: ViewMode;
+  onViewChange: (mode: ViewMode) => void;
 }
 
-const ViewModeSelector = ({ viewMode, setViewMode }: ViewModeSelectorProps) => {
+const ViewModeSelector = ({ activeView, onViewChange }: ViewModeSelectorProps) => {
   return (
     <div className="flex justify-center w-full">
       <ToggleGroup 
         type="single" 
-        value={viewMode} 
-        onValueChange={(value) => value && setViewMode(value as ViewMode)} 
+        value={activeView} 
+        onValueChange={(value) => value && onViewChange(value as ViewMode)} 
         className="flex flex-wrap justify-center"
       >
         <ToggleGroupItem 
           value="list" 
           variant="outline" 
           size="sm" 
-          className={`flex-1 sm:flex-initial ${viewMode === 'list' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+          className={`flex-1 sm:flex-initial ${activeView === 'list' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
         >
           <List size={16} className="mr-2" />
           List
@@ -33,7 +33,7 @@ const ViewModeSelector = ({ viewMode, setViewMode }: ViewModeSelectorProps) => {
           value="graph" 
           variant="outline" 
           size="sm" 
-          className={`flex-1 sm:flex-initial ${viewMode === 'graph' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+          className={`flex-1 sm:flex-initial ${activeView === 'graph' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
         >
           <Network size={16} className="mr-2" />
           Graph
@@ -43,7 +43,7 @@ const ViewModeSelector = ({ viewMode, setViewMode }: ViewModeSelectorProps) => {
           value="table" 
           variant="outline" 
           size="sm" 
-          className={`flex-1 sm:flex-initial ${viewMode === 'table' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+          className={`flex-1 sm:flex-initial ${activeView === 'table' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
           disabled={true}
         >
           <Table2 size={16} className="mr-2" />
@@ -54,7 +54,7 @@ const ViewModeSelector = ({ viewMode, setViewMode }: ViewModeSelectorProps) => {
           value="qa" 
           variant="outline" 
           size="sm" 
-          className={`flex-1 sm:flex-initial ${viewMode === 'qa' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+          className={`flex-1 sm:flex-initial ${activeView === 'qa' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
           disabled={true}
         >
           <MessageCircle size={16} className="mr-2" />
@@ -65,7 +65,7 @@ const ViewModeSelector = ({ viewMode, setViewMode }: ViewModeSelectorProps) => {
           value="flowchart" 
           variant="outline" 
           size="sm" 
-          className={`flex-1 sm:flex-initial ${viewMode === 'flowchart' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+          className={`flex-1 sm:flex-initial ${activeView === 'flowchart' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
           disabled={true}
         >
           <GitBranch size={16} className="mr-2" />

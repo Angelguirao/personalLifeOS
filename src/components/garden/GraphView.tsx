@@ -15,6 +15,7 @@ import {
 import 'reactflow/dist/style.css';
 import { GardenNote } from '../../lib/garden/types/legacy-types';
 import { Connection, RelationshipType } from '../../lib/garden/types/connection-types';
+import { MentalModel } from '../../lib/garden/types';
 
 // Import refactored components
 import NoteNode from './NoteNode';
@@ -25,13 +26,14 @@ import { getRelationshipColor } from './relationshipUtils';
 interface GraphViewProps {
   nodes: GardenNote[];
   connections: Connection[];
+  models?: MentalModel[]; // Optional prop to support backward compatibility
 }
 
 const nodeTypes = {
   note: NoteNode,
 };
 
-const GraphView = ({ nodes, connections }: GraphViewProps) => {
+const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
   const [selectedNode, setSelectedNode] = useState<GardenNote | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
@@ -39,7 +41,10 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
   useEffect(() => {
     console.log('Connections in GraphView:', connections);
     console.log('Nodes in GraphView:', nodes);
-  }, [connections, nodes]);
+    if (models) {
+      console.log('Mental Models in GraphView:', models);
+    }
+  }, [connections, nodes, models]);
   
   // Transform garden notes into React Flow nodes
   const initialNodes: Node[] = nodes.map((note) => ({
