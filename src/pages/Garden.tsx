@@ -10,11 +10,11 @@ import { GardenNote, getNotes, getConnections, seedInitialData } from '../lib/ga
 import GraphView from '../components/garden/GraphView';
 import ListView from '../components/garden/ListView';
 import GardenGuide from '../components/garden/GardenGuide';
-import ViewModeSelector from '../components/garden/ViewModeSelector';
+import ViewModeSelector, { ViewMode } from '../components/garden/ViewModeSelector';
 import { toast } from 'sonner';
 
 const Garden = () => {
-  const [viewMode, setViewMode] = useState<'list' | 'graph'>('list');
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
   
   // Seed initial data when component mounts
   useEffect(() => {
@@ -51,6 +51,11 @@ const Garden = () => {
   const isLoading = notesLoading || connectionsLoading;
   const hasError = notesError || connectionsError;
 
+  // Handler function to update the view mode
+  const handleViewModeChange = (mode: ViewMode) => {
+    setViewMode(mode);
+  };
+
   return (
     <>
       <Navbar />
@@ -73,7 +78,7 @@ const Garden = () => {
           
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <GardenGuide />
-            <ViewModeSelector viewMode={viewMode} setViewMode={setViewMode} />
+            <ViewModeSelector viewMode={viewMode} setViewMode={handleViewModeChange} />
           </div>
           
           {isLoading && (
@@ -99,6 +104,24 @@ const Garden = () => {
               {viewMode === 'graph' && (
                 <div className="glass p-4 rounded-md h-[80vh] md:h-[85vh] lg:h-[90vh] w-full">
                   <GraphView nodes={notes} connections={connections} />
+                </div>
+              )}
+              
+              {viewMode === 'table' && (
+                <div className="glass p-8 rounded-md">
+                  <p className="text-center text-muted-foreground">Table view coming soon</p>
+                </div>
+              )}
+              
+              {viewMode === 'qa' && (
+                <div className="glass p-8 rounded-md">
+                  <p className="text-center text-muted-foreground">Q&A view coming soon</p>
+                </div>
+              )}
+              
+              {viewMode === 'flowchart' && (
+                <div className="glass p-8 rounded-md">
+                  <p className="text-center text-muted-foreground">Flowchart view coming soon</p>
                 </div>
               )}
             </>
