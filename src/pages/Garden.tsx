@@ -110,7 +110,7 @@ const Garden = () => {
                 {activeView === 'graph' && (
                   <div className="h-[600px] rounded-xl border shadow-sm overflow-hidden">
                     <GraphView 
-                      notes={gardenNotes} 
+                      nodes={gardenNotes} 
                       models={models}
                       connections={connections} 
                     />
