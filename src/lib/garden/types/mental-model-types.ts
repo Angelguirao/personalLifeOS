@@ -1,4 +1,3 @@
-
 import { DevelopmentStage, ConfidenceLevel, VisibilityLevel, SourceType } from './basic-types';
 
 // Common and shared types
@@ -85,6 +84,8 @@ export interface MentalModel {
   // Legacy compatibility
   stage?: 'seedling' | 'growing' | 'evergreen'; // For backward compatibility
   lastUpdated?: string; // For backward compatibility
+  // Add bookInfo property
+  bookInfo?: BookInfo;
 }
 
 export interface MentalModelVersion {
