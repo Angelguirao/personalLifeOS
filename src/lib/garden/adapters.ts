@@ -11,8 +11,9 @@ export class DataModelAdapter {
    * Convert a mental model to a garden note (for backward compatibility)
    */
   static modelToNote(model: MentalModel): GardenNote {
+    // Instead of converting ID to number, preserve string ID for connection mapping
     return {
-      id: typeof model.id === 'string' ? parseInt(model.id, 10) || 0 : model.id as unknown as number, // Convert string ID to number
+      id: model.id, // Keep ID as string to maintain connections
       title: model.title,
       summary: model.summary || '',
       fullContent: model.fullContent || model.summary || '',
@@ -36,7 +37,7 @@ export class DataModelAdapter {
    */
   static noteToModel(note: GardenNote): MentalModel {
     return {
-      id: note.id.toString(), // Convert number ID to string
+      id: note.id.toString(), // Ensure ID is a string
       title: note.title,
       subtitle: '',
       summary: note.summary || '',

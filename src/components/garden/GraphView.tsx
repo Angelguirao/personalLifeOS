@@ -58,22 +58,39 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
     });
   }, [connections, nodes, models]);
   
-  // Create a nodeMap for quick lookups
+  // Create a nodeMap for quick lookups - now accommodate both numerical IDs and UUID string IDs
   const nodeMap = React.useMemo(() => {
     const map = new Map();
+    
+    // First, add all nodes with their original IDs
     nodes.forEach(node => {
-      // Store the node under both string and number forms of its ID to be safe
-      const id = node.id.toString();
-      map.set(id, node);
+      map.set(node.id.toString(), node);
       
       // If ID looks like a number, also store it as a number
-      if (!isNaN(Number(id))) {
-        map.set(Number(id), node);
+      if (!isNaN(Number(node.id))) {
+        map.set(Number(node.id), node);
       }
     });
+    
+    // If models are provided, map them by their UUID IDs as well
+    if (models && models.length > 0) {
+      models.forEach(model => {
+        // Create a mapping between model IDs and node IDs
+        const matchingNode = nodes.find(node => 
+          node.title === model.title || 
+          (model.id && node.id.toString() === model.id.toString())
+        );
+        
+        if (matchingNode) {
+          // Add model ID to node mapping
+          map.set(model.id, matchingNode);
+        }
+      });
+    }
+    
     console.log('Node map created with keys:', Array.from(map.keys()));
     return map;
-  }, [nodes]);
+  }, [nodes, models]);
   
   // Create initial nodes with fixed positions for better debugging
   const createInitialNodes = (): Node[] => {
@@ -97,7 +114,7 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
     });
   };
   
-  // Create initial edges
+  // Create initial edges - updated to handle UUID strings
   const createInitialEdges = (): Edge[] => {
     if (!connections || connections.length === 0) {
       console.warn('No connections available to create edges');
@@ -115,13 +132,38 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
         console.log(`Node map has sourceId ${sourceId}:`, nodeMap.has(sourceId));
         console.log(`Node map has targetId ${targetId}:`, nodeMap.has(targetId));
         
-        // Make sure the source and target nodes exist in our nodeMap
-        if (!nodeMap.has(sourceId)) {
+        // Look for nodes with these IDs - try both UUID and matching by title
+        let sourceNode = nodeMap.get(sourceId);
+        let targetNode = nodeMap.get(targetId);
+        
+        // If we can't find the nodes directly, try to find a matching model and get its corresponding node
+        if (!sourceNode && models) {
+          const matchingModel = models.find(model => model.id === sourceId);
+          if (matchingModel) {
+            const matchingNode = nodes.find(node => node.title === matchingModel.title);
+            if (matchingNode) {
+              sourceNode = matchingNode;
+            }
+          }
+        }
+        
+        if (!targetNode && models) {
+          const matchingModel = models.find(model => model.id === targetId);
+          if (matchingModel) {
+            const matchingNode = nodes.find(node => node.title === matchingModel.title);
+            if (matchingNode) {
+              targetNode = matchingNode;
+            }
+          }
+        }
+        
+        // If we still can't find the nodes, skip this edge
+        if (!sourceNode) {
           console.warn(`Edge source node ${sourceId} not found in nodeMap`);
           return null;
         }
         
-        if (!nodeMap.has(targetId)) {
+        if (!targetNode) {
           console.warn(`Edge target node ${targetId} not found in nodeMap`);
           return null;
         }
@@ -134,12 +176,12 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
         // Get color based on relationship type
         const edgeColor = getRelationshipColor(connection.relationship as RelationshipType);
         
-        console.log(`Creating edge from ${sourceId} to ${targetId} with relationship ${connection.relationship}`);
+        console.log(`Creating edge from ${sourceNode.id} to ${targetNode.id} with relationship ${connection.relationship}`);
         
         return {
           id: `edge-${connection.id}`, // Ensure unique edge IDs
-          source: sourceId,
-          target: targetId,
+          source: sourceNode.id.toString(),
+          target: targetNode.id.toString(),
           type: 'smoothstep',
           animated: true,
           style: { 
@@ -183,7 +225,7 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
     if (newEdges.length === 0 && connections.length > 0) {
       toast.warning("Connections data exists but couldn't be displayed. Check for ID mismatches.");
     }
-  }, [connections, nodes, setNodes, setEdges]);
+  }, [connections, nodes, models, setNodes, setEdges]);
   
   const onNodeClick = (_: React.MouseEvent, node: Node) => {
     const note = nodes.find(n => n.id.toString() === node.id);

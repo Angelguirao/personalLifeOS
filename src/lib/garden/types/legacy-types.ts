@@ -1,26 +1,20 @@
 
 import { BookInfo } from './mental-model-types';
 
-// Legacy type definitions (kept for reference but will be phased out)
+// Legacy types for backward compatibility
 export interface GardenNote {
-  id: number;
+  id: string | number; // Support both string and number IDs
   title: string;
-  subtitle?: string;
   summary: string;
-  fullContent: string;
+  fullContent?: string;
   stage: 'seedling' | 'growing' | 'evergreen';
   lastUpdated: string;
-  connections: string[];
+  connections?: string[];
   bookInfo?: BookInfo;
 }
 
-export interface SupabaseNote {
-  id: number;
-  title: string;
-  summary: string;
-  full_content: string;
-  stage: 'seedling' | 'growing' | 'evergreen';
-  last_updated: string;
-  connections: string[];
-  book_info?: BookInfo;
+export interface RelationshipData {
+  from: number;
+  to: number;
+  type: string;
 }
