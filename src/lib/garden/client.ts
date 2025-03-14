@@ -14,12 +14,35 @@ try {
     console.log('Supabase credentials not found in environment variables. Using fallback data.');
     supabase = null;
   } else {
+    console.log('Supabase credentials found. URL format valid:', 
+      supabaseUrl?.startsWith('https://') && supabaseUrl?.includes('.supabase.co'),
+      'Key format valid:', 
+      typeof supabaseKey === 'string' && supabaseKey.length > 20
+    );
+    
     supabase = createClient(supabaseUrl, supabaseKey, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
       },
     });
+    
+    // Test connection by making a simple query
+    supabase.from('mental_models').select('id').limit(1)
+      .then(response => {
+        if (response.error) {
+          console.warn('Supabase connection test failed:', response.error.message);
+          if (response.error.message.includes('permission denied')) {
+            console.log('This appears to be a permissions issue. Check your RLS policies.');
+          }
+        } else {
+          console.log('Supabase connection test successful!');
+        }
+      })
+      .catch(error => {
+        console.error('Supabase connection test error:', error.message);
+      });
+    
     console.log('Supabase client initialized successfully');
   }
 } catch (error) {
