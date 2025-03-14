@@ -9,6 +9,8 @@ try {
   
   if (!supabaseUrl || !supabaseKey) {
     console.warn('Supabase credentials not found in environment variables. Using fallback data.');
+    // Instead of undefined, we'll set supabase to null to indicate it's intentionally not initialized
+    supabase = null;
   } else {
     supabase = createClient(supabaseUrl, supabaseKey, {
       auth: {
@@ -20,6 +22,8 @@ try {
   }
 } catch (error) {
   console.error('Failed to initialize Supabase client:', error);
+  // Set to null when an error occurs
+  supabase = null;
 }
 
 export default supabase;

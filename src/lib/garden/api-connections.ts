@@ -1,4 +1,3 @@
-
 import supabase from './client';
 import { connections } from './data';
 import { Connection, SupabaseConnection, RelationshipType } from './types/connection-types';
@@ -27,16 +26,18 @@ const mapToDatabaseConnection = (frontendConnection: Omit<Connection, 'id'>): Om
 export const getConnections = async (): Promise<Connection[]> => {
   console.log('Fetching connections...');
   
-  // Ensure Supabase is initialized
-  if (!supabase) {
-    throw new Error('Supabase client not initialized');
+  // If Supabase is not initialized, return fallback data
+  if (supabase === null) {
+    console.log('Supabase client not initialized. Using fallback connections data.');
+    return connections;
   }
   
   try {
     // Check if table exists
     const connectionsExist = await tableExists('connections');
     if (!connectionsExist) {
-      throw new Error('Connections table does not exist');
+      console.log('Connections table does not exist, using fallback data');
+      return connections;
     }
     
     console.log('Fetching connections from Supabase...');
@@ -46,14 +47,14 @@ export const getConnections = async (): Promise<Connection[]> => {
     
     if (error) {
       console.error('Supabase error:', error);
-      throw error;
+      return connections; // Return fallback data on error
     }
     
     console.log('Supabase connections data:', data);
     
     if (!data || data.length === 0) {
       console.log('No connections found in Supabase');
-      return [];
+      return connections; // Return fallback data if no connections found
     }
     
     // Transform from snake_case to camelCase using our mapping function
@@ -61,8 +62,8 @@ export const getConnections = async (): Promise<Connection[]> => {
   } catch (error) {
     console.error('Error fetching connections:', error);
     toast.error('Error fetching connections. Please refresh.');
-    // No fallback, just return an empty array
-    return [];
+    // Return fallback data on error
+    return connections;
   }
 };
 

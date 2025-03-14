@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -27,6 +28,8 @@ const Garden = () => {
     try {
       toast.info('Setting up the garden...');
       setSeedingError(null);
+      
+      // Try to seed data, but don't throw if credentials are missing
       await seedInitialData();
       setSeedingComplete(true);
       
@@ -49,7 +52,7 @@ const Garden = () => {
         toast.error('Error setting up the garden.');
       }
       
-      // Mark seeding as complete even if it failed, so queries can run
+      // Mark seeding as complete even if it failed, so we'll use fallback data
       setSeedingComplete(true);
     }
   };
@@ -85,7 +88,7 @@ const Garden = () => {
   });
   
   const isLoading = notesLoading || connectionsLoading || !seedingComplete;
-  const hasError = notesError || connectionsError;
+  const hasError = Boolean(notesError || connectionsError);
 
   // Handler function to update the view mode
   const handleViewModeChange = (mode: ViewMode) => {
@@ -125,19 +128,17 @@ const Garden = () => {
             </div>
           )}
           
-          {hasError && (
+          {hasError && seedingError && (
             <div className="glass p-8 text-center">
               <p className="text-red-500 mb-2">Failed to load garden data</p>
               <p className="text-muted-foreground text-sm">Please try refreshing the page</p>
-              {seedingError && (
-                <div className="mt-4 p-4 bg-red-50 text-red-800 rounded text-sm font-mono whitespace-pre-wrap">
-                  {seedingError}
-                </div>
-              )}
+              <div className="mt-4 p-4 bg-red-50 text-red-800 rounded text-sm font-mono whitespace-pre-wrap">
+                {seedingError}
+              </div>
             </div>
           )}
           
-          {!isLoading && !hasError && (
+          {(!isLoading && !hasError) && (
             <>
               {viewMode === 'list' && <ListView notes={notes} />}
               

@@ -10,7 +10,7 @@ export const getMentalModels = async (): Promise<MentalModel[]> => {
   console.log('Fetching mental models...');
   
   // If Supabase is not initialized, return fallback data
-  if (!supabase) {
+  if (supabase === null) {
     console.log('Using fallback mental models data');
     return mentalModels;
   }

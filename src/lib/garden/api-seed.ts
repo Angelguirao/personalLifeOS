@@ -9,7 +9,12 @@ import { seedInspirations } from './seed/seed-inspirations';
 import { seedConnections } from './seed/seed-connections';
 
 export const seedInitialData = async () => {
-  if (!supabase) return;
+  // If supabase is null, just return without trying to seed
+  if (supabase === null) {
+    console.log('Supabase client not initialized. Using fallback data.');
+    toast.info('Running in offline mode with sample garden data.');
+    return;
+  }
   
   console.log('Seeding initial data to Supabase...');
   
@@ -53,5 +58,6 @@ export const seedInitialData = async () => {
   } catch (error) {
     console.error('Error during seeding process:', error);
     toast.error('Error seeding data to database');
+    throw error; // Re-throw to be caught by the Garden component
   }
 };

@@ -3,7 +3,11 @@ import supabase from '../client';
 
 // Helper function to check if a table exists
 export const tableExists = async (tableName: string): Promise<boolean> => {
-  if (!supabase) return false;
+  // If supabase is null, return false to indicate table doesn't exist
+  if (supabase === null) {
+    console.log(`Supabase client not initialized, can't check if table ${tableName} exists`);
+    return false;
+  }
   
   try {
     // Try to fetch a single record from the table
@@ -30,7 +34,10 @@ export const tableExists = async (tableName: string): Promise<boolean> => {
 
 // Create necessary tables in Supabase if they don't exist
 export const createTablesIfNotExist = async (): Promise<boolean> => {
-  if (!supabase) return false;
+  if (supabase === null) {
+    console.log("Supabase client not initialized, can't create tables");
+    return false;
+  }
   
   try {
     console.log('Creating tables using Supabase API instead of SQL commands');
