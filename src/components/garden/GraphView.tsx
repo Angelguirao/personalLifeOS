@@ -47,6 +47,15 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
     }
   }, [connections, nodes, models]);
   
+  // Create a nodeMap for quick lookups
+  const nodeMap = React.useMemo(() => {
+    const map = new Map();
+    nodes.forEach(node => {
+      map.set(node.id.toString(), node);
+    });
+    return map;
+  }, [nodes]);
+  
   // Create initial nodes with fixed positions for better debugging
   const createInitialNodes = (): Node[] => {
     return nodes.map((note, index) => {
@@ -59,8 +68,8 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
         type: 'note',
         data: note,
         position: { 
-          x: 100 + col * 250, 
-          y: 100 + row * 250 
+          x: 100 + col * 300, 
+          y: 100 + row * 300 
         },
       };
     });
@@ -73,49 +82,51 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
       return [];
     }
     
-    return connections.map((connection) => {
-      // Ensure IDs are strings
-      const sourceId = connection.sourceId.toString();
-      const targetId = connection.targetId.toString();
+    const validEdges = connections
+      .map((connection) => {
+        // Ensure IDs are strings
+        const sourceId = connection.sourceId.toString();
+        const targetId = connection.targetId.toString();
+        
+        // Make sure the source and target nodes exist in our nodeMap
+        if (!nodeMap.has(sourceId) || !nodeMap.has(targetId)) {
+          console.warn(`Edge from ${sourceId} to ${targetId} has missing nodes`);
+          return null;
+        }
+        
+        // Get strength as a number (default to 0.5 if invalid)
+        const strengthValue = typeof connection.strength === 'number' 
+          ? connection.strength 
+          : isNaN(Number(connection.strength)) ? 0.5 : Number(connection.strength);
+        
+        // Get color based on relationship type
+        const edgeColor = getRelationshipColor(connection.relationship as RelationshipType);
+        
+        console.log(`Creating edge from ${sourceId} to ${targetId} with relationship ${connection.relationship}`);
+        
+        return {
+          id: `edge-${connection.id}`, // Ensure unique edge IDs
+          source: sourceId,
+          target: targetId,
+          type: 'smoothstep',
+          animated: true,
+          style: { 
+            stroke: edgeColor, 
+            strokeWidth: Math.max(1, strengthValue * 3)
+          },
+          label: connection.relationship,
+          labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12, fontWeight: 500 },
+          labelBgStyle: { fill: 'rgba(255, 255, 255, 0.75)', rx: 4, padding: 2 },
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            color: edgeColor,
+          },
+        };
+      })
+      .filter(Boolean) as Edge[];
       
-      // Make sure the source and target nodes exist
-      const sourceExists = nodes.some(node => node.id.toString() === sourceId);
-      const targetExists = nodes.some(node => node.id.toString() === targetId);
-      
-      if (!sourceExists || !targetExists) {
-        console.warn(`Edge from ${sourceId} to ${targetId} has missing nodes`);
-        return null;
-      }
-      
-      // Get strength as a number (default to 0.5 if invalid)
-      const strengthValue = typeof connection.strength === 'number' 
-        ? connection.strength 
-        : isNaN(Number(connection.strength)) ? 0.5 : Number(connection.strength);
-      
-      // Get color based on relationship type
-      const edgeColor = getRelationshipColor(connection.relationship as RelationshipType);
-      
-      console.log(`Creating edge from ${sourceId} to ${targetId} with relationship ${connection.relationship}`);
-      
-      return {
-        id: `e-${connection.id}`,
-        source: sourceId,
-        target: targetId,
-        type: 'smoothstep',
-        animated: true,
-        style: { 
-          stroke: edgeColor, 
-          strokeWidth: Math.max(1, strengthValue * 3)
-        },
-        label: connection.relationship,
-        labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12, fontWeight: 500 },
-        labelBgStyle: { fill: 'rgba(255, 255, 255, 0.75)', rx: 4, padding: 2 },
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          color: edgeColor,
-        },
-      };
-    }).filter(Boolean) as Edge[];
+    console.log('Valid edges created:', validEdges);
+    return validEdges;
   };
   
   // Use ReactFlow hooks with initial data
@@ -124,7 +135,12 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
   
   // Update when connections or nodes change
   useEffect(() => {
-    // Update nodes
+    if (nodes.length === 0) {
+      console.warn('No nodes available to create graph');
+      return;
+    }
+    
+    // Update nodes with wider spacing
     setNodes(createInitialNodes());
     
     // Update edges
@@ -155,7 +171,7 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
         onNodeClick={onNodeClick}
         nodeTypes={nodeTypes}
         fitView
-        fitViewOptions={{ padding: 0.2 }}
+        fitViewOptions={{ padding: 0.3 }} 
         minZoom={0.1}
         maxZoom={4}
         attributionPosition="bottom-right"
