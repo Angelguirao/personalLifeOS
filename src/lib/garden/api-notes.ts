@@ -1,4 +1,3 @@
-
 import supabase from './client';
 import { gardenNotes } from './data';
 import { GardenNote } from './types';
@@ -39,8 +38,6 @@ export const getNotes = async (): Promise<GardenNote[]> => {
     
     if (!data || data.length === 0) {
       console.log('No notes found in Supabase, using fallback data');
-      // If the table exists but has no data, seed it with our sample data
-      await seedInitialData();
       return gardenNotes;
     }
     

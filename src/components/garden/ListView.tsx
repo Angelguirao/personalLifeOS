@@ -18,7 +18,11 @@ const ListView = ({ notes }: ListViewProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {gardensNotes.map((note, index) => (
-        <NoteCard key={note.id} note={note} index={index} />
+        <NoteCard 
+          key={`note-${note.id}-${index}`} 
+          note={note} 
+          index={index} 
+        />
       ))}
     </div>
   );

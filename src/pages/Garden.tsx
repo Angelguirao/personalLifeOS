@@ -1,42 +1,58 @@
+
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, RefreshCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import RevealText from '../components/ui/RevealText';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getNotes, getConnections, seedInitialData } from '../lib/garden/api';
 import GraphView from '../components/garden/GraphView';
 import ListView from '../components/garden/ListView';
 import GardenGuide from '../components/garden/GardenGuide';
 import ViewModeSelector, { ViewMode } from '../components/garden/ViewModeSelector';
 import { toast } from 'sonner';
+import { Button } from '../components/ui/button';
 
 const Garden = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [seedingComplete, setSeedingComplete] = useState(false);
+  const [seedingError, setSeedingError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  
+  // Function to seed data and refresh queries
+  const seedData = async () => {
+    try {
+      toast.info('Setting up the garden...');
+      setSeedingError(null);
+      await seedInitialData();
+      setSeedingComplete(true);
+      
+      // Invalidate queries to force a refresh of data
+      await queryClient.invalidateQueries({ queryKey: ['garden-notes'] });
+      await queryClient.invalidateQueries({ queryKey: ['garden-connections'] });
+      
+      toast.success('Garden data refreshed successfully!');
+    } catch (error) {
+      console.error('Error seeding initial data:', error);
+      
+      // Show more detailed error for debugging
+      if (error instanceof Error) {
+        const errorMessage = `Error setting up the garden: ${error.message}`;
+        setSeedingError(errorMessage);
+        toast.error(errorMessage);
+      } else {
+        setSeedingError('Unknown error setting up the garden');
+        toast.error('Error setting up the garden. Using local data.');
+      }
+      
+      // Mark seeding as complete even if it failed, so queries can run
+      setSeedingComplete(true);
+    }
+  };
   
   // Seed initial data when component mounts
   useEffect(() => {
-    const seedData = async () => {
-      try {
-        await seedInitialData();
-        setSeedingComplete(true);
-      } catch (error) {
-        console.error('Error seeding initial data:', error);
-        
-        // Show more detailed error for debugging
-        if (error instanceof Error) {
-          toast.error(`Error setting up the garden: ${error.message}. Using local data.`);
-        } else {
-          toast.error('Error setting up the garden. Using local data.');
-        }
-        
-        // Mark seeding as complete even if it failed, so queries can run
-        setSeedingComplete(true);
-      }
-    };
-    
     seedData();
   }, []);
   
@@ -47,7 +63,8 @@ const Garden = () => {
   } = useQuery({
     queryKey: ['garden-notes'],
     queryFn: getNotes,
-    enabled: seedingComplete // Only fetch once seeding is complete
+    enabled: seedingComplete, // Only fetch once seeding is complete
+    staleTime: 0, // Don't cache the data, always fetch fresh
   });
   
   const { 
@@ -57,7 +74,8 @@ const Garden = () => {
   } = useQuery({
     queryKey: ['garden-connections'],
     queryFn: getConnections,
-    enabled: seedingComplete // Only fetch once seeding is complete
+    enabled: seedingComplete, // Only fetch once seeding is complete
+    staleTime: 0, // Don't cache the data, always fetch fresh
   });
   
   const isLoading = notesLoading || connectionsLoading || !seedingComplete;
@@ -66,6 +84,11 @@ const Garden = () => {
   // Handler function to update the view mode
   const handleViewModeChange = (mode: ViewMode) => {
     setViewMode(mode);
+  };
+
+  // Function to manually refresh data
+  const handleRefreshData = () => {
+    seedData();
   };
 
   return (
@@ -89,7 +112,18 @@ const Garden = () => {
           </div>
           
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-            <GardenGuide />
+            <div className="flex items-center gap-2">
+              <GardenGuide />
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleRefreshData}
+                className="flex items-center gap-1"
+              >
+                <RefreshCcw size={14} />
+                Refresh Data
+              </Button>
+            </div>
             <ViewModeSelector viewMode={viewMode} setViewMode={handleViewModeChange} />
           </div>
           
@@ -106,6 +140,11 @@ const Garden = () => {
             <div className="glass p-8 text-center">
               <p className="text-red-500 mb-2">Failed to load garden notes</p>
               <p className="text-muted-foreground text-sm">Please try again later</p>
+              {seedingError && (
+                <div className="mt-4 p-4 bg-red-50 text-red-800 rounded text-sm font-mono whitespace-pre-wrap">
+                  {seedingError}
+                </div>
+              )}
             </div>
           )}
           
