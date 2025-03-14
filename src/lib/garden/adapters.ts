@@ -1,59 +1,61 @@
-import { 
-  GardenNote 
-} from './types/legacy-types'; 
-import { 
-  MentalModel 
-} from './types/mental-model-types';
-import { 
-  convertNoteToMentalModel, 
-  convertMentalModelToNote 
-} from './types/conversion-utils';
-import { Connection } from './types/connection-types';
+
+// This file contains adapter functions for different data formats
+import { MentalModel } from './types/mental-model-types';
+import { GardenNote } from './types/legacy-types';
 
 /**
- * Adapter to ensure backward compatibility during the migration
- * from the old GardenNote model to the new MentalModel structure.
+ * Adapters for converting between different data models
  */
 export class DataModelAdapter {
   /**
-   * Convert an array of legacy GardenNotes to MentalModels
+   * Convert a mental model to a garden note (for backward compatibility)
    */
-  static notesToModels(notes: GardenNote[]): MentalModel[] {
-    return notes.map(note => convertNoteToMentalModel(note));
+  static modelToNote(model: MentalModel): GardenNote {
+    return {
+      id: model.id, // Keep ID exactly as is
+      title: model.title,
+      content: model.fullContent || model.summary || '',
+      stage: model.developmentStage || model.stage || 'seedling',
+      tags: model.tags || [],
+      lastUpdated: model.timestamps?.modified || model.lastUpdated || new Date().toISOString(),
+      url: '', // Not applicable in new model
+    };
   }
-  
+
   /**
-   * Convert an array of MentalModels back to legacy GardenNotes
+   * Convert multiple mental models to garden notes
    */
   static modelsToNotes(models: MentalModel[]): GardenNote[] {
-    return models.map(model => convertMentalModelToNote(model));
+    return models.map(model => this.modelToNote(model));
   }
-  
+
   /**
-   * Find a MentalModel by ID in an array
+   * Convert a garden note to a minimal mental model
    */
-  static findModelById(models: MentalModel[], id: string): MentalModel | undefined {
-    return models.find(model => model.id === id);
+  static noteToModel(note: GardenNote): MentalModel {
+    return {
+      id: note.id, // Keep ID exactly as is
+      title: note.title,
+      subtitle: '',
+      summary: note.content,
+      fullContent: note.content,
+      developmentStage: note.stage,
+      stage: note.stage, // For backward compatibility
+      confidenceLevel: 'working',
+      tags: note.tags || [],
+      timestamps: {
+        created: note.lastUpdated,
+        modified: note.lastUpdated
+      },
+      lastUpdated: note.lastUpdated,
+      visibility: 'public'
+    };
   }
-  
+
   /**
-   * Find a legacy GardenNote by ID in an array
+   * Convert multiple garden notes to mental models
    */
-  static findNoteById(notes: GardenNote[], id: number): GardenNote | undefined {
-    return notes.find(note => note.id === id);
-  }
-  
-  /**
-   * Enhance connections with additional attributes based on mental models
-   */
-  static enhanceConnections(
-    connections: Connection[], 
-    models: MentalModel[]
-  ): Connection[] {
-    return connections.map(connection => {
-      // Here we could enhance each connection with additional information
-      // from the mental models, but for now we'll just return the original
-      return connection;
-    });
+  static notesToModels(notes: GardenNote[]): MentalModel[] {
+    return notes.map(note => this.noteToModel(note));
   }
 }

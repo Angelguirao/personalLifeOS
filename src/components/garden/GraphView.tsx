@@ -38,21 +38,40 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
   const [selectedNode, setSelectedNode] = useState<GardenNote | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
-  // Console log the connections for debugging
+  // Log data for debugging
   useEffect(() => {
     console.log('Connections in GraphView:', connections);
     console.log('Nodes in GraphView:', nodes);
     if (models) {
       console.log('Mental Models in GraphView:', models);
     }
+    
+    // Print all node IDs for debugging
+    const nodeIds = nodes.map(node => node.id.toString());
+    console.log('Node IDs available:', nodeIds);
+    
+    // Print all connection source/target IDs for debugging
+    connections.forEach(conn => {
+      console.log(`Connection: ${conn.id}, Source: ${conn.sourceId}, Target: ${conn.targetId}`);
+      console.log(`Source ID exists in nodes: ${nodeIds.includes(conn.sourceId.toString())}`);
+      console.log(`Target ID exists in nodes: ${nodeIds.includes(conn.targetId.toString())}`);
+    });
   }, [connections, nodes, models]);
   
   // Create a nodeMap for quick lookups
   const nodeMap = React.useMemo(() => {
     const map = new Map();
     nodes.forEach(node => {
-      map.set(node.id.toString(), node);
+      // Store the node under both string and number forms of its ID to be safe
+      const id = node.id.toString();
+      map.set(id, node);
+      
+      // If ID looks like a number, also store it as a number
+      if (!isNaN(Number(id))) {
+        map.set(Number(id), node);
+      }
     });
+    console.log('Node map created with keys:', Array.from(map.keys()));
     return map;
   }, [nodes]);
   
@@ -60,16 +79,19 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
   const createInitialNodes = (): Node[] => {
     return nodes.map((note, index) => {
       // Create a grid layout
-      const row = Math.floor(index / 5);
-      const col = index % 5;
+      const row = Math.floor(index / 4);
+      const col = index % 4;
+      
+      const id = note.id.toString();
+      console.log(`Creating node with ID: ${id}`);
       
       return {
-        id: note.id.toString(),
+        id: id,
         type: 'note',
         data: note,
         position: { 
-          x: 100 + col * 300, 
-          y: 100 + row * 300 
+          x: 150 + col * 350, 
+          y: 150 + row * 350 
         },
       };
     });
@@ -88,9 +110,19 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
         const sourceId = connection.sourceId.toString();
         const targetId = connection.targetId.toString();
         
+        // Log for debugging
+        console.log(`Checking connection: ${sourceId} -> ${targetId}`);
+        console.log(`Node map has sourceId ${sourceId}:`, nodeMap.has(sourceId));
+        console.log(`Node map has targetId ${targetId}:`, nodeMap.has(targetId));
+        
         // Make sure the source and target nodes exist in our nodeMap
-        if (!nodeMap.has(sourceId) || !nodeMap.has(targetId)) {
-          console.warn(`Edge from ${sourceId} to ${targetId} has missing nodes`);
+        if (!nodeMap.has(sourceId)) {
+          console.warn(`Edge source node ${sourceId} not found in nodeMap`);
+          return null;
+        }
+        
+        if (!nodeMap.has(targetId)) {
+          console.warn(`Edge target node ${targetId} not found in nodeMap`);
           return null;
         }
         
