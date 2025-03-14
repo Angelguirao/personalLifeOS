@@ -16,7 +16,7 @@ import {
 // Enhanced mental models using the new structure
 export const mentalModels: MentalModel[] = [
   {
-    id: "1",
+    id: "f47ac10b-58cc-4372-a567-0e02b2c3d479", // Valid UUID format
     title: "Humanity's Future: Transform, Not Extinct",
     subtitle: "Rethinking human existence in relation to nature",
     developmentStage: "seedling",
@@ -43,7 +43,7 @@ export const mentalModels: MentalModel[] = [
     lastUpdated: "2024-09-01"
   },
   {
-    id: "2",
+    id: "c4c6e79b-0d04-4f53-b6f3-3382180cadc9", // Valid UUID format
     title: "Beyond Happiness: Rethinking What Matters",
     subtitle: "Critique of happiness as the ultimate goal",
     developmentStage: "seedling",
@@ -69,7 +69,7 @@ export const mentalModels: MentalModel[] = [
     lastUpdated: "2024-09-01"
   },
   {
-    id: "3",
+    id: "3a8a7e33-da91-4782-90ba-1834c9e982c4", // Valid UUID format
     title: "Knowledge as Ethical Solidarity",
     subtitle: "Rorty's pragmatic approach to epistemology",
     developmentStage: "growing",
@@ -95,7 +95,7 @@ export const mentalModels: MentalModel[] = [
     lastUpdated: "2024-08-31"
   },
   {
-    id: "4",
+    id: "0556b3d5-64e2-4b70-8f47-8d3ba68f56c8", // Valid UUID format
     title: "Reclaiming Reflection in a Thoughtless Age",
     subtitle: "Arendt on thoughtfulness as political action",
     developmentStage: "growing",
@@ -122,7 +122,7 @@ export const mentalModels: MentalModel[] = [
     lastUpdated: "2024-08-29"
   },
   {
-    id: "5",
+    id: "2b45c097-b31e-4c36-b324-3f8824601dbe", // Valid UUID format
     title: "The Beautiful Mystery of Truth",
     subtitle: "Epistemological uncertainty as a feature, not a bug",
     developmentStage: "evergreen",
@@ -152,34 +152,34 @@ export const mentalModels: MentalModel[] = [
 // Sample questions related to mental models
 export const questions: Question[] = [
   {
-    id: "q1",
+    id: "6d43bc47-67c5-4b4a-9d9a-082c6c95a75f", // Valid UUID format
     questionText: "What is the relationship between happiness and a good life?",
     clarificationNeeded: false,
-    relatedModels: ["2"],
+    relatedModels: ["c4c6e79b-0d04-4f53-b6f3-3382180cadc9"], // Updated to match the new UUID
     category: "philosophical",
     importanceRank: 8
   },
   {
-    id: "q2",
+    id: "b9c2f317-fc7d-48b5-8264-5988a69c1a96", // Valid UUID format
     questionText: "How should humans relate to the natural world?",
     clarificationNeeded: false,
-    relatedModels: ["1"],
+    relatedModels: ["f47ac10b-58cc-4372-a567-0e02b2c3d479"], // Updated to match the new UUID
     category: "ethical",
     importanceRank: 9
   },
   {
-    id: "q3",
+    id: "38f5b8e4-c760-4b32-90d0-cd83235c7b34", // Valid UUID format
     questionText: "Is objective truth possible or desirable?",
     clarificationNeeded: false,
-    relatedModels: ["3", "5"],
+    relatedModels: ["3a8a7e33-da91-4782-90ba-1834c9e982c4", "2b45c097-b31e-4c36-b324-3f8824601dbe"], // Updated to match the new UUIDs
     category: "philosophical",
     importanceRank: 7
   },
   {
-    id: "q4",
+    id: "7a8f19d7-4bc3-4d6a-9f12-6efd2d8cc721", // Valid UUID format
     questionText: "What is the relationship between thinking and action?",
     clarificationNeeded: false,
-    relatedModels: ["4"],
+    relatedModels: ["0556b3d5-64e2-4b70-8f47-8d3ba68f56c8"], // Updated to match the new UUID
     category: "philosophical",
     importanceRank: 6
   }
@@ -188,7 +188,7 @@ export const questions: Question[] = [
 // Sample inspirations
 export const inspirations: Inspiration[] = [
   {
-    id: "i1",
+    id: "b32db1ae-6f5e-4c81-94da-6a3c3fe03c1c", // Valid UUID format
     sourceType: "book",
     sourceName: "Should We Go Extinct?",
     authorName: "Todd May",
@@ -196,7 +196,7 @@ export const inspirations: Inspiration[] = [
     quote: "The question is not whether we should go extinct, but how we should live."
   },
   {
-    id: "i2",
+    id: "97f84357-b3a7-4c0f-88f0-e1d0ff8249cd", // Valid UUID format
     sourceType: "book",
     sourceName: "Against Happiness",
     authorName: "Owen Flanagan",
@@ -211,16 +211,16 @@ export const gardenNotes: GardenNote[] = mentalModels.map(convertMentalModelToNo
 // Sample mental model versions for version history tracking
 export const modelVersions: MentalModelVersion[] = [
   {
-    id: "v1",
-    mentalModelId: "1",
+    id: "e7c74a23-9fc8-4d94-99ce-41a6f37409ad", // Valid UUID format
+    mentalModelId: "f47ac10b-58cc-4372-a567-0e02b2c3d479", // Updated to match the new UUID
     versionNumber: 1,
     contentSnapshot: "Initial thoughts on Todd May's Should We Go Extinct?",
     changeLog: "Initial creation",
     timestamp: "2024-09-01T10:00:00Z"
   },
   {
-    id: "v2",
-    mentalModelId: "1",
+    id: "a8d35c91-7f2f-4b7b-ac03-48c726a98d71", // Valid UUID format
+    mentalModelId: "f47ac10b-58cc-4372-a567-0e02b2c3d479", // Updated to match the new UUID
     versionNumber: 2,
     contentSnapshot: "Todd May's Should We Go Extinct? provokes deep reflection on humanity's future. What if the answer lies not in our extinction, but in transforming how we live—by valuing nature as part of ourselves?",
     changeLog: "Expanded on the core concept and added nuance",
@@ -237,3 +237,4 @@ export const connections: Connection[] = [
   { id: 5, sourceId: 4, targetId: 1, strength: 0.4, relationship: "references" as RelationshipType },
   { id: 6, sourceId: 5, targetId: 3, strength: 0.5, relationship: "questions" as RelationshipType },
 ];
+

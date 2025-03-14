@@ -15,15 +15,26 @@ import { toast } from 'sonner';
 
 const Garden = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
+  const [seedingComplete, setSeedingComplete] = useState(false);
   
   // Seed initial data when component mounts
   useEffect(() => {
     const seedData = async () => {
       try {
         await seedInitialData();
+        setSeedingComplete(true);
       } catch (error) {
         console.error('Error seeding initial data:', error);
-        toast.error('Error setting up the garden. Using local data.');
+        
+        // Show more detailed error for debugging
+        if (error instanceof Error) {
+          toast.error(`Error setting up the garden: ${error.message}. Using local data.`);
+        } else {
+          toast.error('Error setting up the garden. Using local data.');
+        }
+        
+        // Mark seeding as complete even if it failed, so queries can run
+        setSeedingComplete(true);
       }
     };
     
@@ -36,7 +47,8 @@ const Garden = () => {
     error: notesError 
   } = useQuery({
     queryKey: ['garden-notes'],
-    queryFn: getNotes
+    queryFn: getNotes,
+    enabled: seedingComplete // Only fetch once seeding is complete
   });
   
   const { 
@@ -45,10 +57,11 @@ const Garden = () => {
     error: connectionsError 
   } = useQuery({
     queryKey: ['garden-connections'],
-    queryFn: getConnections
+    queryFn: getConnections,
+    enabled: seedingComplete // Only fetch once seeding is complete
   });
   
-  const isLoading = notesLoading || connectionsLoading;
+  const isLoading = notesLoading || connectionsLoading || !seedingComplete;
   const hasError = notesError || connectionsError;
 
   // Handler function to update the view mode
@@ -134,3 +147,4 @@ const Garden = () => {
 };
 
 export default Garden;
+
