@@ -91,7 +91,7 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
   }, []);
   
   const [nodes_, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(createEdgesFromConnections(connections));
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   
   // Update edges when connections change
   useEffect(() => {
