@@ -17,7 +17,7 @@ export const seedConnections = async () => {
     const { error: deleteError } = await supabase
       .from('connections')
       .delete()
-      .is('id', 'not.null'); // Delete all records
+      .not('id', 'is', null); // Fix syntax: use .not() instead of .is('id', 'not.null')
     
     if (deleteError) {
       console.error('Error deleting existing connections:', deleteError);

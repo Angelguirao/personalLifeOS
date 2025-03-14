@@ -36,36 +36,37 @@ export const seedInitialData = async () => {
       return;
     }
     
-    // Modified seeding order to handle dependencies correctly:
-    // 1. Clear and seed model versions first (to remove foreign key constraints)
+    // Improved seeding order to handle dependencies correctly:
+    // 1. First clear versions (to remove foreign key constraints)
     if (versionsTableExists) {
       console.log('Starting to seed model versions...');
       await seedModelVersions();
     }
     
-    // 2. Now seed the mental models (without the constraints from versions)
+    // 2. Seed mental models
     console.log('Starting to seed mental models...');
     const modelsSeedResult = await seedMentalModels();
     console.log('Mental models seeding result:', modelsSeedResult);
     
-    // 3. Seed model versions again to ensure they reference the newly seeded models
+    // 3. Re-seed model versions 
     if (versionsTableExists && modelsSeedResult) {
       console.log('Re-seeding model versions with new references...');
       await seedModelVersions();
     }
     
-    // 4. Seed connections (must be after mental models are seeded)
+    // 4. Seed connections (after mental models)
     if (connectionsTableExists && modelsSeedResult) {
       console.log('Starting to seed connections...');
       await seedConnections();
     }
     
-    // 5. Seed other non-dependent data
+    // 5. Seed questions
     if (questionsTableExists) {
       console.log('Starting to seed questions...');
       await seedQuestions();
     }
     
+    // 6. Seed inspirations
     if (inspirationsTableExists) {
       console.log('Starting to seed inspirations...');
       await seedInspirations();

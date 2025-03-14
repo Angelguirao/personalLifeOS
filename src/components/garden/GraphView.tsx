@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { 
   ReactFlow, 
   Background, 
@@ -51,70 +51,70 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
     },
   }));
   
-  // Transform connections into React Flow edges
-  const initialEdges: Edge[] = connections.map((connection) => {
-    // Ensure strength is a number and calculate the appropriate stroke width
-    const strengthValue = typeof connection.strength === 'number' 
-      ? connection.strength 
-      : Number(connection.strength);
-    
-    // Get edge color based on relationship type  
-    const edgeColor = getRelationshipColor(connection.relationship as RelationshipType);
-    
-    // Convert to string IDs if they aren't already
-    const sourceId = connection.sourceId.toString();
-    const targetId = connection.targetId.toString();
-    
-    console.log(`Creating edge from ${sourceId} to ${targetId} with relationship ${connection.relationship}`);
-    
-    return {
-      id: `e${sourceId}-${targetId}`,
-      source: sourceId,
-      target: targetId,
-      type: 'smoothstep', // changed from 'default' to 'smoothstep' for better visualization
-      animated: true,
-      style: { 
-        stroke: edgeColor, 
-        strokeWidth: Math.max(1, strengthValue * 2) // Ensure minimum stroke width
-      },
-      label: connection.relationship,
-      labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12 },
-      labelBgStyle: { fill: 'rgba(255, 255, 255, 0.75)' },
-    };
-  });
-  
-  const [nodes_, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  
-  // Update edges when connections change
-  useEffect(() => {
-    const newEdges = connections.map((connection) => {
+  // Transform connections to edges function
+  const createEdgesFromConnections = useCallback((connections: Connection[]) => {
+    return connections.map((connection) => {
+      // Ensure strength is a number and calculate the appropriate stroke width
       const strengthValue = typeof connection.strength === 'number' 
         ? connection.strength 
         : Number(connection.strength);
       
+      // Get edge color based on relationship type  
       const edgeColor = getRelationshipColor(connection.relationship as RelationshipType);
+      
+      // Convert to string IDs if they aren't already
       const sourceId = connection.sourceId.toString();
       const targetId = connection.targetId.toString();
+      
+      console.log(`Creating edge from ${sourceId} to ${targetId} with relationship ${connection.relationship}`);
       
       return {
         id: `e${sourceId}-${targetId}`,
         source: sourceId,
         target: targetId,
-        type: 'smoothstep',
+        type: 'smoothstep', // use smoothstep for better visualization
         animated: true,
         style: { 
           stroke: edgeColor, 
-          strokeWidth: Math.max(1, strengthValue * 2)
+          strokeWidth: Math.max(1, strengthValue * 3) // Increase visibility by using larger stroke width
         },
         label: connection.relationship,
-        labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12 },
-        labelBgStyle: { fill: 'rgba(255, 255, 255, 0.75)' },
+        labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12, fontWeight: 500 },
+        labelBgStyle: { fill: 'rgba(255, 255, 255, 0.75)', rx: 4, padding: 2 },
+        markerEnd: {
+          type: 'arrowclosed',
+          color: edgeColor,
+        },
       };
     });
+  }, []);
+  
+  const [nodes_, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(createEdgesFromConnections(connections));
+  
+  // Update edges when connections change
+  useEffect(() => {
+    if (connections && connections.length > 0) {
+      const newEdges = createEdgesFromConnections(connections);
+      console.log('Setting new edges:', newEdges);
+      setEdges(newEdges);
+    }
+  }, [connections, setEdges, createEdgesFromConnections]);
+  
+  // Also update nodes when the nodes prop changes
+  useEffect(() => {
+    const newNodes = nodes.map((note) => ({
+      id: note.id.toString(),
+      type: 'note',
+      data: note,
+      position: { 
+        x: 100 + Math.random() * 500, 
+        y: 100 + Math.random() * 500 
+      },
+    }));
     
-    setEdges(newEdges);
-  }, [connections, setEdges]);
+    setNodes(newNodes);
+  }, [nodes, setNodes]);
   
   const onNodeClick = (_: React.MouseEvent, node: Node) => {
     const note = nodes.find(n => n.id.toString() === node.id);

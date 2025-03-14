@@ -12,7 +12,7 @@ export const seedModelVersions = async () => {
     const { error: deleteError } = await supabase
       .from('mental_model_versions')
       .delete()
-      .is('id', 'not.null'); // Delete all records
+      .not('id', 'is', null); // Fix syntax: use .not() instead of .is('id', 'not.null')
     
     if (deleteError) {
       console.error('Error deleting existing model versions:', deleteError);
