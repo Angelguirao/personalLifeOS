@@ -5,6 +5,7 @@ import { BookInfo } from './mental-model-types';
 export interface GardenNote {
   id: string | number; // Support both string and number IDs
   title: string;
+  subtitle?: string; // Add subtitle property
   summary: string;
   fullContent?: string;
   stage: 'seedling' | 'growing' | 'evergreen';

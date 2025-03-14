@@ -15,6 +15,7 @@ export class DataModelAdapter {
     return {
       id: model.id, // Keep ID as string to maintain connections
       title: model.title,
+      subtitle: model.subtitle, // Include subtitle
       summary: model.summary || '',
       fullContent: model.fullContent || model.summary || '',
       stage: this.normalizeDevelopmentStage(model.developmentStage || model.stage),
@@ -39,7 +40,7 @@ export class DataModelAdapter {
     return {
       id: note.id.toString(), // Ensure ID is a string
       title: note.title,
-      subtitle: '',
+      subtitle: note.subtitle || '',
       summary: note.summary || '',
       fullContent: note.fullContent || note.summary || '',
       developmentStage: this.normalizeStage(note.stage),

@@ -6,6 +6,7 @@ export const transformNoteFromSupabase = (data: any): GardenNote => {
   return {
     id: data.id,
     title: data.title || '',
+    subtitle: data.subtitle || '',
     summary: data.summary || '',
     fullContent: data.full_content || '', 
     stage: data.stage || 'seedling',
@@ -19,6 +20,7 @@ export const transformNoteFromSupabase = (data: any): GardenNote => {
 export const transformNoteToSupabase = (note: Omit<GardenNote, 'id'>) => {
   return {
     title: note.title,
+    subtitle: note.subtitle,
     summary: note.summary,
     full_content: note.fullContent,
     stage: note.stage,
