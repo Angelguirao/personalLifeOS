@@ -3,7 +3,13 @@
 export * from './types';
 
 // Export data for direct access if needed
-export { gardenNotes, gardenConnections } from './data';
+export { 
+  gardenNotes, 
+  gardenConnections,
+  mentalModels,
+  questions,
+  inspirations 
+} from './data';
 
 // Export the Supabase client
 export { default as supabase } from './client';
@@ -35,3 +41,6 @@ export {
 
 // Export seeding functionality
 export { seedInitialData } from './api-seed';
+
+// Export adapter for data model conversion
+export { DataModelAdapter } from './adapters';
