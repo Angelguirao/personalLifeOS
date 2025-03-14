@@ -5,6 +5,7 @@ import { BookInfo } from './mental-model-types';
 export interface GardenNote {
   id: number;
   title: string;
+  subtitle?: string;
   summary: string;
   fullContent: string;
   stage: 'seedling' | 'growing' | 'evergreen';

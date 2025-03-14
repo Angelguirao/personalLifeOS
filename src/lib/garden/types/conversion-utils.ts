@@ -16,6 +16,7 @@ export const convertNoteToMentalModel = (note: GardenNote): MentalModel => {
   return {
     id: note.id.toString(),
     title: note.title,
+    subtitle: note.subtitle,
     summary: note.summary,
     fullContent: note.fullContent,
     developmentStage,

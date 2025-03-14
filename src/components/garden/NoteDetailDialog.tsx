@@ -54,7 +54,7 @@ const NoteDetailDialog = ({ note, isOpen, onOpenChange }: NoteDetailDialogProps)
         <div className="mt-4 space-y-4">
           {/* Show subtitle if available */}
           {note.subtitle && (
-            <p className="text-muted-foreground font-italic">
+            <p className="text-muted-foreground italic">
               {note.subtitle}
             </p>
           )}
