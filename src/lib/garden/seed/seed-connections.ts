@@ -32,7 +32,7 @@ export const seedConnections = async () => {
       source_id: conn.sourceId,
       target_id: conn.targetId,
       strength: strengthAsInteger, // Store as integer
-      relationship: conn.relationship as RelationshipType
+      relationship: conn.relationship
     };
   });
   

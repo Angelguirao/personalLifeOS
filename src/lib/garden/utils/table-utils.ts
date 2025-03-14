@@ -36,32 +36,10 @@ export const createTablesIfNotExist = async (): Promise<boolean> => {
     console.log('Creating tables using Supabase API instead of SQL commands');
     
     // For Supabase, we need to create tables through the Supabase dashboard or using migrations
-    // Here we will just log a message that the user needs to create the tables manually
-    
     console.log(`
       To create required tables, please go to your Supabase dashboard and run these SQL commands:
       
-      -- Legacy tables for backward compatibility
-      CREATE TABLE IF NOT EXISTS garden_notes (
-        id SERIAL PRIMARY KEY,
-        title TEXT NOT NULL,
-        summary TEXT,
-        full_content TEXT,
-        stage TEXT DEFAULT 'seedling',
-        last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        connections TEXT[] DEFAULT '{}',
-        book_info JSONB
-      );
-      
-      CREATE TABLE IF NOT EXISTS garden_connections (
-        id SERIAL PRIMARY KEY,
-        source_id INTEGER NOT NULL REFERENCES garden_notes(id),
-        target_id INTEGER NOT NULL REFERENCES garden_notes(id),
-        strength INTEGER DEFAULT 1,
-        relationship TEXT
-      );
-      
-      -- New enhanced tables
+      -- Enhanced tables for mental models
       CREATE TABLE IF NOT EXISTS mental_models (
         id UUID PRIMARY KEY,
         title TEXT NOT NULL,
@@ -85,6 +63,21 @@ export const createTablesIfNotExist = async (): Promise<boolean> => {
         questions_linked TEXT[] DEFAULT '{}',
         stage TEXT,
         last_updated TIMESTAMP WITH TIME ZONE
+      );
+      
+      CREATE TABLE IF NOT EXISTS connections (
+        id SERIAL PRIMARY KEY,
+        source_id UUID NOT NULL,
+        target_id UUID NOT NULL,
+        strength INTEGER DEFAULT 5, 
+        relationship TEXT NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        
+        -- Add foreign key constraints
+        CONSTRAINT fk_source_mental_model FOREIGN KEY (source_id)
+          REFERENCES mental_models (id) ON DELETE CASCADE,
+        CONSTRAINT fk_target_mental_model FOREIGN KEY (target_id)
+          REFERENCES mental_models (id) ON DELETE CASCADE
       );
       
       CREATE TABLE IF NOT EXISTS mental_model_versions (
@@ -115,8 +108,6 @@ export const createTablesIfNotExist = async (): Promise<boolean> => {
       );
     `);
     
-    // We'll consider this a success so the app can use fallback data
-    // You'll need to create the tables manually in the Supabase dashboard
     return false;
   } catch (error) {
     console.error('Error creating tables:', error);

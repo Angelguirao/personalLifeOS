@@ -62,6 +62,7 @@ const Garden = () => {
     seedData();
   }, []);
   
+  // Get mental models and convert them to notes for backward compatibility
   const { 
     data: notes = [], 
     isLoading: notesLoading, 

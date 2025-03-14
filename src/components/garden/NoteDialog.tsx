@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link2, ExternalLink, Sprout } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
@@ -8,6 +9,16 @@ interface NoteDialogProps {
 }
 
 const NoteDialog = ({ note }: NoteDialogProps) => {
+  const getStageColor = (stage: string) => {
+    switch(stage) {
+      case "seedling": return "text-green-400";
+      case "growing": return "text-green-500";
+      case "evergreen":
+      case "mature": return "text-green-600";
+      default: return "text-green-400";
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -22,7 +33,7 @@ const NoteDialog = ({ note }: NoteDialogProps) => {
         </DialogHeader>
         <div className="mb-3 flex items-center text-xs text-muted-foreground">
           <div className="flex items-center">
-            <Sprout size={16} className={note.stage === 'seedling' ? 'text-green-400' : note.stage === 'growing' ? 'text-green-500' : 'text-green-600'} />
+            <Sprout size={16} className={getStageColor(note.stage)} />
             <span className="ml-1 capitalize">{note.stage}</span>
           </div>
           <span className="mx-2">•</span>

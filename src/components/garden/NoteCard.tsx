@@ -17,6 +17,7 @@ const getStageIcon = (stage: string) => {
     case "growing":
       return <Sprout size={16} className="text-green-500" />;
     case "evergreen":
+    case "mature":
       return <Sprout size={16} className="text-green-600" />;
     default:
       return <Sprout size={16} />;

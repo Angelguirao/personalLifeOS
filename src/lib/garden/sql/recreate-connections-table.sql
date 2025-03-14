@@ -1,6 +1,5 @@
 
 -- First, drop the existing connections table if it exists
-DROP TABLE IF EXISTS garden_connections;
 DROP TABLE IF EXISTS connections;
 
 -- Create a new connections table that references mental_models by UUID
