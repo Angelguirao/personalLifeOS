@@ -1,6 +1,6 @@
 
 import supabase from './client';
-import { tableExists } from './utils/table-utils';
+import { tableExists, createTablesIfNotExist } from './utils/table-utils';
 import { toast } from 'sonner';
 import { seedMentalModels } from './seed/seed-models';
 import { seedModelVersions } from './seed/seed-versions';
@@ -16,10 +16,13 @@ export const seedInitialData = async () => {
     return;
   }
   
-  console.log('Seeding initial data to Supabase...');
+  console.log('Checking Supabase tables and seeding data if needed...');
   
   try {
-    // Only check for new tables
+    // First, try to create tables if they don't exist
+    await createTablesIfNotExist();
+    
+    // Check if tables exist
     const mentalModelsTableExists = await tableExists('mental_models');
     const connectionsTableExists = await tableExists('connections');
     const versionsTableExists = await tableExists('mental_model_versions');
@@ -34,7 +37,7 @@ export const seedInitialData = async () => {
       return;
     }
     
-    // Handle new tables
+    // Seed data into existing tables
     await seedMentalModels();
     
     if (connectionsTableExists) {
