@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import Navbar from '@/components/layout/Navbar';
@@ -69,6 +70,13 @@ const Garden = () => {
   // Convert to garden notes for legacy components
   const gardenNotes = DataModelAdapter.modelsToNotes(models);
 
+  // Check if we have valid connections
+  useEffect(() => {
+    if (connections.length > 0 && gardenNotes.length > 0) {
+      console.log(`Ready to display graph with ${connections.length} connections and ${gardenNotes.length} nodes`);
+    }
+  }, [connections, gardenNotes]);
+
   return (
     <>
       <Navbar />
@@ -106,13 +114,30 @@ const Garden = () => {
                   <ListView notes={models} />
                 )}
                 
-                {activeView === 'graph' && (
+                {activeView === 'graph' && connections.length > 0 && gardenNotes.length > 0 ? (
                   <div className="h-[600px] rounded-xl border shadow-sm overflow-hidden">
                     <GraphView 
                       nodes={gardenNotes}
                       connections={connections} 
                       models={models}
                     />
+                  </div>
+                ) : activeView === 'graph' && (
+                  <div className="h-[600px] rounded-xl border shadow-sm overflow-hidden flex items-center justify-center">
+                    <div className="text-center p-6 max-w-md">
+                      <h3 className="text-lg font-medium mb-2">No Graph Data Available</h3>
+                      <p className="text-muted-foreground">
+                        {connections.length === 0 ? 
+                          "There are no connections between notes to display in the graph." : 
+                          "There was a problem with the graph data."}
+                      </p>
+                      <button 
+                        onClick={fetchData}
+                        className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md"
+                      >
+                        Refresh Data
+                      </button>
+                    </div>
                   </div>
                 )}
                 
