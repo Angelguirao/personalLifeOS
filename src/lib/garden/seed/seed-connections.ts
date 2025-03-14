@@ -2,6 +2,7 @@
 import supabase from '../client';
 import { connections } from '../data';
 import { SupabaseConnection } from '../types';
+import { tableExists } from '../utils';
 import { toast } from 'sonner';
 
 export const seedConnections = async () => {
@@ -48,5 +49,6 @@ export const seedConnections = async () => {
     return false;
   }
   
+  console.log('Successfully seeded connections data');
   return true;
 };
