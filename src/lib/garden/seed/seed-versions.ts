@@ -12,7 +12,7 @@ export const seedModelVersions = async () => {
     const { error: deleteError } = await supabase
       .from('mental_model_versions')
       .delete()
-      .neq('id', null); // Use .neq() for more reliable filtering
+      .gte('id', '00000000-0000-0000-0000-000000000000'); // Delete all records
     
     if (deleteError) {
       console.error('Error deleting existing model versions:', deleteError);

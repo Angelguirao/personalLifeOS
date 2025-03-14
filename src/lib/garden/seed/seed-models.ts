@@ -27,7 +27,7 @@ export const seedMentalModels = async () => {
       const { error: versionsDeleteError } = await supabase
         .from('mental_model_versions')
         .delete()
-        .not('id', 'is', null); // Safety check
+        .gte('id', '00000000-0000-0000-0000-000000000000'); // Delete all records
       
       if (versionsDeleteError) {
         console.error('Error deleting existing model versions:', versionsDeleteError);
@@ -42,7 +42,7 @@ export const seedMentalModels = async () => {
     const { error: deleteError } = await supabase
       .from('mental_models')
       .delete()
-      .not('id', 'is', null); // Safety check to ensure we don't delete with empty condition
+      .gte('id', '00000000-0000-0000-0000-000000000000'); // Delete all records
     
     if (deleteError) {
       console.error('Error deleting existing mental models:', deleteError);

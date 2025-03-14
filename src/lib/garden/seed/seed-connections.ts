@@ -17,7 +17,7 @@ export const seedConnections = async () => {
     const { error: deleteError } = await supabase
       .from('connections')
       .delete()
-      .neq('id', null); // Use .neq() for more reliable filtering
+      .gte('id', 0); // Delete all records with id >= 0 (which is all records)
     
     if (deleteError) {
       console.error('Error deleting existing connections:', deleteError);
