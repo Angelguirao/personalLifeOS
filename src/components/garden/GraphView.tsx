@@ -104,22 +104,32 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
       const newEdges = createEdgesFromConnections(connections);
       console.log('Setting new edges:', newEdges);
       setEdges(newEdges);
+    } else {
+      console.log('No connections to render');
     }
   }, [connections, createEdgesFromConnections, setEdges]);
   
-  // Also update nodes when the nodes prop changes
+  // Update nodes when the nodes prop changes
   useEffect(() => {
     if (nodes.length > 0) {
-      const newNodes = nodes.map((note) => ({
-        id: note.id.toString(),
-        type: 'note',
-        data: note,
-        position: { 
-          x: 100 + Math.random() * 500, 
-          y: 100 + Math.random() * 500 
-        },
-      }));
+      // Use predictable positions for debugging
+      const newNodes = nodes.map((note, index) => {
+        // Create a grid layout for easier debugging
+        const row = Math.floor(index / 3);
+        const col = index % 3;
+        
+        return {
+          id: note.id.toString(),
+          type: 'note',
+          data: note,
+          position: { 
+            x: 100 + col * 250, 
+            y: 100 + row * 250 
+          },
+        };
+      });
       
+      console.log('Setting new nodes:', newNodes);
       setNodes(newNodes);
     }
   }, [nodes, setNodes]);
