@@ -6,7 +6,12 @@ import { ArrowLeft, RefreshCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import RevealText from '../components/ui/RevealText';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getNotes, getConnections, seedInitialData } from '../lib/garden/api';
+import { 
+  getNotes, 
+  getConnections, 
+  seedInitialData, 
+  getMentalModels 
+} from '../lib/garden/api';
 import GraphView from '../components/garden/GraphView';
 import ListView from '../components/garden/ListView';
 import GardenGuide from '../components/garden/GardenGuide';
@@ -31,6 +36,7 @@ const Garden = () => {
       // Invalidate queries to force a refresh of data
       await queryClient.invalidateQueries({ queryKey: ['garden-notes'] });
       await queryClient.invalidateQueries({ queryKey: ['garden-connections'] });
+      await queryClient.invalidateQueries({ queryKey: ['mental-models'] });
       
       toast.success('Garden data refreshed successfully!');
     } catch (error) {
@@ -43,7 +49,7 @@ const Garden = () => {
         toast.error(errorMessage);
       } else {
         setSeedingError('Unknown error setting up the garden');
-        toast.error('Error setting up the garden. Using local data.');
+        toast.error('Error setting up the garden.');
       }
       
       // Mark seeding as complete even if it failed, so queries can run
@@ -65,6 +71,7 @@ const Garden = () => {
     queryFn: getNotes,
     enabled: seedingComplete, // Only fetch once seeding is complete
     staleTime: 0, // Don't cache the data, always fetch fresh
+    retry: 1, // Only retry once to avoid excessive error messages
   });
   
   const { 
@@ -76,6 +83,7 @@ const Garden = () => {
     queryFn: getConnections,
     enabled: seedingComplete, // Only fetch once seeding is complete
     staleTime: 0, // Don't cache the data, always fetch fresh
+    retry: 1, // Only retry once to avoid excessive error messages
   });
   
   const isLoading = notesLoading || connectionsLoading || !seedingComplete;
@@ -138,8 +146,8 @@ const Garden = () => {
           
           {hasError && (
             <div className="glass p-8 text-center">
-              <p className="text-red-500 mb-2">Failed to load garden notes</p>
-              <p className="text-muted-foreground text-sm">Please try again later</p>
+              <p className="text-red-500 mb-2">Failed to load garden data</p>
+              <p className="text-muted-foreground text-sm">Please try refreshing the data</p>
               {seedingError && (
                 <div className="mt-4 p-4 bg-red-50 text-red-800 rounded text-sm font-mono whitespace-pre-wrap">
                   {seedingError}

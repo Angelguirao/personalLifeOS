@@ -1,3 +1,4 @@
+
 import supabase from './client';
 import { connections } from './data';
 import { Connection, SupabaseConnection, RelationshipType } from './types';
@@ -26,18 +27,16 @@ const mapToDatabaseConnection = (frontendConnection: Omit<Connection, 'id'>): Om
 export const getConnections = async (): Promise<Connection[]> => {
   console.log('Fetching connections...');
   
-  // If Supabase is not initialized, return fallback data
+  // Ensure Supabase is initialized
   if (!supabase) {
-    console.log('Using fallback connections data');
-    return connections;
+    throw new Error('Supabase client not initialized');
   }
   
   try {
-    // Check if tables exist
+    // Check if table exists
     const connectionsExist = await tableExists('garden_connections');
     if (!connectionsExist) {
-      console.log('Connections table does not exist, using fallback data');
-      return connections;
+      throw new Error('Connections table does not exist');
     }
     
     console.log('Fetching connections from Supabase...');
@@ -47,23 +46,23 @@ export const getConnections = async (): Promise<Connection[]> => {
     
     if (error) {
       console.error('Supabase error:', error);
-      toast.error('Failed to load connections from database');
-      return connections;
+      throw error;
     }
     
     console.log('Supabase connections data:', data);
     
     if (!data || data.length === 0) {
-      console.log('No connections found in Supabase, using fallback data');
-      return connections;
+      console.log('No connections found in Supabase');
+      return [];
     }
     
     // Transform from snake_case to camelCase using our mapping function
     return data.map(mapToFrontendConnection);
   } catch (error) {
     console.error('Error fetching connections:', error);
-    toast.error('Error fetching connections');
-    return connections;
+    toast.error('Error fetching connections. Please refresh.');
+    // No fallback, just return an empty array
+    return [];
   }
 };
 
@@ -92,22 +91,19 @@ export const createConnection = async (connection: Omit<Connection, 'id'>): Prom
   return mapToFrontendConnection(data);
 };
 
-// Get all connections for a specific note (either as source or target)
-export const getNoteConnections = async (noteId: number): Promise<Connection[]> => {
+// Get all connections for a specific model (either as source or target)
+export const getNoteConnections = async (modelId: string): Promise<Connection[]> => {
   if (!supabase || !(await tableExists('garden_connections'))) {
-    // Filter from local data if Supabase is not available
-    return connections.filter(conn => 
-      conn.sourceId === noteId || conn.targetId === noteId
-    );
+    throw new Error('Supabase connection or table not available');
   }
   
   const { data, error } = await supabase
     .from('garden_connections')
     .select('*')
-    .or(`source_id.eq.${noteId},target_id.eq.${noteId}`);
+    .or(`source_id.eq.${modelId},target_id.eq.${modelId}`);
   
   if (error) {
-    console.error('Error fetching note connections:', error);
+    console.error('Error fetching model connections:', error);
     throw error;
   }
   

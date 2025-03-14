@@ -1,116 +1,75 @@
+
 import supabase from './client';
-import { gardenNotes } from './data';
-import { GardenNote } from './types';
-import { tableExists, transformNoteFromSupabase, transformNoteToSupabase } from './utils';
-import { seedInitialData } from './api-seed';
+import { mentalModels } from './data';
+import { GardenNote, MentalModel } from './types';
+import { 
+  tableExists, 
+  transformMentalModelFromSupabase, 
+  convertMentalModelToNote 
+} from './utils';
 import { toast } from 'sonner';
 
+// Update this function to get mental models and convert them to garden notes for compatibility
 export const getNotes = async (): Promise<GardenNote[]> => {
-  console.log('Fetching notes...');
+  console.log('Fetching mental models for notes view...');
   
-  // If Supabase is not initialized, return fallback data
+  // Ensure Supabase is initialized
   if (!supabase) {
-    console.log('Using fallback notes data');
-    return gardenNotes;
+    throw new Error('Supabase client not initialized');
   }
   
   try {
     // Check if tables exist
-    const notesExist = await tableExists('garden_notes');
-    if (!notesExist) {
-      console.log('Notes table does not exist');
-      toast.info('Digital Garden is running in offline mode. Connect to Supabase for persistent storage.');
-      return gardenNotes;
+    const modelsExist = await tableExists('mental_models');
+    if (!modelsExist) {
+      throw new Error('Mental models table does not exist');
     }
     
-    console.log('Fetching notes from Supabase...');
+    console.log('Fetching mental models from Supabase...');
     const { data, error } = await supabase
-      .from('garden_notes')
+      .from('mental_models')
       .select('*');
     
     if (error) {
       console.error('Supabase error:', error);
-      toast.error('Failed to load notes from database');
-      return gardenNotes; // Return fallback data on error
+      throw error;
     }
     
-    console.log('Supabase notes data:', data);
+    console.log('Supabase mental models data:', data);
     
     if (!data || data.length === 0) {
-      console.log('No notes found in Supabase, using fallback data');
-      return gardenNotes;
+      console.log('No mental models found in Supabase');
+      // No fallback to static data anymore - return empty array
+      return [];
     }
     
-    return data.map(transformNoteFromSupabase);
+    // Transform the mental models to garden notes for backward compatibility
+    return data.map(model => {
+      const mentalModel = transformMentalModelFromSupabase(model);
+      return convertMentalModelToNote(mentalModel);
+    });
   } catch (error) {
     console.error('Error fetching notes:', error);
-    toast.error('Error fetching notes');
-    // Fallback to the sample data if there's an error
-    return gardenNotes;
+    toast.error('Error fetching notes. Please refresh.');
+    // No fallback, just return empty array
+    return [];
   }
 };
 
 export const getNoteById = async (id: number): Promise<GardenNote | undefined> => {
-  if (!supabase || !(await tableExists('garden_notes'))) {
-    console.log('Using fallback for note details');
-    return gardenNotes.find(note => note.id === id);
-  }
-  
-  try {
-    const { data, error } = await supabase
-      .from('garden_notes')
-      .select('*')
-      .eq('id', id)
-      .single();
-    
-    if (error) throw error;
-    return data ? transformNoteFromSupabase(data) : undefined;
-  } catch (error) {
-    console.error('Error fetching note by id:', error);
-    // Fallback to finding the note in the sample data
-    return gardenNotes.find(note => note.id === id);
-  }
+  // This function needs to be updated to use mental models
+  // For now, we'll throw an error to indicate this function needs to be updated
+  throw new Error('getNoteById is deprecated. Use getMentalModelById instead.');
 };
 
 export const createNote = async (note: Omit<GardenNote, 'id'>): Promise<GardenNote> => {
-  if (!supabase || !(await tableExists('garden_notes'))) {
-    throw new Error('Cannot create note: Supabase connection or table not available');
-  }
-  
-  const supabaseNote = transformNoteToSupabase(note);
-  
-  const { data, error } = await supabase
-    .from('garden_notes')
-    .insert(supabaseNote)
-    .select()
-    .single();
-  
-  if (error) throw error;
-  return transformNoteFromSupabase(data);
+  // This function needs to be updated to use mental models
+  // For now, we'll throw an error to indicate this function needs to be updated
+  throw new Error('createNote is deprecated. Use createMentalModel instead.');
 };
 
 export const updateNote = async (id: number, note: Partial<GardenNote>): Promise<GardenNote> => {
-  if (!supabase || !(await tableExists('garden_notes'))) {
-    throw new Error('Cannot update note: Supabase connection or table not available');
-  }
-  
-  const supabaseNote: any = {};
-  
-  if (note.title) supabaseNote.title = note.title;
-  if (note.summary) supabaseNote.summary = note.summary;
-  if (note.fullContent) supabaseNote.full_content = note.fullContent;
-  if (note.stage) supabaseNote.stage = note.stage;
-  if (note.lastUpdated) supabaseNote.last_updated = note.lastUpdated;
-  if (note.connections) supabaseNote.connections = note.connections;
-  if (note.bookInfo) supabaseNote.book_info = note.bookInfo;
-  
-  const { data, error } = await supabase
-    .from('garden_notes')
-    .update(supabaseNote)
-    .eq('id', id)
-    .select()
-    .single();
-  
-  if (error) throw error;
-  return transformNoteFromSupabase(data);
+  // This function needs to be updated to use mental models
+  // For now, we'll throw an error to indicate this function needs to be updated
+  throw new Error('updateNote is deprecated. Use updateMentalModel instead.');
 };

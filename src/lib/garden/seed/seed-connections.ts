@@ -5,6 +5,22 @@ import { SupabaseConnection } from '../types';
 import { toast } from 'sonner';
 
 export const seedConnections = async () => {
+  // Check if we already have connection data
+  const { count, error: countError } = await supabase
+    .from('garden_connections')
+    .select('*', { count: 'exact', head: true });
+  
+  if (countError) {
+    console.error('Error checking connections data:', countError);
+    return false;
+  }
+  
+  // If we already have data, no need to seed
+  if (count && count > 0) {
+    console.log('Connections table already contains data. Skipping seed operation.');
+    return true;
+  }
+  
   // Transform connections to snake_case for Supabase
   // Convert strength to integers (0-10 scale) for Supabase
   const connectionsData: Omit<SupabaseConnection, 'id'>[] = connections.map(conn => {

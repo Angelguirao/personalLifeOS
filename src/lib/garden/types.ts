@@ -7,7 +7,7 @@ export type VisibilityLevel = 'private' | 'public' | 'restricted';
 export type SourceType = 'book' | 'article' | 'author' | 'other' | 'experience';
 export type QuestionCategory = 'philosophical' | 'technical' | 'scientific' | 'ethical' | 'personal' | 'other';
 
-// Legacy type definitions
+// Legacy type definitions (kept for reference but will be phased out)
 export interface BookInfo {
   title: string;
   author: string;
@@ -28,10 +28,11 @@ export interface GardenNote {
 // Define specific relationship types for better type safety
 export type RelationshipType = 'related' | 'inspires' | 'builds_on' | 'contrasts' | 'references' | 'questions';
 
+// Updated to use string IDs for mental models
 export interface Connection {
   id: number;
-  sourceId: number;
-  targetId: number;
+  sourceId: string; // Changed to string for UUID compatibility
+  targetId: string; // Changed to string for UUID compatibility
   strength: number; // Decimal 0.0 to 1.0 in frontend, stored as integer 0-10 in DB
   relationship: RelationshipType;
 }
@@ -39,8 +40,8 @@ export interface Connection {
 // Define the database representation for better type safety
 export interface SupabaseConnection {
   id: number;
-  source_id: number;
-  target_id: number;
+  source_id: string; // Changed to string for UUID compatibility
+  target_id: string; // Changed to string for UUID compatibility
   strength: number; // Integer 0-10 in database
   relationship: RelationshipType;
 }
@@ -196,7 +197,6 @@ export const convertNoteToMentalModel = (note: GardenNote): MentalModel => {
   };
 };
 
-// Helper function to convert MentalModel back to GardenNote for legacy compatibility
 export const convertMentalModelToNote = (model: MentalModel): GardenNote => {
   return {
     id: parseInt(model.id),
