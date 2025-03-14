@@ -1,11 +1,14 @@
-
 import { 
-  GardenNote, 
-  MentalModel, 
+  GardenNote 
+} from './types/legacy-types'; 
+import { 
+  MentalModel 
+} from './types/mental-model-types';
+import { 
   convertNoteToMentalModel, 
-  convertMentalModelToNote,
-  Connection
-} from './types';
+  convertMentalModelToNote 
+} from './types/conversion-utils';
+import { Connection } from './types/connection-types';
 
 /**
  * Adapter to ensure backward compatibility during the migration

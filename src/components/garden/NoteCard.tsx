@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link2, Sprout, ExternalLink } from 'lucide-react';
 import BlurEffect from '../ui/BlurEffect';
-import { GardenNote } from '../../lib/garden/types';
+import { GardenNote } from '../../lib/garden/types/legacy-types';
 import NoteDialog from './NoteDialog';
 
 interface NoteCardProps {

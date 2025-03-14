@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { 
   ReactFlow, 
@@ -12,7 +11,8 @@ import {
   useEdgesState
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { GardenNote, Connection, RelationshipType } from '../../lib/garden/types';
+import { GardenNote } from '../../lib/garden/types/legacy-types';
+import { Connection, RelationshipType } from '../../lib/garden/types/connection-types';
 
 // Import refactored components
 import NoteNode from './NoteNode';

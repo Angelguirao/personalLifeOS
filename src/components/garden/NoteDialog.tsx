@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Link2, ExternalLink, Sprout } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { GardenNote } from '../../lib/garden/types';
+import { GardenNote } from '../../lib/garden/types/legacy-types';
 
 interface NoteDialogProps {
   note: GardenNote;

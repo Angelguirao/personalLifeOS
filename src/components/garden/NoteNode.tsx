@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Handle, Position } from 'reactflow';
-import { GardenNote } from '../../lib/garden/types';
+import { GardenNote } from '../../lib/garden/types/legacy-types';
 
 // Custom node for garden notes
 const NoteNode = ({ data }: { data: GardenNote }) => {

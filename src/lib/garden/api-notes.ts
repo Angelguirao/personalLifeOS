@@ -1,6 +1,8 @@
+
 import supabase from './client';
 import { mentalModels } from './data';
-import { GardenNote, MentalModel } from './types/index';
+import { GardenNote } from './types/legacy-types';
+import { MentalModel } from './types/mental-model-types';
 import { convertMentalModelToNote } from './types/conversion-utils';
 import { 
   tableExists, 

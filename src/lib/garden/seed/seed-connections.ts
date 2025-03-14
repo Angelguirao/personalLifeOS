@@ -1,7 +1,7 @@
 
 import supabase from '../client';
 import { connections } from '../data';
-import { SupabaseConnection } from '../types';
+import { SupabaseConnection } from '../types/connection-types';
 import { tableExists } from '../utils';
 import { toast } from 'sonner';
 

@@ -1,6 +1,8 @@
 
 import React from 'react';
-import { GardenNote, MentalModel, convertMentalModelToNote } from '../../lib/garden/types';
+import { GardenNote } from '../../lib/garden/types/legacy-types';
+import { MentalModel } from '../../lib/garden/types/mental-model-types';
+import { convertMentalModelToNote } from '../../lib/garden/types/conversion-utils';
 import NoteCard from './NoteCard';
 import { DataModelAdapter } from '../../lib/garden/adapters';
 

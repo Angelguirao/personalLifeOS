@@ -1,7 +1,7 @@
 
 import supabase from './client';
 import { mentalModels } from './data';
-import { MentalModel } from './types';
+import { MentalModel } from './types/mental-model-types';
 import { tableExists, transformMentalModelFromSupabase, transformMentalModelToSupabase } from './utils';
 import { toast } from 'sonner';
 

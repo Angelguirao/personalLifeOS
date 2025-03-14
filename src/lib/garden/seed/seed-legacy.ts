@@ -1,7 +1,7 @@
 
 import supabase from '../client';
 import { gardenNotes, connections } from '../data';
-import { SupabaseConnection } from '../types';
+import { SupabaseConnection } from '../types/connection-types';
 import { tableExists, transformNoteToSupabase } from '../utils';
 import { toast } from 'sonner';
 import { seedConnections } from './seed-connections';
