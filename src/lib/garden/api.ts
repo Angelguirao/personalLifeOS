@@ -5,10 +5,11 @@ export * from './types';
 // Export data for direct access if needed
 export { 
   gardenNotes, 
-  gardenConnections,
+  connections,
   mentalModels,
   questions,
-  inspirations 
+  inspirations,
+  modelVersions
 } from './data';
 
 // Export the Supabase client

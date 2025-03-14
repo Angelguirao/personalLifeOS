@@ -1,6 +1,5 @@
-
 import supabase from './client';
-import { gardenConnections } from './data';
+import { connections } from './data';
 import { Connection, SupabaseConnection, RelationshipType } from './types';
 import { tableExists } from './utils';
 import { toast } from 'sonner';
@@ -30,7 +29,7 @@ export const getConnections = async (): Promise<Connection[]> => {
   // If Supabase is not initialized, return fallback data
   if (!supabase) {
     console.log('Using fallback connections data');
-    return gardenConnections;
+    return connections;
   }
   
   try {
@@ -38,7 +37,7 @@ export const getConnections = async (): Promise<Connection[]> => {
     const connectionsExist = await tableExists('garden_connections');
     if (!connectionsExist) {
       console.log('Connections table does not exist, using fallback data');
-      return gardenConnections;
+      return connections;
     }
     
     console.log('Fetching connections from Supabase...');
@@ -49,14 +48,14 @@ export const getConnections = async (): Promise<Connection[]> => {
     if (error) {
       console.error('Supabase error:', error);
       toast.error('Failed to load connections from database');
-      return gardenConnections;
+      return connections;
     }
     
     console.log('Supabase connections data:', data);
     
     if (!data || data.length === 0) {
       console.log('No connections found in Supabase, using fallback data');
-      return gardenConnections;
+      return connections;
     }
     
     // Transform from snake_case to camelCase using our mapping function
@@ -64,7 +63,7 @@ export const getConnections = async (): Promise<Connection[]> => {
   } catch (error) {
     console.error('Error fetching connections:', error);
     toast.error('Error fetching connections');
-    return gardenConnections;
+    return connections;
   }
 };
 
@@ -97,7 +96,7 @@ export const createConnection = async (connection: Omit<Connection, 'id'>): Prom
 export const getNoteConnections = async (noteId: number): Promise<Connection[]> => {
   if (!supabase || !(await tableExists('garden_connections'))) {
     // Filter from local data if Supabase is not available
-    return gardenConnections.filter(conn => 
+    return connections.filter(conn => 
       conn.sourceId === noteId || conn.targetId === noteId
     );
   }

@@ -9,7 +9,8 @@ import {
   Question,
   QuestionCategory,
   Inspiration,
-  convertMentalModelToNote
+  convertMentalModelToNote,
+  MentalModelVersion
 } from './types';
 
 // Enhanced mental models using the new structure
@@ -207,8 +208,28 @@ export const inspirations: Inspiration[] = [
 // For backward compatibility - convert mental models to garden notes
 export const gardenNotes: GardenNote[] = mentalModels.map(convertMentalModelToNote);
 
+// Sample mental model versions for version history tracking
+export const modelVersions: MentalModelVersion[] = [
+  {
+    id: "v1",
+    mentalModelId: "1",
+    versionNumber: 1,
+    contentSnapshot: "Initial thoughts on Todd May's Should We Go Extinct?",
+    changeLog: "Initial creation",
+    timestamp: "2024-09-01T10:00:00Z"
+  },
+  {
+    id: "v2",
+    mentalModelId: "1",
+    versionNumber: 2,
+    contentSnapshot: "Todd May's Should We Go Extinct? provokes deep reflection on humanity's future. What if the answer lies not in our extinction, but in transforming how we live—by valuing nature as part of ourselves?",
+    changeLog: "Expanded on the core concept and added nuance",
+    timestamp: "2024-09-01T15:30:00Z"
+  }
+];
+
 // Generate some sample connections between notes with strengths as numbers, not strings
-export const gardenConnections: Connection[] = [
+export const connections: Connection[] = [
   { id: 1, sourceId: 1, targetId: 2, strength: 0.7, relationship: "related" as RelationshipType },
   { id: 2, sourceId: 1, targetId: 3, strength: 0.5, relationship: "inspires" as RelationshipType },
   { id: 3, sourceId: 2, targetId: 4, strength: 0.6, relationship: "builds_on" as RelationshipType },
