@@ -13,8 +13,8 @@ export const mentalModels: MentalModel[] = [
     subtitle: "Human existence as part of nature rather than separate from it",
     developmentStage: "seedling",
     confidenceLevel: "hypothesis",
-    summary: "Our relationship with nature isn't necessarily antagonistic. Instead of extinction, we could transform how we perceive ourselves in relation to nature – as part of it rather than separate from it.",
-    fullContent: "Todd May's book 'Should We Go Extinct?' challenges us to rethink human existence in relation to the rest of life on Earth. While some argue human extinction would benefit other species, an alternative view is that humans can transform our relationship with nature by understanding ourselves as integral to it rather than separate. This mental model reframes environmental ethics from extinction-focused to transformation-focused thinking.",
+    summary: "Our relationship with nature isn't necessarily antagonistic. We can transform how we perceive ourselves in relation to nature – as part of it rather than separate from it.",
+    fullContent: "Humans have long positioned themselves outside and above nature, treating the environment as a resource to exploit. This mental model proposes that a fundamental reorientation is needed where we recognize ourselves as integral to the natural world. Our choices, technologies, and values should reflect this embeddedness, seeking harmony rather than domination. Practical implications include regenerative design principles, circular economies, and biophilic communities that embed natural processes within human systems.",
     tags: ["ethics", "environment", "ecology", "anthropocene"],
     timestamps: {
       created: "2024-09-01",
@@ -40,8 +40,8 @@ export const mentalModels: MentalModel[] = [
     subtitle: "Justice and equality as primary social values",
     developmentStage: "seedling",
     confidenceLevel: "working",
-    summary: "The global pursuit of happiness as the ultimate goal may lead to overlooking more fundamental values like justice and equality. A well-lived life might require more than just happiness.",
-    fullContent: "The book 'Against Happiness' by Owen Flanagan challenges the dominant 'happiness agenda' in global policy. This mental model proposes that focusing exclusively on happiness metrics overlooks critical values like justice, fairness, and equality. A meaningful life likely requires a broader spectrum of experiences and values beyond mere happiness, including moral virtue, justice-seeking, and thoughtful engagement with difficult realities.",
+    summary: "The pursuit of happiness as society's ultimate goal may lead to overlooking more fundamental values like justice and equality. A well-lived life might require more than just happiness.",
+    fullContent: "Modern societies increasingly measure success through happiness metrics and personal satisfaction. This mental model proposes that focusing exclusively on happiness is insufficient for human flourishing. Values like justice, fairness, and equality may sometimes require sacrificing immediate happiness for longer-term societal wellbeing. Individuals experiencing appropriate negative emotions in response to injustice (like righteous anger or moral outrage) might be living better lives than those who maintain happiness through moral disengagement or willful ignorance.",
     tags: ["ethics", "values", "philosophy", "happiness"],
     timestamps: {
       created: "2024-09-01",
@@ -67,7 +67,7 @@ export const mentalModels: MentalModel[] = [
     developmentStage: "growing",
     confidenceLevel: "established",
     summary: "Knowledge isn't about capturing objective reality but creating frameworks that strengthen human solidarity and ethical relationships.",
-    fullContent: "Richard Rorty's seminal work 'Contingency, Irony, and Solidarity' reframes epistemology entirely. This mental model holds that knowledge claims are justified not by correspondence to an external reality but by their ability to foster human solidarity and ethical relations. The pursuit of knowledge is fundamentally ethical rather than representational, aimed at creating communities of shared understanding rather than mirroring nature. This pragmatic approach shifts focus from 'getting reality right' to 'making lives better.'",
+    fullContent: "This model reframes epistemology entirely. Knowledge claims are justified not by correspondence to an external reality but by their ability to foster human solidarity and ethical relations. Truth becomes a property of statements made within communities of shared understanding, not an independent feature of reality. This pragmatic approach shifts focus from 'getting reality right' to 'making lives better,' treating inquiry as fundamentally ethical rather than representational. Scientific progress happens not because we're getting closer to reality's intrinsic nature, but because we're developing more useful ways of predicting and controlling our environment.",
     tags: ["epistemology", "pragmatism", "ethics", "philosophy"],
     timestamps: {
       created: "2024-08-31",
@@ -93,7 +93,7 @@ export const mentalModels: MentalModel[] = [
     developmentStage: "growing",
     confidenceLevel: "established",
     summary: "The capacity for deep reflection is a vital political action in an age where thoughtlessness enables political harm.",
-    fullContent: "Hannah Arendt's 'The Human Condition' introduces the concept that thoughtlessness—not active malice—enables political catastrophes. This mental model proposes that cultivating the habit of reflection is itself a political act. When we pause to consider the full implications of our actions and policies, we resist the currents of thoughtless harm that characterize modern political life. Thoughtfulness becomes a form of resistance to authoritarianism and injustice.",
+    fullContent: "In modern political systems, thoughtlessness—not active malice—enables catastrophic policies and outcomes. This mental model proposes that cultivating the habit of reflection is itself a political act. When we pause to consider the full implications of our actions, policies, and systems, we resist the currents of thoughtless harm. Thoughtfulness requires stepping back from immediate reactions, considering multiple perspectives, and examining consequences across time and space. By making reflection a practice, individuals can develop resistance to propaganda, demagoguery, and the normalization of harmful policies.",
     tags: ["politics", "philosophy", "reflection", "ethics"],
     timestamps: {
       created: "2024-08-29",
@@ -120,7 +120,7 @@ export const mentalModels: MentalModel[] = [
     developmentStage: "evergreen",
     confidenceLevel: "fundamental",
     summary: "Truth is not something to be definitively captured but a beautiful mystery to be continuously engaged with through sustained inquiry.",
-    fullContent: "Throughout intellectual history, humans have sought certainty—first through divine revelation, then through scientific method. This mental model proposes that truth itself is shaped by the consciousness engaging with it, making complete certainty impossible. Rather than viewing this as a failure, we might see the beauty in uncertainty: it keeps inquiry alive, prevents dogmatism, and acknowledges the evolving nature of knowledge. Embracing skepticism becomes not just intellectually honest but aesthetically rich.",
+    fullContent: "This fundamental mental model embraces the limitation that truth itself is shaped by the consciousness engaging with it, making complete certainty impossible. Rather than viewing this as a failure of knowledge, we might see beauty in uncertainty: it keeps inquiry alive, prevents dogmatism, and acknowledges the evolving nature of understanding. The best knowledge systems maintain a productive tension between confidence in established findings and openness to revision. Intellectual humility becomes not just an ethical virtue but an epistemological necessity. This perspective values questions as much as answers and sees the pursuit of knowledge as an aesthetic engagement with reality's mysteries.",
     tags: ["epistemology", "philosophy", "consciousness", "truth"],
     timestamps: {
       created: "2024-08-29",

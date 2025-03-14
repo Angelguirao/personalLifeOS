@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { 
   ReactFlow, 
@@ -36,7 +37,8 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
   // Console log the connections for debugging
   useEffect(() => {
     console.log('Connections in GraphView:', connections);
-  }, [connections]);
+    console.log('Nodes in GraphView:', nodes);
+  }, [connections, nodes]);
   
   // Transform garden notes into React Flow nodes
   const initialNodes: Node[] = nodes.map((note) => ({
@@ -59,16 +61,21 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
     // Get edge color based on relationship type  
     const edgeColor = getRelationshipColor(connection.relationship as RelationshipType);
     
-    console.log('Creating edge:', connection);
+    // Convert to string IDs if they aren't already
+    const sourceId = connection.sourceId.toString();
+    const targetId = connection.targetId.toString();
+    
+    console.log(`Creating edge from ${sourceId} to ${targetId} with relationship ${connection.relationship}`);
+    
     return {
-      id: `e${connection.sourceId}-${connection.targetId}`,
-      source: connection.sourceId.toString(),
-      target: connection.targetId.toString(),
-      type: 'default', // Changed from 'smoothstep' to ensure basic compatibility
+      id: `e${sourceId}-${targetId}`,
+      source: sourceId,
+      target: targetId,
+      type: 'default',
       animated: true,
       style: { 
         stroke: edgeColor, 
-        strokeWidth: strengthValue * 2 || 1.5 
+        strokeWidth: Math.max(1, strengthValue * 2) // Ensure minimum stroke width
       },
       label: connection.relationship,
       labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12 },

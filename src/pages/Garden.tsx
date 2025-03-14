@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { ArrowLeft, RefreshCcw } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import RevealText from '../components/ui/RevealText';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -17,7 +17,6 @@ import ListView from '../components/garden/ListView';
 import GardenGuide from '../components/garden/GardenGuide';
 import ViewModeSelector, { ViewMode } from '../components/garden/ViewModeSelector';
 import { toast } from 'sonner';
-import { Button } from '../components/ui/button';
 
 const Garden = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
@@ -38,7 +37,7 @@ const Garden = () => {
       await queryClient.invalidateQueries({ queryKey: ['garden-connections'] });
       await queryClient.invalidateQueries({ queryKey: ['mental-models'] });
       
-      toast.success('Garden data refreshed successfully!');
+      toast.success('Garden data loaded successfully!');
     } catch (error) {
       console.error('Error seeding initial data:', error);
       
@@ -95,11 +94,6 @@ const Garden = () => {
     setViewMode(mode);
   };
 
-  // Function to manually refresh data
-  const handleRefreshData = () => {
-    seedData();
-  };
-
   return (
     <>
       <Navbar />
@@ -121,18 +115,7 @@ const Garden = () => {
           </div>
           
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-            <div className="flex items-center gap-2">
-              <GardenGuide />
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleRefreshData}
-                className="flex items-center gap-1"
-              >
-                <RefreshCcw size={14} />
-                Refresh Data
-              </Button>
-            </div>
+            <GardenGuide />
             <ViewModeSelector viewMode={viewMode} setViewMode={handleViewModeChange} />
           </div>
           
@@ -148,7 +131,7 @@ const Garden = () => {
           {hasError && (
             <div className="glass p-8 text-center">
               <p className="text-red-500 mb-2">Failed to load garden data</p>
-              <p className="text-muted-foreground text-sm">Please try refreshing the data</p>
+              <p className="text-muted-foreground text-sm">Please try refreshing the page</p>
               {seedingError && (
                 <div className="mt-4 p-4 bg-red-50 text-red-800 rounded text-sm font-mono whitespace-pre-wrap">
                   {seedingError}
