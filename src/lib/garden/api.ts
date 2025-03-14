@@ -53,6 +53,12 @@ export {
 
 // Export seeding functionality
 export { seedInitialData } from './api-seed';
+export { seedLegacyData } from './seed/seed-legacy';
+export { seedConnections } from './seed/seed-connections';
+export { seedMentalModels } from './seed/seed-models';
+export { seedModelVersions } from './seed/seed-versions';
+export { seedQuestions } from './seed/seed-questions';
+export { seedInspirations } from './seed/seed-inspirations';
 
 // Export adapter for data model conversion
 export { DataModelAdapter } from './adapters';
