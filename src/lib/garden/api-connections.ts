@@ -1,3 +1,4 @@
+
 import supabase from './client';
 import { connections } from './data';
 import { Connection, SupabaseConnection, RelationshipType } from './types/connection-types';
@@ -139,7 +140,7 @@ export const updateConnection = async (
   
   if (updates.sourceId !== undefined) supabaseUpdates.source_id = updates.sourceId;
   if (updates.targetId !== undefined) supabaseUpdates.target_id = updates.targetId;
-  if (updates.relationship !== undefined) supabaseUpdates.relationship = updates.relationship;
+  if (updates.relationship !== undefined) supabaseUpdates.relationship = updates.relationship as RelationshipType;
   if (updates.strength !== undefined) {
     // Convert decimal strength to integer for DB
     supabaseUpdates.strength = Math.round(Number(updates.strength) * 10);

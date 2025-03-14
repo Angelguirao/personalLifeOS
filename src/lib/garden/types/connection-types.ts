@@ -7,7 +7,12 @@ export type RelationshipType =
   | 'extends' 
   | 'example' 
   | 'implementation' 
-  | 'question';
+  | 'question'
+  | 'inspires'
+  | 'builds_on'
+  | 'contrasts'
+  | 'references'
+  | 'questions';
 
 // Connection interface for the frontend
 export interface Connection {
@@ -15,7 +20,7 @@ export interface Connection {
   sourceId: string | number;
   targetId: string | number;
   strength: number; // 0.0 to 1.0
-  relationship: string; // Type of connection
+  relationship: RelationshipType; // Type of connection
 }
 
 // Connection type for Supabase database
