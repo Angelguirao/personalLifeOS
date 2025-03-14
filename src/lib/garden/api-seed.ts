@@ -36,21 +36,24 @@ export const seedInitialData = async () => {
       return;
     }
     
-    // Seed data into existing tables
+    // First seed the mental models (which also deletes existing model versions)
     console.log('Starting to seed mental models...');
     const modelsSeedResult = await seedMentalModels();
     console.log('Mental models seeding result:', modelsSeedResult);
     
-    if (connectionsTableExists) {
-      console.log('Starting to seed connections...');
-      await seedConnections();
-    }
-    
-    if (versionsTableExists) {
+    // Then seed model versions (must be before connections since they may reference versions)
+    if (versionsTableExists && modelsSeedResult) {
       console.log('Starting to seed model versions...');
       await seedModelVersions();
     }
     
+    // Then seed connections
+    if (connectionsTableExists && modelsSeedResult) {
+      console.log('Starting to seed connections...');
+      await seedConnections();
+    }
+    
+    // Seed other data
     if (questionsTableExists) {
       console.log('Starting to seed questions...');
       await seedQuestions();

@@ -20,7 +20,24 @@ export const seedMentalModels = async () => {
       return false;
     }
 
-    // Delete existing mental models data
+    // First, check if the versions table exists and delete its contents
+    const versionsTableExists = await tableExists('mental_model_versions');
+    if (versionsTableExists) {
+      console.log('Deleting existing model versions data...');
+      const { error: versionsDeleteError } = await supabase
+        .from('mental_model_versions')
+        .delete()
+        .not('id', 'is', null); // Safety check
+      
+      if (versionsDeleteError) {
+        console.error('Error deleting existing model versions:', versionsDeleteError);
+        toast.error('Error deleting existing model versions');
+        return false;
+      }
+      console.log('Existing model versions deleted successfully');
+    }
+
+    // Now delete the mental models
     console.log('Deleting existing mental models data...');
     const { error: deleteError } = await supabase
       .from('mental_models')
