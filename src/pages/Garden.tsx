@@ -10,7 +10,8 @@ import {
   getNotes, 
   getConnections, 
   seedInitialData, 
-  getMentalModels 
+  getMentalModels,
+  isSupabaseAvailable
 } from '../lib/garden/api';
 import GraphView from '../components/garden/GraphView';
 import ListView from '../components/garden/ListView';
@@ -38,7 +39,11 @@ const Garden = () => {
       await queryClient.invalidateQueries({ queryKey: ['garden-connections'] });
       await queryClient.invalidateQueries({ queryKey: ['mental-models'] });
       
-      toast.success('Garden data loaded successfully!');
+      if (isSupabaseAvailable()) {
+        toast.success('Garden data loaded from database successfully!');
+      } else {
+        toast.info('Using sample garden data (Supabase not connected)');
+      }
     } catch (error) {
       console.error('Error seeding initial data:', error);
       
@@ -125,6 +130,15 @@ const Garden = () => {
                 <p className="text-muted-foreground mb-2">Loading garden notes...</p>
                 <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
               </div>
+            </div>
+          )}
+          
+          {!isLoading && !hasError && !isSupabaseAvailable() && (
+            <div className="mb-6 p-4 border border-yellow-200 bg-yellow-50 rounded-md">
+              <p className="text-yellow-800">
+                <strong>Note:</strong> Running in offline mode with sample garden data. 
+                To connect to a database, set up Supabase credentials.
+              </p>
             </div>
           )}
           

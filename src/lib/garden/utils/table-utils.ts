@@ -1,10 +1,10 @@
 
-import supabase from '../client';
+import supabase, { isSupabaseAvailable } from '../client';
 
 // Helper function to check if a table exists
 export const tableExists = async (tableName: string): Promise<boolean> => {
   // If supabase is null, return false to indicate table doesn't exist
-  if (supabase === null) {
+  if (!isSupabaseAvailable()) {
     console.log(`Supabase client not initialized, can't check if table ${tableName} exists`);
     return false;
   }
@@ -34,7 +34,7 @@ export const tableExists = async (tableName: string): Promise<boolean> => {
 
 // Create necessary tables in Supabase if they don't exist
 export const createTablesIfNotExist = async (): Promise<boolean> => {
-  if (supabase === null) {
+  if (!isSupabaseAvailable()) {
     console.log("Supabase client not initialized, can't create tables");
     return false;
   }

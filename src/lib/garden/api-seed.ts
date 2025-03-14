@@ -1,5 +1,5 @@
 
-import supabase from './client';
+import supabase, { isSupabaseAvailable } from './client';
 import { tableExists, createTablesIfNotExist } from './utils/table-utils';
 import { toast } from 'sonner';
 import { seedMentalModels } from './seed/seed-models';
@@ -10,9 +10,8 @@ import { seedConnections } from './seed/seed-connections';
 
 export const seedInitialData = async () => {
   // If supabase is null, just return without trying to seed
-  if (supabase === null) {
+  if (!isSupabaseAvailable()) {
     console.log('Supabase client not initialized. Using fallback data.');
-    toast.info('Running in offline mode with sample garden data.');
     return;
   }
   

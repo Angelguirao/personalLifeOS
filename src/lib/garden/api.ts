@@ -12,8 +12,8 @@ export {
   modelVersions
 } from './data';
 
-// Export the Supabase client
-export { default as supabase } from './client';
+// Export the Supabase client and helper functions
+export { default as supabase, isSupabaseAvailable } from './client';
 
 // Export notes API functions (legacy)
 export {
