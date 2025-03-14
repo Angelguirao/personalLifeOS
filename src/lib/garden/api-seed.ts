@@ -162,8 +162,11 @@ const seedMentalModels = async () => {
     return true;
   }
   
-  // Transform mental models to Supabase format
-  const modelsData = mentalModels.map(model => transformMentalModelToSupabase(model));
+  // Transform mental models to Supabase format and ensure IDs are included
+  const modelsData = mentalModels.map(model => transformMentalModelToSupabase({
+    ...model,
+    id: model.id  // Explicitly include the ID
+  }));
   
   // Insert mental models
   const { error } = await supabase
@@ -198,10 +201,20 @@ const seedModelVersions = async () => {
     return true;
   }
   
+  // Format the model versions data for Supabase (using snake_case for column names)
+  const versionsData = modelVersions.map(version => ({
+    id: version.id,
+    mental_model_id: version.mentalModelId,
+    version_number: version.versionNumber,
+    content_snapshot: version.contentSnapshot,
+    change_log: version.changeLog, // Ensure this matches the column name in Supabase
+    timestamp: version.timestamp
+  }));
+  
   // Insert versions
   const { error } = await supabase
     .from('mental_model_versions')
-    .insert(modelVersions);
+    .insert(versionsData);
   
   if (error) {
     console.error('Error seeding model versions:', error);
@@ -231,10 +244,20 @@ const seedQuestions = async () => {
     return true;
   }
   
+  // Format the questions data for Supabase (using snake_case for column names)
+  const questionsData = questions.map(question => ({
+    id: question.id,
+    question_text: question.questionText,
+    clarification_needed: question.clarificationNeeded, // Use snake_case for Supabase
+    related_models: question.relatedModels,
+    category: question.category,
+    importance_rank: question.importanceRank
+  }));
+  
   // Insert questions
   const { error } = await supabase
     .from('questions')
-    .insert(questions);
+    .insert(questionsData);
   
   if (error) {
     console.error('Error seeding questions:', error);
@@ -264,10 +287,20 @@ const seedInspirations = async () => {
     return true;
   }
   
+  // Format the inspirations data for Supabase (using snake_case for column names)
+  const inspirationsData = inspirations.map(inspiration => ({
+    id: inspiration.id,
+    source_type: inspiration.sourceType,
+    source_name: inspiration.sourceName,
+    author_name: inspiration.authorName, // Use snake_case for Supabase
+    link: inspiration.link,
+    quote: inspiration.quote
+  }));
+  
   // Insert inspirations
   const { error } = await supabase
     .from('inspirations')
-    .insert(inspirations);
+    .insert(inspirationsData);
   
   if (error) {
     console.error('Error seeding inspirations:', error);

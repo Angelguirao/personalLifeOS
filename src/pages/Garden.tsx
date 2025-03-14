@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import RevealText from '../components/ui/RevealText';
 import { useQuery } from '@tanstack/react-query';
-import { GardenNote, getNotes, getConnections, seedInitialData } from '../lib/garden/api';
+import { getNotes, getConnections, seedInitialData } from '../lib/garden/api';
 import GraphView from '../components/garden/GraphView';
 import ListView from '../components/garden/ListView';
 import GardenGuide from '../components/garden/GardenGuide';

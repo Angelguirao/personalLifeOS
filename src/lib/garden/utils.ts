@@ -185,8 +185,9 @@ export const transformMentalModelFromSupabase = (data: any): MentalModel => {
 };
 
 // Helper function to transform mental model to Supabase format
-export const transformMentalModelToSupabase = (model: Omit<MentalModel, 'id'>) => {
+export const transformMentalModelToSupabase = (model: Partial<MentalModel> & { id?: string }) => {
   return {
+    id: model.id, // Include the ID when provided
     title: model.title,
     subtitle: model.subtitle,
     development_stage: model.developmentStage,
@@ -211,3 +212,4 @@ export const transformMentalModelToSupabase = (model: Omit<MentalModel, 'id'>) =
     last_updated: model.lastUpdated
   };
 };
+
