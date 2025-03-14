@@ -1,4 +1,3 @@
-
 import supabase from './client';
 import { connections } from './data';
 import { Connection, SupabaseConnection, RelationshipType } from './types/connection-types';
@@ -21,7 +20,7 @@ const mapToDatabaseConnection = (frontendConnection: Omit<Connection, 'id'>): Om
   target_id: frontendConnection.targetId,
   // Convert decimal strength (0.0-1.0) to integer (0-10)
   strength: Math.round(Number(frontendConnection.strength) * 10),
-  relationship: frontendConnection.relationship as RelationshipType
+  relationship: frontendConnection.relationship
 });
 
 export const getConnections = async (): Promise<Connection[]> => {
