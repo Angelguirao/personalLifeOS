@@ -95,7 +95,7 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
     });
   }, []);
   
-  const [nodes_, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [rfNodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   
   // Update edges when connections change
@@ -135,7 +135,7 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
   return (
     <div className="w-full h-full">
       <ReactFlow
-        nodes={nodes_}
+        nodes={rfNodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
