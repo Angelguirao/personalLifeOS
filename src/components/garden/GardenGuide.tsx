@@ -6,10 +6,12 @@ const GardenGuide = () => {
   return (
     <div className="glass p-3 border-l-4 border-green-500">
       <div className="text-xs text-muted-foreground flex flex-wrap gap-2 items-center">
-        <span className="font-semibold mr-1">View mental models:</span>
-        <span className="flex items-center"><Sprout size={12} className="text-green-400 mr-1" /> Seedling</span>
-        <span className="flex items-center"><Sprout size={12} className="text-green-500 mr-1" /> Growing</span>
-        <span className="flex items-center"><Sprout size={12} className="text-green-600 mr-1" /> Evergreen</span>
+        <span className="font-semibold mr-1">Views:</span>
+        <span className="flex items-center"><List size={12} className="mr-1" /> List</span>
+        <span className="flex items-center"><Network size={12} className="mr-1" /> Graph</span>
+        <span className="flex items-center"><Table2 size={12} className="mr-1" /> Table</span>
+        <span className="flex items-center"><MessageCircle size={12} className="mr-1" /> Q&A</span>
+        <span className="flex items-center"><GitBranch size={12} className="mr-1" /> Flowchart</span>
       </div>
     </div>
   );
