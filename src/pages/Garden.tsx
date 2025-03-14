@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -92,7 +91,7 @@ const Garden = () => {
   const handleViewModeChange = (mode: ViewMode) => {
     setViewMode(mode);
   };
-
+  
   return (
     <>
       <Navbar />
@@ -113,7 +112,7 @@ const Garden = () => {
             </p>
           </div>
           
-          <div className="flex justify-end mb-8">
+          <div className="w-full flex justify-center mb-8">
             <ViewModeSelector viewMode={viewMode} setViewMode={handleViewModeChange} />
           </div>
           
