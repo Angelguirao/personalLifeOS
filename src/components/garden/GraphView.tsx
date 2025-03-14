@@ -100,21 +100,23 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
       console.log('Setting new edges:', newEdges);
       setEdges(newEdges);
     }
-  }, [connections, setEdges, createEdgesFromConnections]);
+  }, [connections, createEdgesFromConnections, setEdges]);
   
   // Also update nodes when the nodes prop changes
   useEffect(() => {
-    const newNodes = nodes.map((note) => ({
-      id: note.id.toString(),
-      type: 'note',
-      data: note,
-      position: { 
-        x: 100 + Math.random() * 500, 
-        y: 100 + Math.random() * 500 
-      },
-    }));
-    
-    setNodes(newNodes);
+    if (nodes.length > 0) {
+      const newNodes = nodes.map((note) => ({
+        id: note.id.toString(),
+        type: 'note',
+        data: note,
+        position: { 
+          x: 100 + Math.random() * 500, 
+          y: 100 + Math.random() * 500 
+        },
+      }));
+      
+      setNodes(newNodes);
+    }
   }, [nodes, setNodes]);
   
   const onNodeClick = (_: React.MouseEvent, node: Node) => {

@@ -12,6 +12,19 @@ export const seedConnections = async () => {
   }
   
   try {
+    // Check if we already have data
+    const { data: existingData, error: checkError } = await supabase
+      .from('connections')
+      .select('id')
+      .limit(1);
+    
+    if (checkError) {
+      console.error('Error checking for existing connections:', checkError);
+    } else if (existingData && existingData.length > 0) {
+      console.log('Connections already exist, skipping seed...');
+      return true;
+    }
+    
     // First, delete existing connections
     console.log('Deleting existing connections...');
     const { error: deleteError } = await supabase

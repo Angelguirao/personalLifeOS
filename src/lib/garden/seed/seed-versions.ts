@@ -7,6 +7,19 @@ export const seedModelVersions = async () => {
   try {
     console.log('Seeding model versions...');
     
+    // Check if we already have data
+    const { data: existingData, error: checkError } = await supabase
+      .from('mental_model_versions')
+      .select('id')
+      .limit(1);
+    
+    if (checkError) {
+      console.error('Error checking for existing model versions:', checkError);
+    } else if (existingData && existingData.length > 0) {
+      console.log('Mental model versions already exist, skipping seed...');
+      return true;
+    }
+    
     // First, delete existing model versions
     console.log('Deleting existing model versions...');
     const { error: deleteError } = await supabase
