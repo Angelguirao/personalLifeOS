@@ -37,21 +37,27 @@ export const seedInitialData = async () => {
     }
     
     // Seed data into existing tables
-    await seedMentalModels();
+    console.log('Starting to seed mental models...');
+    const modelsSeedResult = await seedMentalModels();
+    console.log('Mental models seeding result:', modelsSeedResult);
     
     if (connectionsTableExists) {
+      console.log('Starting to seed connections...');
       await seedConnections();
     }
     
     if (versionsTableExists) {
+      console.log('Starting to seed model versions...');
       await seedModelVersions();
     }
     
     if (questionsTableExists) {
+      console.log('Starting to seed questions...');
       await seedQuestions();
     }
     
     if (inspirationsTableExists) {
+      console.log('Starting to seed inspirations...');
       await seedInspirations();
     }
     

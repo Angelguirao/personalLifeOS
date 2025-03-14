@@ -36,10 +36,14 @@ export const seedMentalModels = async () => {
       id: model.id  // Explicitly include the ID
     }));
     
+    console.log(`Seeding ${modelsData.length} mental models...`);
+    
     // Insert mental models in batches to avoid request size limits
     const batchSize = 5;
     for (let i = 0; i < modelsData.length; i += batchSize) {
       const batch = modelsData.slice(i, i + batchSize);
+      console.log(`Inserting batch ${Math.floor(i/batchSize) + 1}/${Math.ceil(modelsData.length/batchSize)}`);
+      
       const { error } = await supabase
         .from('mental_models')
         .insert(batch);
@@ -52,6 +56,7 @@ export const seedMentalModels = async () => {
     }
     
     console.log('Mental models seeded successfully');
+    toast.success('Mental models seeded successfully to database');
     return true;
   } catch (error) {
     console.error('Unexpected error seeding mental models:', error);

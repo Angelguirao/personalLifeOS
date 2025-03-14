@@ -22,11 +22,13 @@ const Garden = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [seedingComplete, setSeedingComplete] = useState(false);
   const [seedingError, setSeedingError] = useState<string | null>(null);
+  const [isSeeding, setIsSeeding] = useState(false);
   const queryClient = useQueryClient();
   
   // Function to seed data and refresh queries
   const seedData = async () => {
     try {
+      setIsSeeding(true);
       toast.info('Setting up the garden...');
       setSeedingError(null);
       
@@ -59,6 +61,18 @@ const Garden = () => {
       
       // Mark seeding as complete even if it failed, so we'll use fallback data
       setSeedingComplete(true);
+    } finally {
+      setIsSeeding(false);
+    }
+  };
+  
+  // Function to manually trigger reseeding
+  const handleReseed = () => {
+    if (isSeeding) return;
+    
+    // Confirm before reseeding
+    if (window.confirm('This will attempt to seed the database with mental models. Continue?')) {
+      seedData();
     }
   };
   
@@ -120,14 +134,28 @@ const Garden = () => {
             </p>
           </div>
           
-          <div className="w-full flex justify-center mb-8">
+          <div className="w-full flex justify-between items-center mb-8">
             <ViewModeSelector viewMode={viewMode} setViewMode={handleViewModeChange} />
+            
+            {/* Button to manually trigger reseeding */}
+            {isSupabaseAvailable() && (
+              <button 
+                onClick={handleReseed}
+                disabled={isSeeding}
+                className="text-sm px-3 py-1 bg-primary/10 hover:bg-primary/20 text-primary rounded-md 
+                           transition-colors disabled:opacity-50 disabled:pointer-events-none"
+              >
+                {isSeeding ? 'Seeding...' : 'Seed Database'}
+              </button>
+            )}
           </div>
           
           {isLoading && (
             <div className="flex justify-center items-center py-20">
               <div className="text-center">
-                <p className="text-muted-foreground mb-2">Loading garden notes...</p>
+                <p className="text-muted-foreground mb-2">
+                  {isSeeding ? 'Seeding database...' : 'Loading garden notes...'}
+                </p>
                 <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
               </div>
             </div>
