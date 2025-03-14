@@ -14,7 +14,6 @@ import {
 } from '../lib/garden/api';
 import GraphView from '../components/garden/GraphView';
 import ListView from '../components/garden/ListView';
-import GardenGuide from '../components/garden/GardenGuide';
 import ViewModeSelector, { ViewMode } from '../components/garden/ViewModeSelector';
 import { toast } from 'sonner';
 
@@ -114,8 +113,7 @@ const Garden = () => {
             </p>
           </div>
           
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-            <GardenGuide />
+          <div className="flex justify-end mb-8">
             <ViewModeSelector viewMode={viewMode} setViewMode={handleViewModeChange} />
           </div>
           
