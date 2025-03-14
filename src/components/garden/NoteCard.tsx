@@ -25,6 +25,9 @@ const getStageIcon = (stage: string) => {
 };
 
 const NoteCard = ({ note, index }: NoteCardProps) => {
+  // Extract first sentence for a concise description
+  const firstSentence = note.summary.split('.')[0] + '.';
+  
   return (
     <BlurEffect className={`animation-delay-${(index + 1) * 100}`}>
       <article className="glass p-6 h-full transition-transform hover:-translate-y-1">
@@ -34,7 +37,7 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
             <span className="ml-1 capitalize">{note.stage}</span>
           </div>
           <span className="mx-2">•</span>
-          <time dateTime={note.lastUpdated}>Updated: {new Date(note.lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+          <time dateTime={note.lastUpdated}>Updated: {new Date(note.lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
         </div>
         
         <h2 className="font-serif text-xl font-semibold mb-3">
@@ -42,22 +45,7 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
         </h2>
         
         <p className="text-muted-foreground mb-4">
-          {note.bookInfo ? (
-            <>
-              {note.summary.split(note.bookInfo.title)[0]}
-              <a 
-                href={note.bookInfo.link} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                {note.bookInfo.title}
-              </a>
-              {note.summary.split(note.bookInfo.title)[1]}
-            </>
-          ) : (
-            note.summary
-          )}
+          {firstSentence}
         </p>
         
         <div className="flex flex-col space-y-4">

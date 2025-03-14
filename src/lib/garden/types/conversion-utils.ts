@@ -37,18 +37,16 @@ export const convertNoteToMentalModel = (note: GardenNote): MentalModel => {
 
 export const convertMentalModelToNote = (model: MentalModel): GardenNote => {
   return {
-    id: parseInt(model.id),
+    id: typeof model.id === 'string' ? parseInt(model.id.replace(/-/g, '').substring(0, 9), 16) % 100000 : parseInt(model.id),
     title: model.title,
+    subtitle: model.subtitle,
     summary: model.summary,
     fullContent: model.fullContent,
     stage: model.stage || (model.developmentStage as 'seedling' | 'growing' | 'evergreen'),
     lastUpdated: model.lastUpdated || model.timestamps.modified,
     connections: model.tags,
-    // Optionally convert bookInfo if present
-    bookInfo: model.tags.includes('book') ? {
-      title: model.title.split(' by ')[0] || '',
-      author: model.title.split(' by ')[1] || 'Unknown',
-      link: '#' // Default link
-    } : undefined
+    // We no longer automatically create bookInfo, as our mental models now treat books as references
+    // rather than being directly about books
+    bookInfo: undefined
   };
 };

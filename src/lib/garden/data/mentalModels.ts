@@ -5,23 +5,23 @@ import {
   convertMentalModelToNote 
 } from '../types';
 
-// Enhanced mental models using the new structure
+// Enhanced mental models using the new structure - representing fundamental units of knowledge
 export const mentalModels: MentalModel[] = [
   {
-    id: "f47ac10b-58cc-4372-a567-0e02b2c3d479", // Valid UUID format
-    title: "Humanity's Future: Transform, Not Extinct",
-    subtitle: "Rethinking human existence in relation to nature",
+    id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    title: "Transformative Existence",
+    subtitle: "Human existence as part of nature rather than separate from it",
     developmentStage: "seedling",
     confidenceLevel: "hypothesis",
-    summary: "Todd May's Should We Go Extinct? provokes deep reflection on humanity's future. What if the answer lies not in our extinction, but in transforming how we live—by valuing nature as part of ourselves?",
-    fullContent: "Todd May's Should We Go Extinct? provokes deep reflection on humanity's future. What if the answer lies not in our extinction, but in transforming how we live—by valuing nature as part of ourselves? This is a placeholder for the extended version of this note that would dive deeper into the concepts and provide more detailed analysis.",
-    tags: ["ethics", "humanity", "environment", "book"],
+    summary: "Our relationship with nature isn't necessarily antagonistic. Instead of extinction, we could transform how we perceive ourselves in relation to nature – as part of it rather than separate from it.",
+    fullContent: "Todd May's book 'Should We Go Extinct?' challenges us to rethink human existence in relation to the rest of life on Earth. While some argue human extinction would benefit other species, an alternative view is that humans can transform our relationship with nature by understanding ourselves as integral to it rather than separate. This mental model reframes environmental ethics from extinction-focused to transformation-focused thinking.",
+    tags: ["ethics", "environment", "ecology", "anthropocene"],
     timestamps: {
       created: "2024-09-01",
       modified: "2024-09-01"
     },
     latchAttributes: {
-      category: "Philosophy",
+      category: "Environmental Ethics",
       hierarchyLevel: 4
     },
     socraticAttributes: {
@@ -35,14 +35,14 @@ export const mentalModels: MentalModel[] = [
     lastUpdated: "2024-09-01"
   },
   {
-    id: "c4c6e79b-0d04-4f53-b6f3-3382180cadc9", // Valid UUID format
-    title: "Beyond Happiness: Rethinking What Matters",
-    subtitle: "Critique of happiness as the ultimate goal",
+    id: "c4c6e79b-0d04-4f53-b6f3-3382180cadc9",
+    title: "Values Beyond Happiness",
+    subtitle: "Justice and equality as primary social values",
     developmentStage: "seedling",
     confidenceLevel: "working",
-    summary: "The global pursuit of happiness overlooks justice and equality. Against Happiness by Owen Flanagan and co-authors critiques the simplistic 'happiness agenda,' urging us to rethink what truly makes a life worth living. Time to prioritize deeper values.",
-    fullContent: "The global pursuit of happiness overlooks justice and equality. Against Happiness by Owen Flanagan and co-authors critiques the simplistic 'happiness agenda,' urging us to rethink what truly makes a life worth living. Time to prioritize deeper values. This extended version would explore the philosophical implications of prioritizing happiness over other values and how this shapes societal structures.",
-    tags: ["ethics", "happiness", "values", "book"],
+    summary: "The global pursuit of happiness as the ultimate goal may lead to overlooking more fundamental values like justice and equality. A well-lived life might require more than just happiness.",
+    fullContent: "The book 'Against Happiness' by Owen Flanagan challenges the dominant 'happiness agenda' in global policy. This mental model proposes that focusing exclusively on happiness metrics overlooks critical values like justice, fairness, and equality. A meaningful life likely requires a broader spectrum of experiences and values beyond mere happiness, including moral virtue, justice-seeking, and thoughtful engagement with difficult realities.",
+    tags: ["ethics", "values", "philosophy", "happiness"],
     timestamps: {
       created: "2024-09-01",
       modified: "2024-09-01"
@@ -61,14 +61,14 @@ export const mentalModels: MentalModel[] = [
     lastUpdated: "2024-09-01"
   },
   {
-    id: "3a8a7e33-da91-4782-90ba-1834c9e982c4", // Valid UUID format
-    title: "Knowledge as Ethical Solidarity",
-    subtitle: "Rorty's pragmatic approach to epistemology",
+    id: "3a8a7e33-da91-4782-90ba-1834c9e982c4",
+    title: "Knowledge as Solidarity",
+    subtitle: "Epistemological pragmatism centered on human relations",
     developmentStage: "growing",
     confidenceLevel: "established",
-    summary: "Richard Rorty's book \"Contingency, irony, and solidarity\" is a reminder that the heart of inquiry is ethical solidarity, not an objective endpoint. What if our pursuit of knowledge is really about how we relate to each other?",
-    fullContent: "Richard Rorty's book \"Contingency, irony, and solidarity\" is a reminder that the heart of inquiry is ethical solidarity, not an objective endpoint. What if our pursuit of knowledge is really about how we relate to each other? This expanded note would delve into Rorty's pragmatism and how it challenges traditional notions of truth and objectivity.",
-    tags: ["ethics", "knowledge", "solidarity", "book"],
+    summary: "Knowledge isn't about capturing objective reality but creating frameworks that strengthen human solidarity and ethical relationships.",
+    fullContent: "Richard Rorty's seminal work 'Contingency, Irony, and Solidarity' reframes epistemology entirely. This mental model holds that knowledge claims are justified not by correspondence to an external reality but by their ability to foster human solidarity and ethical relations. The pursuit of knowledge is fundamentally ethical rather than representational, aimed at creating communities of shared understanding rather than mirroring nature. This pragmatic approach shifts focus from 'getting reality right' to 'making lives better.'",
+    tags: ["epistemology", "pragmatism", "ethics", "philosophy"],
     timestamps: {
       created: "2024-08-31",
       modified: "2024-08-31"
@@ -87,14 +87,14 @@ export const mentalModels: MentalModel[] = [
     lastUpdated: "2024-08-31"
   },
   {
-    id: "0556b3d5-64e2-4b70-8f47-8d3ba68f56c8", // Valid UUID format
-    title: "Reclaiming Reflection in a Thoughtless Age",
-    subtitle: "Arendt on thoughtfulness as political action",
+    id: "0556b3d5-64e2-4b70-8f47-8d3ba68f56c8",
+    title: "Thoughtfulness as Political Action",
+    subtitle: "Reflection as resistance to political thoughtlessness",
     developmentStage: "growing",
     confidenceLevel: "established",
-    summary: "In an age of thoughtless actions, Arendt's The Human Condition urges us to reclaim our capacity for reflection. Are we mindlessly drifting, or consciously shaping our world?",
-    fullContent: "In an age of thoughtless actions, Arendt's The Human Condition urges us to reclaim our capacity for reflection. Are we mindlessly drifting, or consciously shaping our world? This expanded note would explore Arendt's concept of 'thoughtlessness' and its implications for modern society, politics, and individual responsibility.",
-    tags: ["politics", "reflection", "consciousness", "book"],
+    summary: "The capacity for deep reflection is a vital political action in an age where thoughtlessness enables political harm.",
+    fullContent: "Hannah Arendt's 'The Human Condition' introduces the concept that thoughtlessness—not active malice—enables political catastrophes. This mental model proposes that cultivating the habit of reflection is itself a political act. When we pause to consider the full implications of our actions and policies, we resist the currents of thoughtless harm that characterize modern political life. Thoughtfulness becomes a form of resistance to authoritarianism and injustice.",
+    tags: ["politics", "philosophy", "reflection", "ethics"],
     timestamps: {
       created: "2024-08-29",
       modified: "2024-08-29"
@@ -114,14 +114,14 @@ export const mentalModels: MentalModel[] = [
     lastUpdated: "2024-08-29"
   },
   {
-    id: "2b45c097-b31e-4c36-b324-3f8824601dbe", // Valid UUID format
-    title: "The Beautiful Mystery of Truth",
-    subtitle: "Epistemological uncertainty as a feature, not a bug",
+    id: "2b45c097-b31e-4c36-b324-3f8824601dbe",
+    title: "Truth as Beautiful Mystery",
+    subtitle: "Uncertainty as epistemological strength",
     developmentStage: "evergreen",
     confidenceLevel: "fundamental",
-    summary: "From divine to scientific, our pursuit of certainty reflects a deeper need. But truth, shaped by our consciousness, remains a mystery we cannot fully grasp. To truly evolve, we must embrace skepticism and the beauty of uncertainty.",
-    fullContent: "From divine to scientific, our pursuit of certainty reflects a deeper need. But truth, shaped by our consciousness, remains a mystery we cannot fully grasp. To truly evolve, we must embrace skepticism and the beauty of uncertainty. This fuller exploration would examine how different epistemological frameworks have attempted to define and capture truth, and why embracing uncertainty might be more intellectually honest.",
-    tags: ["truth", "consciousness", "uncertainty", "epistemology"],
+    summary: "Truth is not something to be definitively captured but a beautiful mystery to be continuously engaged with through sustained inquiry.",
+    fullContent: "Throughout intellectual history, humans have sought certainty—first through divine revelation, then through scientific method. This mental model proposes that truth itself is shaped by the consciousness engaging with it, making complete certainty impossible. Rather than viewing this as a failure, we might see the beauty in uncertainty: it keeps inquiry alive, prevents dogmatism, and acknowledges the evolving nature of knowledge. Embracing skepticism becomes not just intellectually honest but aesthetically rich.",
+    tags: ["epistemology", "philosophy", "consciousness", "truth"],
     timestamps: {
       created: "2024-08-29",
       modified: "2024-08-29"
