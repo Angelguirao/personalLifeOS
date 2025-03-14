@@ -71,7 +71,7 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
       id: `e${sourceId}-${targetId}`,
       source: sourceId,
       target: targetId,
-      type: 'default',
+      type: 'smoothstep', // changed from 'default' to 'smoothstep' for better visualization
       animated: true,
       style: { 
         stroke: edgeColor, 
@@ -85,6 +85,36 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
   
   const [nodes_, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  
+  // Update edges when connections change
+  useEffect(() => {
+    const newEdges = connections.map((connection) => {
+      const strengthValue = typeof connection.strength === 'number' 
+        ? connection.strength 
+        : Number(connection.strength);
+      
+      const edgeColor = getRelationshipColor(connection.relationship as RelationshipType);
+      const sourceId = connection.sourceId.toString();
+      const targetId = connection.targetId.toString();
+      
+      return {
+        id: `e${sourceId}-${targetId}`,
+        source: sourceId,
+        target: targetId,
+        type: 'smoothstep',
+        animated: true,
+        style: { 
+          stroke: edgeColor, 
+          strokeWidth: Math.max(1, strengthValue * 2)
+        },
+        label: connection.relationship,
+        labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12 },
+        labelBgStyle: { fill: 'rgba(255, 255, 255, 0.75)' },
+      };
+    });
+    
+    setEdges(newEdges);
+  }, [connections, setEdges]);
   
   const onNodeClick = (_: React.MouseEvent, node: Node) => {
     const note = nodes.find(n => n.id.toString() === node.id);
@@ -110,7 +140,7 @@ const GraphView = ({ nodes, connections }: GraphViewProps) => {
         attributionPosition="bottom-right"
         connectionLineType={ConnectionLineType.SmoothStep}
         defaultEdgeOptions={{
-          type: 'default',
+          type: 'smoothstep',
           animated: true
         }}
       >

@@ -1,7 +1,7 @@
 
 import supabase from '../client';
 import { connections } from '../data';
-import { SupabaseConnection, RelationshipType } from '../types/connection-types';
+import { SupabaseConnection } from '../types/connection-types';
 import { tableExists } from '../utils/table-utils';
 import { toast } from 'sonner';
 
@@ -12,23 +12,20 @@ export const seedConnections = async () => {
   }
   
   try {
-    // Check if we already have connection data
-    const { count, error: countError } = await supabase
+    // First, delete existing connections
+    console.log('Deleting existing connections...');
+    const { error: deleteError } = await supabase
       .from('connections')
-      .select('*', { count: 'exact', head: true });
+      .delete()
+      .is('id', 'not.null'); // Delete all records
     
-    if (countError) {
-      console.error('Error checking connections data:', countError);
+    if (deleteError) {
+      console.error('Error deleting existing connections:', deleteError);
+      toast.error('Failed to clear existing connections');
       return false;
     }
     
-    // If we already have data, no need to seed
-    if (count && count > 0) {
-      console.log('Connections table already contains data. Skipping seed operation.');
-      return true;
-    }
-    
-    console.log('Connections table is empty. Seeding with initial data...');
+    console.log('Connections table cleared. Seeding with initial data...');
     
     // Transform connections to snake_case for Supabase
     // Convert strength to integers (0-10 scale) for Supabase

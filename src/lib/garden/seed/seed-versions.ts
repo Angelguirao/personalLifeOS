@@ -5,15 +5,32 @@ import { toast } from 'sonner';
 
 export const seedModelVersions = async () => {
   try {
+    console.log('Seeding model versions...');
+    
+    // First, delete existing model versions
+    console.log('Deleting existing model versions...');
+    const { error: deleteError } = await supabase
+      .from('mental_model_versions')
+      .delete()
+      .is('id', 'not.null'); // Delete all records
+    
+    if (deleteError) {
+      console.error('Error deleting existing model versions:', deleteError);
+      toast.error('Failed to clear existing model versions');
+      return false;
+    }
+    
     // Format the model versions data for Supabase (using snake_case for column names)
     const versionsData = modelVersions.map(version => ({
       id: version.id,
       mental_model_id: version.mentalModelId,
       version_number: version.versionNumber,
       content_snapshot: version.contentSnapshot,
-      change_log: version.changeLog, // Ensure this matches the column name in Supabase
+      change_log: version.changeLog,
       timestamp: version.timestamp
     }));
+    
+    console.log('Inserting model versions:', versionsData);
     
     // Insert versions
     const { error } = await supabase
