@@ -12,23 +12,28 @@ export const seedMentalModels = async () => {
   }
   
   try {
-    // Check if the mental_models table has data
-    const { count, error: countError } = await supabase
+    // Check if the mental_models table exists
+    const tableExistsResult = await tableExists('mental_models');
+    if (!tableExistsResult) {
+      console.error('Mental models table does not exist');
+      toast.error('Mental models table does not exist');
+      return false;
+    }
+
+    // Delete existing mental models data
+    console.log('Deleting existing mental models data...');
+    const { error: deleteError } = await supabase
       .from('mental_models')
-      .select('*', { count: 'exact', head: true });
+      .delete()
+      .not('id', 'is', null); // Safety check to ensure we don't delete with empty condition
     
-    if (countError) {
-      console.error('Error checking mental_models data:', countError);
+    if (deleteError) {
+      console.error('Error deleting existing mental models:', deleteError);
+      toast.error('Error deleting existing mental models');
       return false;
     }
     
-    // If we already have data, no need to seed
-    if (count && count > 0) {
-      console.log('Mental models table already contains data. Skipping seed operation.');
-      return true;
-    }
-    
-    console.log('Mental models table is empty. Seeding with initial data...');
+    console.log('Existing mental models deleted successfully');
     
     // Transform mental models to Supabase format and ensure IDs are included
     const modelsData = mentalModels.map(model => transformMentalModelToSupabase({

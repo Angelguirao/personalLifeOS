@@ -71,7 +71,7 @@ const Garden = () => {
     if (isSeeding) return;
     
     // Confirm before reseeding
-    if (window.confirm('This will attempt to seed the database with mental models. Continue?')) {
+    if (window.confirm('This will DELETE all existing mental models in the database and replace them with the latest models. Continue?')) {
       seedData();
     }
   };
