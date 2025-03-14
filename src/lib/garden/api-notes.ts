@@ -5,9 +5,11 @@ import { GardenNote } from './types/legacy-types';
 import { MentalModel } from './types/mental-model-types';
 import { convertMentalModelToNote } from './types/conversion-utils';
 import { 
-  tableExists, 
-  transformMentalModelFromSupabase
-} from './utils';
+  tableExists 
+} from './utils/table-utils';
+import { 
+  transformMentalModelFromSupabase 
+} from './utils/model-transforms';
 import { toast } from 'sonner';
 
 // Update this function to get mental models and convert them to garden notes for compatibility

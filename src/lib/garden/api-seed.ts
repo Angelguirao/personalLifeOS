@@ -1,6 +1,6 @@
 
 import supabase from './client';
-import { tableExists } from './utils';
+import { tableExists } from './utils/table-utils';
 import { toast } from 'sonner';
 import { seedLegacyData } from './seed/seed-legacy';
 import { seedMentalModels } from './seed/seed-models';

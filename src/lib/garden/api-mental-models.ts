@@ -2,7 +2,8 @@
 import supabase from './client';
 import { mentalModels } from './data';
 import { MentalModel } from './types/mental-model-types';
-import { tableExists, transformMentalModelFromSupabase, transformMentalModelToSupabase } from './utils';
+import { tableExists } from './utils/table-utils';
+import { transformMentalModelFromSupabase, transformMentalModelToSupabase } from './utils/model-transforms';
 import { toast } from 'sonner';
 
 export const getMentalModels = async (): Promise<MentalModel[]> => {

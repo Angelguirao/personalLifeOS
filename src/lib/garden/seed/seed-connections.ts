@@ -1,8 +1,8 @@
 
 import supabase from '../client';
 import { connections } from '../data';
-import { SupabaseConnection } from '../types/connection-types';
-import { tableExists } from '../utils';
+import { SupabaseConnection, RelationshipType } from '../types/connection-types';
+import { tableExists } from '../utils/table-utils';
 import { toast } from 'sonner';
 
 export const seedConnections = async () => {

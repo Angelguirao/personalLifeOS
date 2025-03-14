@@ -2,7 +2,7 @@
 import supabase from './client';
 import { connections } from './data';
 import { Connection, SupabaseConnection, RelationshipType } from './types/connection-types';
-import { tableExists } from './utils';
+import { tableExists } from './utils/table-utils';
 import { toast } from 'sonner';
 
 // Convert a database connection to a frontend connection

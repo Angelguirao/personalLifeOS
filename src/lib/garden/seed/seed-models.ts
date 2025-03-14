@@ -1,7 +1,8 @@
 
 import supabase from '../client';
 import { mentalModels } from '../data';
-import { tableExists, transformMentalModelToSupabase } from '../utils';
+import { tableExists } from '../utils/table-utils';
+import { transformMentalModelToSupabase } from '../utils/model-transforms';
 import { toast } from 'sonner';
 
 export const seedMentalModels = async () => {
