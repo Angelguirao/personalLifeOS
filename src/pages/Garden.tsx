@@ -1,214 +1,190 @@
+
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
-import { ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import RevealText from '../components/ui/RevealText';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { 
-  getNotes, 
-  getConnections, 
-  seedInitialData, 
-  getMentalModels,
-  isSupabaseAvailable
-} from '../lib/garden/api';
-import GraphView from '../components/garden/GraphView';
-import ListView from '../components/garden/ListView';
-import ViewModeSelector, { ViewMode } from '../components/garden/ViewModeSelector';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import ListView from '@/components/garden/ListView';
+import GraphView from '@/components/garden/GraphView';
+import GardenGuide from '@/components/garden/GardenGuide';
+import ViewModeSelector from '@/components/garden/ViewModeSelector';
 import { toast } from 'sonner';
+import { getMentalModels, getConnections, seedInitialData } from '@/lib/garden/api';
+import { MentalModel, Connection } from '@/lib/garden/types';
+import { DataModelAdapter } from '@/lib/garden/adapters';
+import ConnectionsDebugTool from '@/components/garden/ConnectionsDebugTool';
+
+// Views available in the garden
+type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart';
 
 const Garden = () => {
-  const [viewMode, setViewMode] = useState<ViewMode>('list');
-  const [seedingComplete, setSeedingComplete] = useState(false);
-  const [seedingError, setSeedingError] = useState<string | null>(null);
-  const [isSeeding, setIsSeeding] = useState(false);
-  const queryClient = useQueryClient();
-  
-  // Function to seed data and refresh queries
+  const [models, setModels] = useState<MentalModel[]>([]);
+  const [connections, setConnections] = useState<Connection[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeView, setActiveView] = useState<ViewMode>('list');
+  const [showDebug, setShowDebug] = useState(false);
+
+  // Function to seed data
   const seedData = async () => {
     try {
-      setIsSeeding(true);
-      toast.info('Setting up the garden...');
-      setSeedingError(null);
-      
-      // Try to seed data, but don't throw if credentials are missing
+      toast.info('Initializing garden data...', { duration: 2000 });
       await seedInitialData();
-      setSeedingComplete(true);
-      
-      // Invalidate queries to force a refresh of data
-      await queryClient.invalidateQueries({ queryKey: ['garden-notes'] });
-      await queryClient.invalidateQueries({ queryKey: ['garden-connections'] });
-      await queryClient.invalidateQueries({ queryKey: ['mental-models'] });
-      
-      if (isSupabaseAvailable()) {
-        toast.success('Garden data loaded from database successfully!');
-      } else {
-        toast.info('Using sample garden data (Supabase not connected)');
-      }
+      await fetchData();
+      toast.success('Garden data loaded successfully.');
     } catch (error) {
-      console.error('Error seeding initial data:', error);
-      
-      // Show more detailed error for debugging
-      if (error instanceof Error) {
-        const errorMessage = `Error setting up the garden: ${error.message}`;
-        setSeedingError(errorMessage);
-        toast.error(errorMessage);
-      } else {
-        setSeedingError('Unknown error setting up the garden');
-        toast.error('Error setting up the garden.');
-      }
-      
-      // Mark seeding as complete even if it failed, so we'll use fallback data
-      setSeedingComplete(true);
-    } finally {
-      setIsSeeding(false);
+      console.error('Error seeding data:', error);
+      toast.error('Failed to initialize garden data.');
     }
   };
-  
-  // Function to manually trigger reseeding
-  const handleReseed = () => {
-    if (isSeeding) return;
-    
-    // Confirm before reseeding
-    if (window.confirm('This will DELETE all existing mental models in the database and replace them with the latest models. Continue?')) {
-      seedData();
-    }
-  };
-  
-  // Seed initial data when component mounts
-  useEffect(() => {
-    seedData();
-  }, []);
-  
-  // Get mental models and convert them to notes for backward compatibility
-  const { 
-    data: notes = [], 
-    isLoading: notesLoading, 
-    error: notesError 
-  } = useQuery({
-    queryKey: ['garden-notes'],
-    queryFn: getNotes,
-    enabled: seedingComplete, // Only fetch once seeding is complete
-    staleTime: 0, // Don't cache the data, always fetch fresh
-    retry: 1, // Only retry once to avoid excessive error messages
-  });
-  
-  const { 
-    data: connections = [], 
-    isLoading: connectionsLoading, 
-    error: connectionsError 
-  } = useQuery({
-    queryKey: ['garden-connections'],
-    queryFn: getConnections,
-    enabled: seedingComplete, // Only fetch once seeding is complete
-    staleTime: 0, // Don't cache the data, always fetch fresh
-    retry: 1, // Only retry once to avoid excessive error messages
-  });
-  
-  const isLoading = notesLoading || connectionsLoading || !seedingComplete;
-  const hasError = Boolean(notesError || connectionsError);
 
-  // Handler function to update the view mode
-  const handleViewModeChange = (mode: ViewMode) => {
-    setViewMode(mode);
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      console.log('Fetching mental models and connections...');
+      
+      // Fetch mental models
+      const mentalModelsData = await getMentalModels();
+      console.log('Mental models fetched:', mentalModelsData);
+      setModels(mentalModelsData);
+      
+      // Fetch connections
+      const connectionsData = await getConnections();
+      console.log('Connections fetched:', connectionsData);
+      setConnections(connectionsData);
+      
+    } catch (error) {
+      console.error('Error fetching garden data:', error);
+      toast.error('Failed to load garden data.');
+    } finally {
+      setIsLoading(false);
+    }
   };
-  
+
+  useEffect(() => {
+    // Fetch data on component mount
+    fetchData();
+    
+    // For development - uncomment to seed data on load
+    // seedData();
+  }, []);
+
+  // Convert to garden notes for legacy components
+  const gardenNotes = DataModelAdapter.modelsToNotes(models);
+
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-16 px-4 sm:px-6">
-        <div className="container-narrow">
-          <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6">
-            <ArrowLeft size={16} className="mr-1" />
-            Back to home
-          </Link>
+      <main className="container py-12 min-h-screen">
+        <div className="mb-6 space-y-4">
+          <h1 className="font-serif text-3xl md:text-4xl font-bold">Digital Garden</h1>
+          <p className="max-w-2xl text-muted-foreground">
+            A space for growing and cultivating ideas. These notes connect with one another to form a network of related concepts.
+          </p>
           
-          <div className="space-y-4 mb-8">
-            <h1 className="heading-lg">
-              <RevealText>Digital Garden</RevealText>
-            </h1>
-            <p className="text-muted-foreground max-w-2xl">
-              Unlike traditional blogs or essays, a digital garden embraces the messiness of thinking in public. 
-              Ideas connect in unexpected ways, creating a rich network of concepts that evolve over time.
-            </p>
-          </div>
+          <GardenGuide />
+        </div>
+        
+        <Tabs defaultValue="explore" className="mb-8">
+          <TabsList>
+            <TabsTrigger value="explore">Explore</TabsTrigger>
+            <TabsTrigger value="about">About The Garden</TabsTrigger>
+            <TabsTrigger value="debug" onClick={() => setShowDebug(!showDebug)}>Debug</TabsTrigger>
+          </TabsList>
           
-          <div className="w-full flex justify-between items-center mb-8">
-            <ViewModeSelector viewMode={viewMode} setViewMode={handleViewModeChange} />
-            
-            {/* Button to manually trigger reseeding */}
-            {isSupabaseAvailable() && (
-              <button 
-                onClick={handleReseed}
-                disabled={isSeeding}
-                className="text-sm px-3 py-1 bg-primary/10 hover:bg-primary/20 text-primary rounded-md 
-                           transition-colors disabled:opacity-50 disabled:pointer-events-none"
-              >
-                {isSeeding ? 'Seeding...' : 'Seed Database'}
-              </button>
-            )}
-          </div>
-          
-          {isLoading && (
-            <div className="flex justify-center items-center py-20">
-              <div className="text-center">
-                <p className="text-muted-foreground mb-2">
-                  {isSeeding ? 'Seeding database...' : 'Loading garden notes...'}
-                </p>
-                <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
+          <TabsContent value="explore">
+            {isLoading ? (
+              <div className="h-64 flex items-center justify-center">
+                <div className="animate-spin h-8 w-8 border-t-2 border-primary rounded-full"></div>
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="space-y-6">
+                <ViewModeSelector activeView={activeView} onViewChange={setActiveView} />
+                
+                {showDebug && (
+                  <ConnectionsDebugTool connections={connections} />
+                )}
+                
+                {activeView === 'list' && (
+                  <ListView notes={models} />
+                )}
+                
+                {activeView === 'graph' && (
+                  <div className="h-[600px] rounded-xl border shadow-sm overflow-hidden">
+                    <GraphView 
+                      notes={gardenNotes} 
+                      models={models}
+                      connections={connections} 
+                    />
+                  </div>
+                )}
+                
+                {/* Additional views (table, Q&A, flowchart) will be added here */}
+              </div>
+            )}
+          </TabsContent>
           
-          {!isLoading && !hasError && !isSupabaseAvailable() && (
-            <div className="mb-6 p-4 border border-yellow-200 bg-yellow-50 rounded-md">
-              <p className="text-yellow-800">
-                <strong>Note:</strong> Running in offline mode with sample garden data. 
-                To connect to a database, set up Supabase credentials.
+          <TabsContent value="about">
+            <div className="prose max-w-2xl mx-auto">
+              <h2>What is a Digital Garden?</h2>
+              <p>
+                A digital garden is a different approach to content management. Unlike traditional blogs 
+                which are chronological and primarily for consumption, a garden is designed for exploration, 
+                connection, and growth.
+              </p>
+              
+              <h3>Principles of the Garden</h3>
+              <ul>
+                <li><strong>Non-linear exploration</strong> - Follow connections rather than time</li>
+                <li><strong>Growth stages</strong> - Ideas evolve from seedlings to mature thoughts</li>
+                <li><strong>Interconnection</strong> - Everything is connected in a web of relations</li>
+                <li><strong>Cultivated, not produced</strong> - Ideas need tending, not just publishing</li>
+              </ul>
+              
+              <h3>How to Use This Garden</h3>
+              <p>
+                Feel free to explore using different views. The graph view shows connections visually, 
+                while the list view provides an easy-to-scan index. Notes range from rough seedlings 
+                to well-developed evergreen thoughts.
               </p>
             </div>
-          )}
+          </TabsContent>
           
-          {hasError && seedingError && (
-            <div className="glass p-8 text-center">
-              <p className="text-red-500 mb-2">Failed to load garden data</p>
-              <p className="text-muted-foreground text-sm">Please try refreshing the page</p>
-              <div className="mt-4 p-4 bg-red-50 text-red-800 rounded text-sm font-mono whitespace-pre-wrap">
-                {seedingError}
+          <TabsContent value="debug">
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">Garden Debug Information</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 border rounded-md">
+                  <h3 className="font-medium mb-2">Mental Models</h3>
+                  <p className="text-sm mb-2">Count: {models.length}</p>
+                  <button 
+                    onClick={fetchData}
+                    className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm"
+                  >
+                    Refresh Data
+                  </button>
+                </div>
+                
+                <div className="p-4 border rounded-md">
+                  <h3 className="font-medium mb-2">Connections</h3>
+                  <p className="text-sm mb-2">Count: {connections.length}</p>
+                  <ConnectionsDebugTool connections={connections} />
+                </div>
+              </div>
+              
+              <div className="p-4 border rounded-md">
+                <h3 className="font-medium mb-2">Actions</h3>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={seedData}
+                    className="px-3 py-1 bg-primary text-primary-foreground rounded-md text-sm"
+                  >
+                    Seed Initial Data
+                  </button>
+                </div>
               </div>
             </div>
-          )}
-          
-          {(!isLoading && !hasError) && (
-            <>
-              {viewMode === 'list' && <ListView notes={notes} />}
-              
-              {viewMode === 'graph' && (
-                <div className="glass p-4 rounded-md h-[80vh] md:h-[85vh] lg:h-[90vh] w-full">
-                  <GraphView nodes={notes} connections={connections} />
-                </div>
-              )}
-              
-              {viewMode === 'table' && (
-                <div className="glass p-8 rounded-md">
-                  <p className="text-center text-muted-foreground">Table view coming soon</p>
-                </div>
-              )}
-              
-              {viewMode === 'qa' && (
-                <div className="glass p-8 rounded-md">
-                  <p className="text-center text-muted-foreground">Q&A view coming soon</p>
-                </div>
-              )}
-              
-              {viewMode === 'flowchart' && (
-                <div className="glass p-8 rounded-md">
-                  <p className="text-center text-muted-foreground">Flowchart view coming soon</p>
-                </div>
-              )}
-            </>
-          )}
-        </div>
+          </TabsContent>
+        </Tabs>
       </main>
       <Footer />
     </>

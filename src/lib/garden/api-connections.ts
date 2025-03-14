@@ -1,3 +1,4 @@
+
 import supabase from './client';
 import { connections } from './data';
 import { Connection, SupabaseConnection, RelationshipType } from './types/connection-types';
@@ -58,7 +59,9 @@ export const getConnections = async (): Promise<Connection[]> => {
     }
     
     // Transform from snake_case to camelCase using our mapping function
-    return data.map(mapToFrontendConnection);
+    const mappedConnections = data.map(mapToFrontendConnection);
+    console.log('Mapped frontend connections:', mappedConnections);
+    return mappedConnections;
   } catch (error) {
     console.error('Error fetching connections:', error);
     toast.error('Error fetching connections. Please refresh.');
