@@ -171,14 +171,14 @@ const SystemFormDialog: React.FC<SystemFormDialogProps> = ({
           <div className="space-y-2">
             <Label htmlFor="parentSystem">Parent System (Optional)</Label>
             <Select
-              value={formData.parentSystem || ""}
-              onValueChange={(value) => handleSelectChange('parentSystem', value || undefined)}
+              value={formData.parentSystem || "none"}
+              onValueChange={(value) => handleSelectChange('parentSystem', value === "none" ? undefined : value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select a parent system (optional)" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">None</SelectItem>
+                <SelectItem value="none">None</SelectItem>
                 {availableSystems.map(system => (
                   <SelectItem key={system.id} value={system.id}>
                     {system.name}
