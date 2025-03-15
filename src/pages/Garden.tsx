@@ -10,6 +10,8 @@ import { getMentalModels, getConnections, seedInitialData } from '@/lib/garden/a
 import { MentalModel, Connection } from '@/lib/garden/types';
 import { DataModelAdapter } from '@/lib/garden/adapters';
 import ConnectionsDebugTool from '@/components/garden/ConnectionsDebugTool';
+import RevealText from '@/components/ui/RevealText';
+import BlurEffect from '@/components/ui/BlurEffect';
 
 // Views available in the garden
 type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart';
@@ -79,11 +81,15 @@ const Garden = () => {
     <>
       <Navbar />
       <main className="container py-12 min-h-screen">
-        <div className="mb-6">
-          <h1 className="font-serif text-2xl md:text-3xl font-bold">Digital Garden</h1>
-          <p className="max-w-2xl text-muted-foreground mt-2">
-            A space for growing and cultivating ideas. These notes connect with one another to form a network of related concepts.
-          </p>
+        <div className="mb-12">
+          <h1 className="heading-lg">
+            <RevealText>Digital Garden</RevealText>
+          </h1>
+          <BlurEffect className="animation-delay-200">
+            <p className="body-lg text-muted-foreground mt-2 max-w-2xl">
+              A space for growing and cultivating ideas. These notes connect with one another to form a network of related concepts.
+            </p>
+          </BlurEffect>
         </div>
         
         <div className="space-y-6">
