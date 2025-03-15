@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Control, useWatch, useFormContext } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
@@ -24,6 +25,7 @@ interface BasicInfoTabProps {
 export const BasicInfoTab = ({ control }: BasicInfoTabProps) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const { setValue } = useFormContext<MentalModelFormValues>(); // Add useFormContext here
 
   // This will track the field value to show preview or placeholder
   const imageUrl = useWatch({
@@ -63,8 +65,8 @@ export const BasicInfoTab = ({ control }: BasicInfoTabProps) => {
         .from('garden')
         .getPublicUrl(filePath);
       
-      // Set the URL in the form
-      form.setValue("imageUrl", publicUrl);
+      // Set the URL in the form - use setValue from useFormContext instead of form
+      setValue("imageUrl", publicUrl);
       setPreviewUrl(URL.createObjectURL(file));
       
       toast.success('Image uploaded successfully');
