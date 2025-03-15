@@ -11,4 +11,5 @@ export interface Question {
 }
 
 // Export the QuestionCategory to make it available to other files
-export { QuestionCategory };
+// Using 'export type' instead of 'export' to fix the isolatedModules error
+export type { QuestionCategory };
