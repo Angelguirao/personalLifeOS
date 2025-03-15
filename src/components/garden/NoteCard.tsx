@@ -2,12 +2,12 @@
 import React, { useState } from 'react';
 import { Link2, Sprout, ChevronRight } from 'lucide-react';
 import BlurEffect from '../ui/BlurEffect';
-import { GardenNote } from '../../lib/garden/types/legacy-types';
+import { MentalModel } from '../../lib/garden/types/mental-model-types';
 import NoteDialog from './NoteDialog';
 import { Button } from '../ui/button';
 
 interface NoteCardProps {
-  note: GardenNote;
+  note: MentalModel;
   index: number;
 }
 
@@ -49,11 +49,17 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
       >
         <div className="mb-3 flex items-center text-xs text-muted-foreground">
           <div className="flex items-center">
-            {getStageIcon(note.stage)}
-            <span className="ml-1 capitalize">{note.stage}</span>
+            {getStageIcon(note.developmentStage || note.stage || 'seedling')}
+            <span className="ml-1 capitalize">{note.developmentStage || note.stage || 'seedling'}</span>
           </div>
           <span className="mx-2">•</span>
-          <time dateTime={note.lastUpdated}>Updated: {new Date(note.lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+          <time dateTime={note.timestamps?.modified || note.lastUpdated || ''}>
+            Updated: {new Date(note.timestamps?.modified || note.lastUpdated || '').toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'short', 
+              day: 'numeric' 
+            })}
+          </time>
         </div>
         
         <h2 className="font-serif text-xl font-semibold mb-3">
@@ -66,7 +72,7 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
         
         <div className="flex flex-col space-y-4">
           <div className="flex flex-wrap gap-2">
-            {note.connections && note.connections.map((tag) => (
+            {note.tags && note.tags.map((tag) => (
               <span key={tag} className="inline-flex items-center px-2 py-1 rounded-full bg-secondary/50 text-muted-foreground text-xs">
                 <Link2 size={10} className="mr-1" />
                 {tag}
@@ -87,7 +93,7 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
         </div>
       </article>
       
-      {/* Separate dialog component from article markup */}
+      {/* Passing MentalModel directly to NoteDialog */}
       <NoteDialog 
         note={note} 
         isOpen={isDialogOpen} 

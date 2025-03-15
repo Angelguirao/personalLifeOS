@@ -8,4 +8,6 @@ export interface Inspiration {
   quote?: string;
   authorName?: string;
   link?: string;
+  // Add reference to mental model
+  mentalModelId?: string; // Foreign key to link to mental models
 }
