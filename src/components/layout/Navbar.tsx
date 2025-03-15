@@ -13,13 +13,12 @@ const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
   
-  const navItems = [
-    { name: 'Home', path: '/' },
-    { name: 'Self', path: '/about' },
-    { name: 'Theory', path: '/garden' },
-    { name: 'Action', path: '/projects' },
-    { name: 'Tools', path: '/tools' },
-    { name: 'Constraints', path: '/constraints' },
+  // Define nav items with conditional labels based on authentication
+  const getNavItems = (isAuth) => [
+    { name: isAuth ? 'Consciousness' : 'Home', path: '/' },
+    { name: isAuth ? 'Self' : 'About', path: '/about' },
+    { name: isAuth ? 'Theory' : 'Garden', path: '/garden' },
+    { name: isAuth ? 'Action' : 'Projects', path: '/projects' },
     { name: 'Connect', path: '/connect' },
   ];
 
@@ -64,6 +63,9 @@ const Navbar = () => {
       return () => subscription.unsubscribe();
     }
   }, []);
+  
+  // Get the appropriate nav items based on authentication state
+  const navItems = getNavItems(isAuthenticated);
   
   return (
     <header className={cn(

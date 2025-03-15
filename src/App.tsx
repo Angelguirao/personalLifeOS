@@ -8,14 +8,10 @@ import { useEffect } from "react";
 import { SupabaseProvider } from "@/lib/supabase/SupabaseProvider";
 import { useAuth } from "@/hooks/useAuth";
 import Index from "./pages/Index";
-import Philosophy from "./pages/Philosophy";
-import Entrepreneurship from "./pages/Entrepreneurship";
-import Projects from "./pages/Projects";
 import Garden from "./pages/Garden";
+import Projects from "./pages/Projects";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
-import Tools from "./pages/Tools";
-import Constraints from "./pages/Constraints";
 import Connect from "./pages/Connect";
 
 const queryClient = new QueryClient();
@@ -63,15 +59,11 @@ const AppRoutes = () => {
     <>
       <ScrollToTop />
       <Routes>
-        {/* Public routes available to everyone */}
+        {/* Core pages available to everyone */}
         <Route path="/" element={<Index />} />
-        <Route path="/philosophy" element={<Philosophy />} />
-        <Route path="/entrepreneurship" element={<Entrepreneurship />} />
-        <Route path="/projects" element={<Projects />} />
         <Route path="/garden" element={<Garden />} />
+        <Route path="/projects" element={<Projects />} />
         <Route path="/about" element={<About />} />
-        <Route path="/tools" element={<Tools />} />
-        <Route path="/constraints" element={<Constraints />} />
         <Route path="/connect" element={<Connect />} />
         
         {/* Catch-all route */}
