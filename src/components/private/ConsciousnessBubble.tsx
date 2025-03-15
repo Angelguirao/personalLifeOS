@@ -10,9 +10,6 @@ interface ConsciousnessBubbleProps {
   icon: React.ReactNode;
 }
 
-// Add framer-motion dependency
-<lov-add-dependency>framer-motion@latest</lov-add-dependency>
-
 const ConsciousnessBubble = ({ title, description, icon }: ConsciousnessBubbleProps) => {
   const isSelfBubble = title === 'Self';
   
