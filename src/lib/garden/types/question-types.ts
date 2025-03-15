@@ -9,3 +9,6 @@ export interface Question {
   category: QuestionCategory;
   importanceRank: number; // 1-10 scale
 }
+
+// Export the QuestionCategory to make it available to other files
+export { QuestionCategory };

@@ -1,6 +1,5 @@
 
-import { VisibilityLevel } from './basic-types';
-import { QuestionCategory } from './question-types';
+import { VisibilityLevel, QuestionCategory } from './basic-types';
 
 // Distinction types
 export type DistinctionType = 'mentalModel' | 'question' | 'experience';

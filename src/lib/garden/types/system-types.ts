@@ -37,3 +37,13 @@ export interface SystemDistinctionRelation {
   strength: number; // 1-10 scale
   createdAt: string;
 }
+
+// Define the system-model relationship interface to fix the error
+export interface SystemModelRelation {
+  id: number;
+  systemId: string;
+  modelId: string;
+  relationshipType: SystemDistinctionRelationshipType;
+  strength: number; // 1-10 scale
+  createdAt: string;
+}
