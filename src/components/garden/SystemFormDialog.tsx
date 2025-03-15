@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,10 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { System } from '@/lib/garden/types';
-import { createSystem, updateSystem } from '@/lib/garden/api';
+import { createSystem, updateSystem, getSystems } from '@/lib/garden/api';
 import { toast } from 'sonner';
 import { CircleDashed } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { X } from 'lucide-react';
 
 interface SystemFormDialogProps {
   isOpen: boolean;
@@ -36,10 +38,33 @@ const SystemFormDialog: React.FC<SystemFormDialogProps> = ({
       importanceLevel: 3,
       visibility: 'public',
       isSelf: false,
-      color: '#3b82f6'
+      color: '#3b82f6',
+      distinctions: []
     }
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [availableSystems, setAvailableSystems] = useState<System[]>([]);
+  const [newDistinction, setNewDistinction] = useState('');
+
+  // Fetch available systems for parent selection
+  useEffect(() => {
+    const fetchSystems = async () => {
+      try {
+        const systems = await getSystems();
+        // Filter out current system and its descendants to avoid circular references
+        const filteredSystems = isEditing 
+          ? systems.filter(sys => sys.id !== initialData?.id)
+          : systems;
+        setAvailableSystems(filteredSystems);
+      } catch (error) {
+        console.error('Error fetching systems:', error);
+      }
+    };
+    
+    if (isOpen) {
+      fetchSystems();
+    }
+  }, [isOpen, initialData, isEditing]);
 
   // Handle form input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -55,6 +80,26 @@ const SystemFormDialog: React.FC<SystemFormDialogProps> = ({
   // Handle toggle changes
   const handleToggleChange = (name: string, checked: boolean) => {
     setFormData(prev => ({ ...prev, [name]: checked }));
+  };
+
+  // Handle adding new distinction
+  const handleAddDistinction = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newDistinction.trim()) {
+      setFormData(prev => ({
+        ...prev,
+        distinctions: [...(prev.distinctions || []), newDistinction.trim()]
+      }));
+      setNewDistinction('');
+    }
+  };
+
+  // Handle removing a distinction
+  const handleRemoveDistinction = (indexToRemove: number) => {
+    setFormData(prev => ({
+      ...prev,
+      distinctions: (prev.distinctions || []).filter((_, index) => index !== indexToRemove)
+    }));
   };
 
   // Handle form submission
@@ -120,6 +165,66 @@ const SystemFormDialog: React.FC<SystemFormDialogProps> = ({
               onChange={handleChange}
               rows={3}
             />
+          </div>
+
+          {/* Parent System */}
+          <div className="space-y-2">
+            <Label htmlFor="parentSystem">Parent System (Optional)</Label>
+            <Select
+              value={formData.parentSystem || ""}
+              onValueChange={(value) => handleSelectChange('parentSystem', value || undefined)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a parent system (optional)" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">None</SelectItem>
+                {availableSystems.map(system => (
+                  <SelectItem key={system.id} value={system.id}>
+                    {system.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Distinctions */}
+          <div className="space-y-2">
+            <Label>Distinctions</Label>
+            <p className="text-sm text-muted-foreground mb-2">
+              Add distinctions like experiences, thoughts, actions, desires, etc.
+            </p>
+            
+            <div className="flex gap-2 mb-2">
+              <Input
+                value={newDistinction}
+                onChange={(e) => setNewDistinction(e.target.value)}
+                placeholder="Add a distinction"
+                className="flex-1"
+              />
+              <Button 
+                type="button" 
+                onClick={handleAddDistinction}
+                variant="outline"
+              >
+                Add
+              </Button>
+            </div>
+            
+            <div className="flex flex-wrap gap-2 mt-2">
+              {(formData.distinctions || []).map((distinction, index) => (
+                <Badge key={index} variant="secondary" className="gap-1">
+                  {distinction}
+                  <X 
+                    className="h-3 w-3 cursor-pointer" 
+                    onClick={() => handleRemoveDistinction(index)}
+                  />
+                </Badge>
+              ))}
+              {(formData.distinctions || []).length === 0 && (
+                <p className="text-sm text-muted-foreground italic">No distinctions added</p>
+              )}
+            </div>
           </div>
 
           {/* Category */}

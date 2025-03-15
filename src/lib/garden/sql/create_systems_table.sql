@@ -11,14 +11,20 @@ CREATE TABLE IF NOT EXISTS systems (
   visibility TEXT NOT NULL DEFAULT 'public',
   related_models TEXT[] DEFAULT '{}',
   is_self BOOLEAN DEFAULT false,
+  parent_system UUID,
+  distinctions TEXT[] DEFAULT '{}',
   metadata JSONB,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  
+  CONSTRAINT fk_parent_system FOREIGN KEY (parent_system)
+    REFERENCES systems (id) ON DELETE SET NULL
 );
 
 -- Create index for faster lookups
 CREATE INDEX IF NOT EXISTS idx_systems_name ON systems(name);
 CREATE INDEX IF NOT EXISTS idx_systems_category ON systems(category);
+CREATE INDEX IF NOT EXISTS idx_systems_parent ON systems(parent_system);
 
 -- Ensure the updated_at timestamp gets updated
 -- PostgreSQL doesn't support IF NOT EXISTS for triggers, so we need a different approach
