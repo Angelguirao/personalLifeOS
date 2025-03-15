@@ -1,17 +1,17 @@
 
 -- Drop existing tables if they exist (in reverse order of dependencies)
-DROP TABLE IF EXISTS mental_model_versions;
-DROP TABLE IF EXISTS connections;
-DROP TABLE IF EXISTS inspirations;
-DROP TABLE IF EXISTS questions;
-DROP TABLE IF EXISTS mental_models;
-DROP TABLE IF EXISTS system_model_relations;
-DROP TABLE IF EXISTS system_distinction_relations;
-DROP TABLE IF EXISTS systems;
-DROP TABLE IF EXISTS distinction_versions;
-DROP TABLE IF EXISTS distinctions;
-DROP TABLE IF EXISTS relationship_types;
-DROP TABLE IF EXISTS perspective_types;
+DROP TABLE IF EXISTS mental_model_versions CASCADE;
+DROP TABLE IF EXISTS connections CASCADE;
+DROP TABLE IF EXISTS inspirations CASCADE;
+DROP TABLE IF EXISTS questions CASCADE;
+DROP TABLE IF EXISTS system_model_relations CASCADE;
+DROP TABLE IF EXISTS mental_models CASCADE;
+DROP TABLE IF EXISTS system_distinction_relations CASCADE;
+DROP TABLE IF EXISTS systems CASCADE;
+DROP TABLE IF EXISTS distinction_versions CASCADE;
+DROP TABLE IF EXISTS distinctions CASCADE;
+DROP TABLE IF EXISTS relationship_types CASCADE;
+DROP TABLE IF EXISTS perspective_types CASCADE;
 
 -- Create schemas for each DSRP element
 CREATE SCHEMA IF NOT EXISTS distinctions;
