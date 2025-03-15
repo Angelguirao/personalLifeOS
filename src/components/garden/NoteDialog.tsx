@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link2, Sprout, X } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '../ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from '../ui/dialog';
 import { GardenNote } from '../../lib/garden/types/legacy-types';
 import { Button } from '../ui/button';
 
@@ -31,6 +31,9 @@ const NoteDialog = ({ note, isOpen, onOpenChange }: NoteDialogProps) => {
       <DialogContent className="max-w-3xl overflow-y-auto max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="font-serif text-xl font-semibold">{note.title}</DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
+            {note.stage} note • Last updated: {new Date(note.lastUpdated).toLocaleDateString()}
+          </DialogDescription>
         </DialogHeader>
         
         <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
