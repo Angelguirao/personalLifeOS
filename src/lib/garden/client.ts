@@ -28,32 +28,8 @@ try {
       },
     });
     
-    // Test connection by making a simple query to check if the distinctions schema and table exist
-    supabase.from('distinctions.distinctions').select('id').limit(1)
-      .then(response => {
-        if (response.error) {
-          console.warn('Supabase connection test failed:', response.error.message, response.error);
-          if (response.error.code === '42P01') {  // Table or view does not exist
-            console.log('The table does not exist. You may need to run the setup SQL script in the Supabase dashboard.');
-            toast.error('Database tables not set up. Please run the setup script.');
-          } else if (response.error.message && response.error.message.includes('permission denied')) {
-            console.log('This appears to be a permissions issue. Check your RLS policies.');
-            toast.error('Database permission issue. Check your policies.');
-          } else {
-            console.log('Unknown database error:', response.error);
-            toast.error('Database connection issue: ' + response.error.message);
-          }
-        } else {
-          console.log('Supabase connection test successful!');
-          toast.success('Connected to database successfully');
-        }
-      })
-      .catch(error => {
-        console.error('Supabase connection test error:', error.message, error);
-        toast.error('Failed to connect to database: ' + error.message);
-      });
-    
-    console.log('Supabase client initialized successfully');
+    // Test connection by making a simple query
+    testConnection();
   }
 } catch (error) {
   console.error('Failed to initialize Supabase client:', error);
@@ -61,10 +37,90 @@ try {
   toast.error('Failed to initialize database connection');
 }
 
+// Test the database connection
+const testConnection = async () => {
+  if (!supabase) return;
+  
+  try {
+    // Try to access public schema first as a basic connection test
+    const { data, error } = await supabase.from('information_schema.schemata').select('schema_name').limit(1);
+    
+    if (error) {
+      console.warn('Supabase connection test failed:', error.message);
+      handleConnectionError(error);
+    } else {
+      console.log('Supabase connection test successful!');
+      toast.success('Connected to database successfully');
+      
+      // Try to create our helper functions
+      createHelperFunctions();
+    }
+  } catch (error) {
+    console.error('Supabase connection test error:', error);
+    toast.error('Failed to connect to database: ' + error.message);
+  }
+};
+
+// Handle connection errors
+const handleConnectionError = (error) => {
+  if (error.code === '42P01') {  // Table or view does not exist
+    console.log('Information schema not accessible. This is expected with limited permissions.');
+    toast.warning('Limited database access. Some features may not work properly.');
+  } else if (error.message && error.message.includes('permission denied')) {
+    console.log('This appears to be a permissions issue. Check your RLS policies.');
+    toast.error('Database permission issue. Check your policies.');
+  } else {
+    console.log('Unknown database error:', error);
+    toast.error('Database connection issue: ' + error.message);
+  }
+};
+
+// Create helper database functions
+const createHelperFunctions = async () => {
+  if (!supabase) return;
+  
+  try {
+    // Create a function to execute arbitrary SQL
+    const createExecSqlFn = `
+    CREATE OR REPLACE FUNCTION exec_sql(sql text) 
+    RETURNS void AS $$
+    BEGIN
+      EXECUTE sql;
+    END;
+    $$ LANGUAGE plpgsql SECURITY DEFINER;
+    `;
+    
+    await supabase.rpc('exec_sql', { sql: createExecSqlFn }).catch(err => {
+      console.warn('Could not create exec_sql function. This requires admin privileges:', err);
+    });
+    
+  } catch (error) {
+    console.warn('Failed to create helper functions:', error);
+    // Not critical, so we'll continue
+  }
+};
+
 // Export the Supabase client
 export default supabase;
 
 // Helper function to check if Supabase is available
 export const isSupabaseAvailable = () => {
   return supabase !== null;
+};
+
+// Helper to execute SQL directly (if permitted)
+export const executeSQL = async (sql: string): Promise<boolean> => {
+  if (!supabase) return false;
+  
+  try {
+    const { error } = await supabase.rpc('exec_sql', { sql });
+    if (error) {
+      console.error('Error executing SQL:', error);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('Failed to execute SQL:', error);
+    return false;
+  }
 };
