@@ -7,6 +7,7 @@ import supabase from '@/lib/garden/client';
 import { processFormDataForSubmission } from '@/lib/garden/utils/form-processors';
 import { handleConnections } from './ConnectionHandler';
 import { handleBookInspiration } from './InspirationHandler';
+import { v4 as uuidv4 } from 'uuid';
 
 export const handleModelSubmit = async (
   formData: MentalModelFormValues, 
@@ -17,6 +18,13 @@ export const handleModelSubmit = async (
 ) => {
   setIsSubmitting(true);
   try {
+    // Validate required fields - only title is required
+    if (!formData.title || formData.title.trim() === '') {
+      toast.error('Title is required');
+      setIsSubmitting(false);
+      return;
+    }
+    
     // Check authentication status before proceeding
     if (supabase) {
       const { data: { session } } = await supabase.auth.getSession();
@@ -54,8 +62,13 @@ export const handleModelSubmit = async (
       
       toast.success('Mental model updated successfully');
     } else {
-      // Create new model
+      // Create new model with a generated UUID
       console.log('Creating new mental model');
+      // Ensure the model has an ID
+      if (!processedData.id) {
+        processedData.id = uuidv4();
+      }
+      
       const newModel = await createMentalModel(processedData);
       modelId = newModel.id;
       toast.success('Mental model created successfully');

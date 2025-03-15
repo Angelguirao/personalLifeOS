@@ -24,7 +24,7 @@ export const BasicInfoFields = ({ control }: BasicInfoFieldsProps) => {
         name="title"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Title</FormLabel>
+            <FormLabel>Title <span className="text-red-500">*</span></FormLabel>
             <FormControl>
               <Input placeholder="Mental model title" {...field} />
             </FormControl>

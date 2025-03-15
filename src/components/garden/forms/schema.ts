@@ -7,10 +7,10 @@ export const mentalModelSchema = z.object({
   // Basic information
   title: z.string().min(1, 'Title is required'),
   subtitle: z.string().optional(),
-  developmentStage: z.enum(['seedling', 'growing', 'evergreen', 'mature', 'refined']),
-  confidenceLevel: z.enum(['hypothesis', 'working', 'established', 'fundamental']),
-  summary: z.string().min(1, 'Summary is required'),
-  fullContent: z.string().min(1, 'Content is required'),
+  developmentStage: z.enum(['seedling', 'growing', 'evergreen', 'mature', 'refined']).optional().default('seedling'),
+  confidenceLevel: z.enum(['hypothesis', 'working', 'established', 'fundamental']).optional().default('working'),
+  summary: z.string().optional().default(''),
+  fullContent: z.string().optional().default(''),
   
   // Tags and categories
   tags: z.string().optional(),
@@ -23,7 +23,7 @@ export const mentalModelSchema = z.object({
   latchAlphabetical: z.string().optional(),
   latchTime: z.string().optional(),
   latchCategory: z.string().optional(),
-  latchHierarchyLevel: z.string().optional(),
+  latchHierarchyLevel: z.string().optional().default('3'),
   
   // DSRP Structure
   dsrpDistinctions: z.string().optional(),
