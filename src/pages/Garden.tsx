@@ -1,21 +1,17 @@
+
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import ListView from '@/components/garden/ListView';
-import GraphView from '@/components/garden/GraphView';
 import ViewModeSelector, { HierarchicalPerspective, ViewMode } from '@/components/garden/ViewModeSelector';
-import { QuestionsView } from '@/components/garden/questions/QuestionsView';
-import { DataModelAdapter } from '@/lib/garden/adapters';
-import ModelManagement from '@/components/garden/ModelManagement';
 import ModelFormDialog from '@/components/garden/ModelFormDialog';
 import GardenHeader from '@/components/garden/GardenHeader';
-import GardenSearch from '@/components/garden/GardenSearch';
-import EmptyGarden from '@/components/garden/EmptyGarden';
 import { useGardenData } from '@/hooks/useGardenData';
 import { createQuestion, getQuestions } from '@/lib/garden/api';
 import { Question } from '@/lib/garden/types';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import GardenActionBar from '@/components/garden/GardenActionBar';
+import GardenContent from '@/components/garden/GardenContent';
 
 const Garden = () => {
   // State for hierarchical perspective and view mode
@@ -72,9 +68,6 @@ const Garden = () => {
     }
   };
 
-  // Convert to garden notes for legacy components
-  const gardenNotes = DataModelAdapter.modelsToNotes(models);
-
   // Filter models based on search query
   const filteredModels = searchQuery.trim() === '' 
     ? models 
@@ -89,9 +82,6 @@ const Garden = () => {
   useEffect(() => {
     fetchQuestions();
   }, [isAuthenticated]);
-
-  // Determine if search should be shown
-  const showSearch = activePerspective === 'mentalModels';
 
   return (
     <>
@@ -112,107 +102,31 @@ const Garden = () => {
             </div>
             
             {/* Action Area: Search and Controls */}
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              {showSearch && (
-                <GardenSearch searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-              )}
-              
-              {/* Only show model management when in Mental Models perspective */}
-              {activePerspective === 'mentalModels' && (
-                <div className="flex gap-2">
-                  <ModelManagement onRefresh={fetchData} />
-                </div>
-              )}
-            </div>
+            <GardenActionBar 
+              activePerspective={activePerspective}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onRefresh={fetchData}
+            />
             
             {/* Content Area */}
-            {isLoading ? (
-              <div className="h-64 flex items-center justify-center">
-                <div className="animate-spin h-8 w-8 border-t-2 border-primary rounded-full"></div>
-              </div>
-            ) : (
-              <div className="mt-6">
-                {/* Questions Perspective */}
-                {activePerspective === 'questions' && (
-                  <QuestionsView 
-                    questions={questions} 
-                    models={models.map(m => ({ id: m.id, title: m.title }))}
-                    onCreateQuestion={handleCreateQuestion}
-                  />
-                )}
-
-                {/* Mental Models Perspective */}
-                {activePerspective === 'mentalModels' && models.length === 0 ? (
-                  <EmptyGarden 
-                    onCreateModel={() => setIsCreateDialogOpen(true)} 
-                    isAuthenticated={isAuthenticated}
-                  />
-                ) : activePerspective === 'mentalModels' && (
-                  <>
-                    {activeView === 'list' && (
-                      <ListView 
-                        notes={filteredModels} 
-                        onSelectModel={handleModelSelect}
-                        selectedModelId={selectedModel?.id}
-                        onRefresh={fetchData}
-                      />
-                    )}
-                    
-                    {activeView === 'graph' && connections.length > 0 && gardenNotes.length > 0 ? (
-                      <div className="h-[600px] rounded-xl border shadow-sm overflow-hidden">
-                        <GraphView 
-                          nodes={gardenNotes}
-                          connections={connections} 
-                          models={models}
-                        />
-                      </div>
-                    ) : activeView === 'graph' && (
-                      <div className="h-[600px] rounded-xl border shadow-sm overflow-hidden flex items-center justify-center">
-                        <div className="text-center p-6 max-w-md">
-                          <h3 className="text-lg font-medium mb-2">No Graph Data Available</h3>
-                          <p className="text-muted-foreground">
-                            {connections.length === 0 ? 
-                              "There are no connections between notes to display in the graph." : 
-                              "There was a problem with the graph data."}
-                          </p>
-                          <Button onClick={fetchData} className="mt-4">
-                            Refresh Data
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Disabled Views - can be implemented later */}
-                    {(activeView === 'flowchart' || activeView === 'table') && (
-                      <div className="h-[400px] rounded-xl border shadow-sm overflow-hidden flex items-center justify-center">
-                        <div className="text-center p-6 max-w-md">
-                          <h3 className="text-lg font-medium mb-2">
-                            {activeView === 'flowchart' ? 'Flowchart View' : 'Table View'} Coming Soon
-                          </h3>
-                          <p className="text-muted-foreground">
-                            This view is still under development. Please check back later.
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </>
-                )}
-
-                {/* Other perspectives - placeholder for future implementation */}
-                {['experiences', 'frameworks', 'systems'].includes(activePerspective) && (
-                  <div className="h-[400px] rounded-xl border shadow-sm overflow-hidden flex items-center justify-center">
-                    <div className="text-center p-6 max-w-md">
-                      <h3 className="text-lg font-medium mb-2">
-                        {activePerspective.charAt(0).toUpperCase() + activePerspective.slice(1)} View Coming Soon
-                      </h3>
-                      <p className="text-muted-foreground">
-                        This perspective is still under development. Please check back later.
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+            <div className="mt-6">
+              <GardenContent 
+                activePerspective={activePerspective}
+                activeView={activeView}
+                models={models}
+                filteredModels={filteredModels}
+                connections={connections}
+                questions={questions}
+                selectedModel={selectedModel}
+                isLoading={isLoading}
+                isAuthenticated={isAuthenticated}
+                onCreateModel={() => setIsCreateDialogOpen(true)}
+                handleModelSelect={handleModelSelect}
+                onCreateQuestion={handleCreateQuestion}
+                fetchData={fetchData}
+              />
+            </div>
           </div>
         </div>
       </main>
