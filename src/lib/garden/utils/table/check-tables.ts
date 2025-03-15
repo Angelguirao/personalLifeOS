@@ -32,6 +32,50 @@ export const checkGardenSchemasExist = async (): Promise<boolean> => {
   }
 };
 
+// Check if distinctions schema and table exist
+export const checkDistinctionsSchemaExists = async (): Promise<boolean> => {
+  try {
+    const distinctionsSchemaExists = await schemaExists('distinctions');
+    
+    if (!distinctionsSchemaExists) {
+      console.warn('Distinctions schema does not exist');
+      return false;
+    }
+    
+    console.log('Distinctions schema exists!');
+    return true;
+  } catch (error) {
+    console.error('Error checking distinctions schema:', error);
+    return false;
+  }
+};
+
+// Check if distinctions table exists
+export const checkDistinctionsTableExists = async (): Promise<boolean> => {
+  try {
+    // First check if schema exists
+    const schemaExists = await checkDistinctionsSchemaExists();
+    if (!schemaExists) {
+      console.warn('Distinctions schema does not exist - need to run setup script first');
+      return false;
+    }
+    
+    // Check if the table exists
+    const distinctionsTableExists = await tableExists('distinctions.distinctions');
+    
+    if (distinctionsTableExists) {
+      console.log('Distinctions table exists!');
+      return true;
+    } else {
+      console.warn('Distinctions table is missing');
+      return false;
+    }
+  } catch (error) {
+    console.error('Error checking distinctions table:', error);
+    return false;
+  }
+};
+
 // Check if all required tables exist
 export const checkGardenTablesExist = async (): Promise<boolean> => {
   try {
