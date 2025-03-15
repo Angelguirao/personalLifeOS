@@ -50,6 +50,10 @@ export const transformMentalModelToSupabase = (model: MentalModel): any => {
     tags: model.tags,
     visibility: model.visibility,
     
+    // Convert Date to ISO string for Supabase (fix for the type error)
+    created_at: model.createdAt instanceof Date ? model.createdAt.toISOString() : model.createdAt,
+    updated_at: model.updatedAt instanceof Date ? model.updatedAt.toISOString() : model.updatedAt,
+    
     // Optional complex fields
     timestamps: model.timestamps,
     origin_moment: model.originMoment,
@@ -60,7 +64,5 @@ export const transformMentalModelToSupabase = (model: MentalModel): any => {
     dsrp_structure: model.dsrpStructure,
     socratic_attributes: model.socraticAttributes,
     hierarchical_view: model.hierarchicalView,
-    
-    // We don't need to map created_at and updated_at as they're handled by the database
   };
 };
