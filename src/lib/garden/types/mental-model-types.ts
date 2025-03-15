@@ -37,6 +37,7 @@ export interface Applications {
 export interface LATCHAttributes {
   location?: string;
   alphabeticalIndex?: string; // Auto-generated
+  time?: string; // Added time property
   category?: string;
   hierarchyLevel: number; // 1-5 scale
 }

@@ -54,7 +54,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
         alphabeticalIndex: formData.latchAlphabetical,
         time: formData.latchTime,
         category: formData.latchCategory,
-        hierarchyLevel: parseInt(formData.latchHierarchyLevel as string) || 3
+        hierarchyLevel: parseInt(formData.latchHierarchyLevel || '3')
       };
       
       // Prepare DSRP structure

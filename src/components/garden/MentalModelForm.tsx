@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -41,7 +40,7 @@ const mentalModelSchema = z.object({
   latchAlphabetical: z.string().optional(),
   latchTime: z.string().optional(),
   latchCategory: z.string().optional(),
-  latchHierarchyLevel: z.string().transform(val => parseInt(val) || 3).optional(),
+  latchHierarchyLevel: z.string().optional(),
   
   // DSRP Structure
   dsrpDistinctions: z.string().optional(),
@@ -101,7 +100,7 @@ const MentalModelForm = ({ model, onSubmit, onCancel, isSubmitting }: MentalMode
       fullContent: model?.fullContent || '',
       
       // Tags and categories
-      tags: convertArrayToString(model?.tags),
+      tags: convertArrayToString(model?.tags?.filter(tag => !tag.startsWith('domain:') && !tag.startsWith('framework:') && !tag.startsWith('application:'))),
       domains: model?.tags?.filter(tag => tag.startsWith('domain:')).map(tag => tag.replace('domain:', '')).join(', ') || '',
       frameworks: model?.tags?.filter(tag => tag.startsWith('framework:')).map(tag => tag.replace('framework:', '')).join(', ') || '',
       applications: model?.tags?.filter(tag => tag.startsWith('application:')).map(tag => tag.replace('application:', '')).join(', ') || '',
@@ -140,7 +139,7 @@ const MentalModelForm = ({ model, onSubmit, onCancel, isSubmitting }: MentalMode
       bookLink: model?.bookInfo?.link || '',
       
       // Visibility and Metadata
-      visibility: model?.visibility || 'public',
+      visibility: (model?.visibility === 'restricted' ? 'private' : model?.visibility) || 'public',
       imageUrl: model?.imageUrl || '',
     },
   });
