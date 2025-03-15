@@ -31,7 +31,7 @@ type MentalModelFormValues = z.infer<typeof mentalModelSchema>;
 
 interface MentalModelFormProps {
   model?: MentalModel;
-  onSubmit: (data: MentalModelFormValues) => Promise<void>;
+  onSubmit: (data: any) => Promise<void>;
   onCancel: () => void;
   isSubmitting: boolean;
 }
