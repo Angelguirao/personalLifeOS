@@ -9,6 +9,7 @@ import { Button } from '../ui/button';
 interface NoteCardProps {
   note: MentalModel;
   index: number;
+  onRefresh?: () => void;
 }
 
 const getStageIcon = (stage: string) => {
@@ -25,7 +26,7 @@ const getStageIcon = (stage: string) => {
   }
 };
 
-const NoteCard = ({ note, index }: NoteCardProps) => {
+const NoteCard = ({ note, index, onRefresh }: NoteCardProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   // Extract first sentence for a concise description
@@ -96,6 +97,7 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
         note={note} 
         isOpen={isDialogOpen} 
         onOpenChange={handleDialogOpenChange}
+        onModelDeleted={onRefresh}
       />
     </BlurEffect>
   );

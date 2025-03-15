@@ -128,7 +128,7 @@ const Garden = () => {
               </div>
             </div>
             
-            <ModelManagement selectedModel={selectedModel} onRefresh={fetchData} />
+            <ModelManagement onRefresh={fetchData} />
             
             {isLoading ? (
               <div className="h-64 flex items-center justify-center">
@@ -141,6 +141,7 @@ const Garden = () => {
                     notes={filteredModels} 
                     onSelectModel={handleModelSelect}
                     selectedModelId={selectedModel?.id}
+                    onRefresh={fetchData}
                   />
                 )}
                 

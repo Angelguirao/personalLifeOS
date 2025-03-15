@@ -7,9 +7,10 @@ interface ListViewProps {
   notes: MentalModel[];
   onSelectModel?: (model: MentalModel) => void;
   selectedModelId?: string;
+  onRefresh?: () => void;
 }
 
-const ListView = ({ notes, onSelectModel, selectedModelId }: ListViewProps) => {
+const ListView = ({ notes, onSelectModel, selectedModelId, onRefresh }: ListViewProps) => {
   const handleCardClick = (note: MentalModel) => {
     if (onSelectModel) {
       onSelectModel(note);
@@ -32,7 +33,7 @@ const ListView = ({ notes, onSelectModel, selectedModelId }: ListViewProps) => {
             onClick={() => handleCardClick(note)}
             className={`${selectedModelId === note.id ? 'ring-2 ring-primary ring-offset-2' : ''} rounded-lg transition-all hover:cursor-pointer`}
           >
-            <NoteCard note={note} index={index} />
+            <NoteCard note={note} index={index} onRefresh={onRefresh} />
           </div>
         ))
       )}
