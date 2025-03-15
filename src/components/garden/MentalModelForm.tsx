@@ -16,6 +16,7 @@ import { AnalysisTab } from './forms/AnalysisTab';
 import { AdditionalTab } from './forms/AdditionalTab';
 import { OriginTab } from './forms/OriginTab';
 import { JsonTab } from './forms/JsonTab';
+import { ConnectionsTab } from './forms/ConnectionsTab';
 import { processModelForForm } from '@/lib/garden/utils/form-processors';
 
 export type MentalModelFormValues = z.infer<typeof mentalModelSchema>;
@@ -138,12 +139,13 @@ const MentalModelForm = ({ model, initialData, onSubmit, onCancel, isSubmitting 
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-6 mb-4">
+          <TabsList className="grid grid-cols-2 md:grid-cols-7 mb-4">
             <TabsTrigger value="basic">Basic</TabsTrigger>
             <TabsTrigger value="metadata">Metadata</TabsTrigger>
             <TabsTrigger value="analysis">Analysis</TabsTrigger>
             <TabsTrigger value="origin">Origin</TabsTrigger>
             <TabsTrigger value="additional">Additional</TabsTrigger>
+            <TabsTrigger value="connections">Connections</TabsTrigger>
             <TabsTrigger value="json">JSON</TabsTrigger>
           </TabsList>
           
@@ -170,6 +172,11 @@ const MentalModelForm = ({ model, initialData, onSubmit, onCancel, isSubmitting 
           {/* Additional Tab */}
           <TabsContent value="additional" className="space-y-4">
             <AdditionalTab control={form.control} />
+          </TabsContent>
+          
+          {/* Connections Tab */}
+          <TabsContent value="connections" className="space-y-4">
+            <ConnectionsTab control={form.control} modelId={model?.id} />
           </TabsContent>
           
           {/* JSON Tab */}

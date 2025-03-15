@@ -10,7 +10,10 @@ import {
   getNoteConnections,
   createConnection,
   updateConnection,
-  deleteConnection
+  deleteConnection,
+  getModelInspirations,
+  createInspiration,
+  deleteInspiration
 } from '@/lib/garden/api';
 import { toast } from 'sonner';
 import supabase from '@/lib/garden/client';
@@ -29,11 +32,12 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
   const [formData, setFormData] = useState<MentalModelFormValues | null>(null);
   const [connections, setConnections] = useState([]);
 
-  // Load connections when editing an existing model
+  // Load connections and inspirations when editing an existing model
   useEffect(() => {
-    const fetchConnections = async () => {
+    const fetchModelData = async () => {
       if (model?.id) {
         try {
+          // Fetch connections
           const modelConnections = await getNoteConnections(model.id);
           // Format connections for the form
           const formattedConnections = modelConnections.map(conn => ({
@@ -64,7 +68,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
       // Initialize form with model data
       setFormData(processModelForForm(model));
       // Fetch connections
-      fetchConnections();
+      fetchModelData();
     } else {
       // Initialize empty form for new model
       setFormData(null);
@@ -160,10 +164,42 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
       }
       
       // Handle book info / inspiration if provided
-      if (processedData.bookInfo) {
-        // Here you would save to your inspirations table
-        // e.g. await saveInspiration(modelId, processedData.bookInfo);
-        console.log('Would save book inspiration:', processedData.bookInfo);
+      if (processedData.bookInfo && processedData.bookInfo.title) {
+        try {
+          // Get existing inspirations for this model
+          let existingInspirations = [];
+          if (model) {
+            existingInspirations = await getModelInspirations(modelId);
+          }
+          
+          // Create or update book inspiration
+          const bookInspiration = {
+            sourceType: 'book' as SourceType,
+            sourceName: processedData.bookInfo.title,
+            authorName: processedData.bookInfo.author,
+            link: processedData.bookInfo.link,
+            mentalModelId: modelId
+          };
+          
+          // Check if we already have a book inspiration for this model
+          const existingBookInspiration = existingInspirations.find(
+            insp => insp.sourceType === 'book'
+          );
+          
+          if (existingBookInspiration) {
+            // Delete old inspiration if book title changed
+            if (existingBookInspiration.sourceName !== processedData.bookInfo.title) {
+              await deleteInspiration(existingBookInspiration.id);
+              await createInspiration(bookInspiration);
+            }
+          } else {
+            // Create new inspiration
+            await createInspiration(bookInspiration);
+          }
+        } catch (error) {
+          console.error('Error saving book inspiration:', error);
+          // Continue even if inspiration saving fails
+        }
       }
       
       // Handle questions if provided

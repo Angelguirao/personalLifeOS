@@ -41,6 +41,15 @@ export {
   deleteMentalModel
 } from './api-mental-models';
 
+// Export inspirations API functions
+export {
+  getInspirations,
+  getModelInspirations,
+  createInspiration,
+  updateInspiration,
+  deleteInspiration
+} from './api-inspirations';
+
 // Export utility functions if needed externally
 export {
   tableExists,
