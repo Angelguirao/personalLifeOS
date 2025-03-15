@@ -13,6 +13,9 @@ import { Button } from '@/components/ui/button';
 import GardenActionBar from '@/components/garden/GardenActionBar';
 import GardenContent from '@/components/garden/GardenContent';
 import SystemsView from '@/components/garden/SystemsView';
+import SystemFormDialog from '@/components/garden/SystemFormDialog';
+import { createSelfSystem } from '@/lib/garden/utils/self-system-seeder';
+import { UserCog } from 'lucide-react';
 
 const Garden = () => {
   // State for hierarchical perspective and view mode
@@ -20,6 +23,7 @@ const Garden = () => {
   const [activeView, setActiveView] = useState<ViewMode>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isCreateSystemDialogOpen, setIsCreateSystemDialogOpen] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   
   const {
@@ -60,6 +64,24 @@ const Garden = () => {
     }
   };
 
+  // Handle creating self system
+  const handleCreateSelfSystem = async () => {
+    try {
+      // Get relevant model IDs for self system
+      const identityModels = models.filter(model => 
+        model.tags?.includes('identity') || 
+        model.tags?.includes('self') ||
+        model.tags?.includes('personal')
+      ).map(model => model.id);
+      
+      await createSelfSystem(undefined, identityModels);
+      fetchData();
+    } catch (error) {
+      console.error('Error creating self system:', error);
+      toast.error('Failed to create self system');
+    }
+  };
+
   // Handle perspective change
   const handlePerspectiveChange = (perspective: HierarchicalPerspective) => {
     setActivePerspective(perspective);
@@ -93,6 +115,9 @@ const Garden = () => {
         (system.category && system.category.toLowerCase().includes(searchQuery.toLowerCase()))
       );
 
+  // Check if a Self system exists
+  const selfSystemExists = systems.some(system => system.isSelf);
+
   // Fetch questions when component mounts or auth status changes
   useEffect(() => {
     fetchQuestions();
@@ -117,17 +142,46 @@ const Garden = () => {
             </div>
             
             {/* Action Area: Search and Controls */}
-            <GardenActionBar 
-              activePerspective={activePerspective}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              onRefresh={fetchData}
-            />
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <GardenActionBar 
+                activePerspective={activePerspective}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                onRefresh={fetchData}
+              />
+              
+              {/* System-specific actions */}
+              {activePerspective === 'systems' && isAuthenticated && (
+                <div className="flex gap-2">
+                  {!selfSystemExists && (
+                    <Button 
+                      variant="secondary" 
+                      size="sm" 
+                      className="whitespace-nowrap gap-1"
+                      onClick={handleCreateSelfSystem}
+                    >
+                      <UserCog size={16} />
+                      Create Self System
+                    </Button>
+                  )}
+                  <Button 
+                    size="sm" 
+                    onClick={() => setIsCreateSystemDialogOpen(true)}
+                  >
+                    New System
+                  </Button>
+                </div>
+              )}
+            </div>
             
             {/* Content Area */}
             <div className="mt-6">
               {activePerspective === 'systems' ? (
-                <SystemsView onSelectSystem={handleSystemSelect} />
+                <SystemsView 
+                  onSelectSystem={handleSystemSelect} 
+                  isAuthenticated={isAuthenticated}
+                  onRefresh={fetchData}
+                />
               ) : (
                 <GardenContent 
                   activePerspective={activePerspective}
@@ -151,9 +205,16 @@ const Garden = () => {
       </main>
       <Footer />
       
+      {/* Dialogs */}
       <ModelFormDialog
         isOpen={isCreateDialogOpen}
         onOpenChange={setIsCreateDialogOpen}
+        onSuccess={fetchData}
+      />
+      
+      <SystemFormDialog
+        isOpen={isCreateSystemDialogOpen}
+        onOpenChange={setIsCreateSystemDialogOpen}
         onSuccess={fetchData}
       />
     </>
