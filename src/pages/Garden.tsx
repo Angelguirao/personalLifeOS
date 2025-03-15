@@ -1,32 +1,27 @@
+
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import ViewModeSelector, { DSRPPerspective, ViewMode, DistinctionType } from '@/components/garden/ViewModeSelector';
+import ViewModeSelector, { DSRPPerspective, ViewMode } from '@/components/garden/ViewModeSelector';
 import ModelFormDialog from '@/components/garden/ModelFormDialog';
 import GardenHeader from '@/components/garden/GardenHeader';
-import { useGardenData } from '@/hooks/useGardenData';
+import SystemFormDialog from '@/components/garden/SystemFormDialog';
 import { createQuestion, getQuestions } from '@/lib/garden/api';
 import { Question } from '@/lib/garden/types';
 import { toast } from 'sonner';
-import GardenActionBar from '@/components/garden/GardenActionBar';
-import GardenContent from '@/components/garden/GardenContent';
-import SystemsView from '@/components/garden/SystemsView';
-import SystemFormDialog from '@/components/garden/SystemFormDialog';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Brain, MessageCircleQuestion, Sparkle } from 'lucide-react';
+import GardenPerspective from '@/components/garden/GardenPerspective';
+import DistinctionTypeDialog from '@/components/garden/DistinctionTypeDialog';
+import { useGardenData } from '@/hooks/useGardenData';
+import { useDistinctionDialogs } from '@/hooks/useDistinctionDialogs';
 
 const Garden = () => {
   // State for DSRP perspective and view mode
   const [activePerspective, setActivePerspective] = useState<DSRPPerspective>('distinctions');
   const [activeView, setActiveView] = useState<ViewMode>('list');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isCreateModelDialogOpen, setIsCreateModelDialogOpen] = useState(false);
-  const [isCreateSystemDialogOpen, setIsCreateSystemDialogOpen] = useState(false);
-  const [isCreateQuestionDialogOpen, setIsCreateQuestionDialogOpen] = useState(false);
-  const [isDistinctionTypeDialogOpen, setIsDistinctionTypeDialogOpen] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   
+  // Custom hooks
   const {
     models,
     connections,
@@ -39,6 +34,19 @@ const Garden = () => {
     handleModelSelect,
     handleSystemSelect,
   } = useGardenData();
+
+  const {
+    isCreateModelDialogOpen,
+    setIsCreateModelDialogOpen,
+    isCreateSystemDialogOpen,
+    setIsCreateSystemDialogOpen,
+    isCreateQuestionDialogOpen, 
+    setIsCreateQuestionDialogOpen,
+    isDistinctionTypeDialogOpen,
+    setIsDistinctionTypeDialogOpen,
+    handleDistinctionTypeSelect,
+    handleCreateDistinction
+  } = useDistinctionDialogs();
 
   // Handle creating a new question
   const handleCreateQuestion = async (questionData: Omit<Question, 'id'>) => {
@@ -81,25 +89,6 @@ const Garden = () => {
     }
   };
 
-  // Handle distinction type selection
-  const handleDistinctionTypeSelect = (type: DistinctionType) => {
-    setIsDistinctionTypeDialogOpen(false);
-    
-    if (type === 'mentalModel') {
-      setIsCreateModelDialogOpen(true);
-    } else if (type === 'question') {
-      setIsCreateQuestionDialogOpen(true);
-    } else if (type === 'experience') {
-      // Future implementation for experiences
-      toast.info('Experience creation coming soon!');
-    }
-  };
-
-  // Open the distinction type selection dialog
-  const handleCreateDistinction = () => {
-    setIsDistinctionTypeDialogOpen(true);
-  };
-
   // Filter models based on search query
   const filteredModels = searchQuery.trim() === '' 
     ? models 
@@ -108,15 +97,6 @@ const Garden = () => {
         (model.subtitle && model.subtitle.toLowerCase().includes(searchQuery.toLowerCase())) ||
         model.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (model.tags && model.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
-      );
-
-  // Filter systems based on search query
-  const filteredSystems = searchQuery.trim() === ''
-    ? systems
-    : systems.filter(system =>
-        system.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (system.description && system.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (system.category && system.category.toLowerCase().includes(searchQuery.toLowerCase()))
       );
 
   // Fetch questions when component mounts or auth status changes
@@ -142,56 +122,28 @@ const Garden = () => {
               />
             </div>
             
-            {/* Action Area: Search and Controls */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <GardenActionBar 
-                activePerspective={activePerspective}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                onRefresh={fetchData}
-                onCreateDistinction={handleCreateDistinction}
-                isAuthenticated={isAuthenticated}
-              />
-              
-              {/* System-specific actions */}
-              {activePerspective === 'systems' && isAuthenticated && (
-                <div className="flex gap-2">
-                  <Button 
-                    size="sm" 
-                    onClick={() => setIsCreateSystemDialogOpen(true)}
-                  >
-                    New System
-                  </Button>
-                </div>
-              )}
-            </div>
-            
-            {/* Content Area */}
-            <div className="mt-6">
-              {activePerspective === 'systems' ? (
-                <SystemsView 
-                  onSelectSystem={handleSystemSelect} 
-                  isAuthenticated={isAuthenticated}
-                  onRefresh={fetchData}
-                />
-              ) : (
-                <GardenContent 
-                  activePerspective={activePerspective}
-                  activeView={activeView}
-                  models={models}
-                  filteredModels={filteredModels}
-                  connections={connections}
-                  questions={questions}
-                  selectedModel={selectedModel}
-                  isLoading={isLoading}
-                  isAuthenticated={isAuthenticated}
-                  onCreateDistinction={handleCreateDistinction}
-                  handleModelSelect={handleModelSelect}
-                  onCreateQuestion={handleCreateQuestion}
-                  fetchData={fetchData}
-                />
-              )}
-            </div>
+            {/* Garden Content with Action Bar */}
+            <GardenPerspective
+              activePerspective={activePerspective}
+              activeView={activeView}
+              models={models}
+              filteredModels={filteredModels}
+              connections={connections}
+              questions={questions}
+              systems={systems}
+              selectedModel={selectedModel}
+              selectedSystem={selectedSystem}
+              isLoading={isLoading}
+              isAuthenticated={isAuthenticated}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onCreateDistinction={handleCreateDistinction}
+              onCreateSystem={() => setIsCreateSystemDialogOpen(true)}
+              onCreateQuestion={handleCreateQuestion}
+              handleModelSelect={handleModelSelect}
+              handleSystemSelect={handleSystemSelect}
+              fetchData={fetchData}
+            />
           </div>
         </div>
       </main>
@@ -211,53 +163,11 @@ const Garden = () => {
       />
 
       {/* Distinction Type Selection Dialog */}
-      <Dialog open={isDistinctionTypeDialogOpen} onOpenChange={setIsDistinctionTypeDialogOpen}>
-        <DialogContent className="sm:max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle>Create New Distinction</DialogTitle>
-            <DialogDescription>
-              Choose what kind of distinction you want to create.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-4">
-            <Button 
-              variant="outline" 
-              className="flex flex-col items-center justify-center h-auto p-4 space-y-2 hover:bg-muted transition-colors"
-              onClick={() => handleDistinctionTypeSelect('mentalModel')}
-            >
-              <Brain className="h-10 w-10 text-primary mb-2" />
-              <span className="font-medium text-sm">Mental Model</span>
-              <span className="text-xs text-muted-foreground text-center line-clamp-2">
-                Frameworks for understanding
-              </span>
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              className="flex flex-col items-center justify-center h-auto p-4 space-y-2 hover:bg-muted transition-colors"
-              onClick={() => handleDistinctionTypeSelect('question')}
-            >
-              <MessageCircleQuestion className="h-10 w-10 text-indigo-600 mb-2" />
-              <span className="font-medium text-sm">Question</span>
-              <span className="text-xs text-muted-foreground text-center line-clamp-2">
-                Inquiries to explore
-              </span>
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              className="flex flex-col items-center justify-center h-auto p-4 space-y-2 hover:bg-muted transition-colors"
-              onClick={() => handleDistinctionTypeSelect('experience')}
-            >
-              <Sparkle className="h-10 w-10 text-amber-500 mb-2" />
-              <span className="font-medium text-sm">Experience</span>
-              <span className="text-xs text-muted-foreground text-center line-clamp-2">
-                Personal insights
-              </span>
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <DistinctionTypeDialog 
+        isOpen={isDistinctionTypeDialogOpen}
+        onOpenChange={setIsDistinctionTypeDialogOpen}
+        onTypeSelect={handleDistinctionTypeSelect}
+      />
     </>
   );
 };
