@@ -12,7 +12,7 @@ import {
   FormDescription,
 } from '@/components/ui/form';
 import { MentalModelFormValues } from './types';
-import { Code, Copy, Download, Loader, Upload } from 'lucide-react';
+import { Code, Copy, Download, Loader, Upload, HelpCircle, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -25,10 +25,10 @@ interface JsonTabProps {
 export const JsonTab = ({ control, defaultValues, reset }: JsonTabProps) => {
   // Watch all form fields to generate JSON representation
   const formValues = useWatch({ control });
-  const [activeJsonTab, setActiveJsonTab] = useState<"complete" | "model" | "connections" | "inspirations">("complete");
+  const [activeJsonTab, setActiveJsonTab] = useState<"complete" | "model" | "connections" | "inspirations" | "questions" | "versioning">("complete");
   
   // Generate formatted JSON representation of the form data
-  const generateJson = (mode: "complete" | "model" | "connections" | "inspirations" = "complete") => {
+  const generateJson = (mode: "complete" | "model" | "connections" | "inspirations" | "questions" | "versioning" = "complete") => {
     try {
       let data = { ...formValues };
       
@@ -36,7 +36,7 @@ export const JsonTab = ({ control, defaultValues, reset }: JsonTabProps) => {
       switch (mode) {
         case "model":
           // Filter out connection and inspiration related fields
-          const { connections, relatedQuestions, bookTitle, bookAuthor, bookLink, ...modelData } = data;
+          const { connections, relatedQuestions, bookTitle, bookAuthor, bookLink, openQuestions, versionNote, createNewVersion, ...modelData } = data;
           return JSON.stringify(modelData, null, 2);
         
         case "connections":
@@ -49,6 +49,27 @@ export const JsonTab = ({ control, defaultValues, reset }: JsonTabProps) => {
               author: data.bookAuthor,
               link: data.bookLink
             } : null
+          }, null, 2);
+          
+        case "questions":
+          // Process open questions to array format
+          const questionsArray = data.openQuestions 
+            ? data.openQuestions.split('\n')
+              .map(q => q.trim())
+              .filter(q => q.length > 0)
+            : [];
+            
+          return JSON.stringify({
+            openQuestions: questionsArray,
+            relatedQuestions: data.relatedQuestions || []
+          }, null, 2);
+          
+        case "versioning":
+          return JSON.stringify({
+            versionInfo: {
+              createNewVersion: data.createNewVersion || false,
+              versionNote: data.versionNote || ''
+            }
           }, null, 2);
         
         case "complete":
@@ -73,11 +94,12 @@ export const JsonTab = ({ control, defaultValues, reset }: JsonTabProps) => {
           ...parsedData,
         });
       } else if (activeJsonTab === "model") {
-        const { connections, ...currentValues } = useWatch({ control });
+        const { connections, relatedQuestions, ...currentValues } = useWatch({ control });
         reset({
           ...currentValues,
           ...parsedData,
-          connections
+          connections,
+          relatedQuestions
         });
       } else if (activeJsonTab === "connections") {
         const currentValues = useWatch({ control });
@@ -93,6 +115,29 @@ export const JsonTab = ({ control, defaultValues, reset }: JsonTabProps) => {
             bookTitle: parsedData.bookInfo.title || '',
             bookAuthor: parsedData.bookInfo.author || '',
             bookLink: parsedData.bookInfo.link || ''
+          });
+        }
+      } else if (activeJsonTab === "questions") {
+        const currentValues = useWatch({ control });
+        
+        // Handle open questions (convert array back to newline-separated string)
+        let openQuestionsStr = '';
+        if (parsedData.openQuestions && Array.isArray(parsedData.openQuestions)) {
+          openQuestionsStr = parsedData.openQuestions.join('\n');
+        }
+        
+        reset({
+          ...currentValues,
+          openQuestions: openQuestionsStr,
+          relatedQuestions: parsedData.relatedQuestions || []
+        });
+      } else if (activeJsonTab === "versioning") {
+        const currentValues = useWatch({ control });
+        if (parsedData.versionInfo) {
+          reset({
+            ...currentValues,
+            createNewVersion: parsedData.versionInfo.createNewVersion,
+            versionNote: parsedData.versionInfo.versionNote || ''
           });
         }
       }
@@ -126,18 +171,26 @@ export const JsonTab = ({ control, defaultValues, reset }: JsonTabProps) => {
       </p>
       
       <Tabs value={activeJsonTab} onValueChange={(value) => setActiveJsonTab(value as any)} className="mb-4">
-        <TabsList>
+        <TabsList className="flex flex-wrap">
           <TabsTrigger value="complete">Complete Data</TabsTrigger>
           <TabsTrigger value="model">Model Only</TabsTrigger>
           <TabsTrigger value="connections">Connections</TabsTrigger>
           <TabsTrigger value="inspirations">Inspirations</TabsTrigger>
+          <TabsTrigger value="questions" className="flex items-center gap-1.5">
+            <HelpCircle size={14} /> Questions
+          </TabsTrigger>
+          <TabsTrigger value="versioning" className="flex items-center gap-1.5">
+            <Clock size={14} /> Versioning
+          </TabsTrigger>
         </TabsList>
         
         <p className="text-sm text-muted-foreground mt-2">
-          {activeJsonTab === "complete" && "View and edit all data including the model, connections, and inspirations"}
+          {activeJsonTab === "complete" && "View and edit all data including the model, connections, and related entities"}
           {activeJsonTab === "model" && "View and edit only the mental model data without related entities"}
           {activeJsonTab === "connections" && "View and edit only the connections between this model and other models"}
           {activeJsonTab === "inspirations" && "View and edit only inspirations like book references"}
+          {activeJsonTab === "questions" && "View and edit open questions and related questions"}
+          {activeJsonTab === "versioning" && "View and edit version control information"}
         </p>
       </Tabs>
       

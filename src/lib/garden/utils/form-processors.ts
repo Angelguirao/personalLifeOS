@@ -165,6 +165,9 @@ export const processModelForForm = (model: MentalModel): MentalModelFormValues =
     tag.startsWith('application:')
   ).map(tag => tag.replace('application:', '')) || [];
   
+  // Format open questions as newline-separated string
+  const openQuestionsStr = model.openQuestions ? model.openQuestions.join('\n') : '';
+  
   return {
     // Basic information
     title: model.title || '',
@@ -212,8 +215,8 @@ export const processModelForForm = (model: MentalModel): MentalModelFormValues =
     consequencesInterpersonal: model.consequences?.interpersonal || '',
     consequencesSocietal: model.consequences?.societal || '',
     
-    // Open Questions
-    openQuestions: model.openQuestions ? model.openQuestions.join('\n') : '',
+    // Open Questions - convert from array to newline-separated string
+    openQuestions: openQuestionsStr,
     
     // Book Info
     bookTitle: model.bookInfo?.title || '',
