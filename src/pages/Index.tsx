@@ -26,14 +26,20 @@ const Index = () => {
         <div id="philosophy-preview" className="bg-gradient-to-br from-background to-purple-50/10">
           <PhilosophyPreview />
         </div>
-        <EntrepreneurshipPreview />
-        <div className="bg-gradient-to-br from-background to-amber-50/10">
-          <ProjectsPreview />
-        </div>
-        <GardenPreview />
-        <div className="bg-gradient-to-br from-background to-green-50/10">
-          <AboutPreview />
-        </div>
+        
+        {/* Only show these sections for public (non-authenticated) users */}
+        {!isAuthenticated && (
+          <>
+            <EntrepreneurshipPreview />
+            <div className="bg-gradient-to-br from-background to-amber-50/10">
+              <ProjectsPreview />
+            </div>
+            <GardenPreview />
+            <div className="bg-gradient-to-br from-background to-green-50/10">
+              <AboutPreview />
+            </div>
+          </>
+        )}
       </main>
       <Footer />
     </>
