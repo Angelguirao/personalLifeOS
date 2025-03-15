@@ -64,6 +64,7 @@ export const createSelfSystem = async (): Promise<System> => {
         'Identity',
         'Values'
       ],
+      relatedModels: [], // Added the required property
       color: '#4f46e5',
       icon: 'user'
     };
@@ -92,6 +93,7 @@ export const createCareerSystem = async (): Promise<System> => {
         'Projects',
         'Learning'
       ],
+      relatedModels: [], // Added the required property
       color: '#0891b2'
     };
     
@@ -119,6 +121,7 @@ export const createHealthSystem = async (): Promise<System> => {
         'Habits',
         'Medical Care'
       ],
+      relatedModels: [], // Added the required property
       color: '#16a34a'
     };
     
@@ -146,6 +149,7 @@ export const createEducationSystem = async (): Promise<System> => {
         'Research',
         'Knowledge Management'
       ],
+      relatedModels: [], // Added the required property
       color: '#ca8a04'
     };
     
