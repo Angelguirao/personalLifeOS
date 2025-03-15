@@ -2,10 +2,10 @@
 import React from 'react';
 import GardenSearch from '@/components/garden/GardenSearch';
 import ModelManagement from '@/components/garden/ModelManagement';
-import { HierarchicalPerspective } from '@/components/garden/ViewModeSelector';
+import { DSRPPerspective } from '@/components/garden/ViewModeSelector';
 
 interface GardenActionBarProps {
-  activePerspective: HierarchicalPerspective;
+  activePerspective: DSRPPerspective;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   onRefresh: () => void;
@@ -18,7 +18,7 @@ const GardenActionBar: React.FC<GardenActionBarProps> = ({
   onRefresh
 }) => {
   // Determine if search should be shown
-  const showSearch = activePerspective === 'mentalModels';
+  const showSearch = activePerspective === 'distinctions';
 
   return (
     <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -26,8 +26,8 @@ const GardenActionBar: React.FC<GardenActionBarProps> = ({
         <GardenSearch searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       )}
       
-      {/* Only show model management when in Mental Models perspective */}
-      {activePerspective === 'mentalModels' && (
+      {/* Only show model management when in Distinctions perspective */}
+      {activePerspective === 'distinctions' && (
         <div className="flex gap-2">
           <ModelManagement onRefresh={onRefresh} />
         </div>

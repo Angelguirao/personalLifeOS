@@ -6,12 +6,12 @@ import { Button } from '@/components/ui/button';
 import { DataModelAdapter } from '@/lib/garden/adapters';
 import EmptyGarden from '@/components/garden/EmptyGarden';
 import PlaceholderView from '@/components/garden/PlaceholderView';
-import { HierarchicalPerspective, ViewMode } from '@/components/garden/ViewModeSelector';
+import { DSRPPerspective, ViewMode } from '@/components/garden/ViewModeSelector';
 import { MentalModel, Question } from '@/lib/garden/types';
 import { Connection } from '@/lib/garden/types';
 
 interface GardenContentProps {
-  activePerspective: HierarchicalPerspective;
+  activePerspective: DSRPPerspective;
   activeView: ViewMode;
   models: MentalModel[];
   filteredModels: MentalModel[];
@@ -52,8 +52,8 @@ const GardenContent: React.FC<GardenContentProps> = ({
     );
   }
 
-  // Questions Perspective
-  if (activePerspective === 'questions') {
+  // Questions View (part of Distinctions now)
+  if (activeView === 'qa') {
     return (
       <QuestionsView 
         questions={questions} 
@@ -63,8 +63,8 @@ const GardenContent: React.FC<GardenContentProps> = ({
     );
   }
 
-  // Mental Models Perspective
-  if (activePerspective === 'mentalModels') {
+  // Distinctions Perspective (Mental Models, etc.)
+  if (activePerspective === 'distinctions') {
     if (models.length === 0) {
       return (
         <EmptyGarden 
@@ -124,16 +124,12 @@ const GardenContent: React.FC<GardenContentProps> = ({
     }
   }
 
-  // Other perspectives - placeholder for future implementation
-  if (['experiences', 'frameworks', 'systems'].includes(activePerspective)) {
-    return (
-      <PlaceholderView 
-        title={activePerspective.charAt(0).toUpperCase() + activePerspective.slice(1)} 
-      />
-    );
-  }
-
-  return null;
+  // Other perspectives - placeholder views
+  return (
+    <PlaceholderView 
+      title={activePerspective.charAt(0).toUpperCase() + activePerspective.slice(1)} 
+    />
+  );
 };
 
 export default GardenContent;
