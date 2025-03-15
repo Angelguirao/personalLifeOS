@@ -47,10 +47,10 @@ const Hero = () => {
           
           <div className="mt-12 opacity-0 animate-fade-in animation-delay-700">
             {isAuthenticated ? (
-              <Link to="#consciousness-os" className="inline-flex flex-col items-center text-foreground hover:text-primary transition-colors group">
+              <a href="#consciousness-os" className="inline-flex flex-col items-center text-foreground hover:text-primary transition-colors group">
                 <span className="text-base font-medium mb-3">Explore your OS</span>
                 <ArrowDownIcon className="animate-bounce h-6 w-6 group-hover:text-primary" />
-              </Link>
+              </a>
             ) : (
               <a href="#philosophy-preview" className="inline-flex flex-col items-center text-foreground hover:text-primary transition-colors group">
                 <span className="text-base font-medium mb-3">Scroll to explore</span>
