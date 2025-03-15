@@ -29,7 +29,7 @@ CREATE SCHEMA IF NOT EXISTS perspectives;
 -- Distinctions Table (unified table for mental models, questions, experiences)
 CREATE TABLE distinctions.distinctions (
   id UUID PRIMARY KEY,
-  type TEXT NOT NULL, -- 'mentalModel', 'question', 'experience'
+  type TEXT NOT NULL, -- 'mental_model', 'question', 'experience'
   title TEXT NOT NULL,
   subtitle TEXT,
   content TEXT,
