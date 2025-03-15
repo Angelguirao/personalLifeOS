@@ -8,8 +8,11 @@ import EntrepreneurshipPreview from '../components/home/EntrepreneurshipPreview'
 import ProjectsPreview from '../components/home/ProjectsPreview';
 import GardenPreview from '../components/home/GardenPreview';
 import AboutPreview from '../components/home/AboutPreview';
+import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
+  const { isAuthenticated } = useAuth();
+  
   useEffect(() => {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
