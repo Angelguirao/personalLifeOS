@@ -8,6 +8,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
 import { MentalModelFormValues } from '../types';
 import { Eye } from 'lucide-react';
 
@@ -25,16 +32,22 @@ export const VisibilityField = ({ control }: VisibilityFieldProps) => {
           <FormLabel className="flex items-center gap-1">
             <Eye size={16} /> Visibility
           </FormLabel>
-          <FormControl>
-            <select 
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              {...field}
-            >
-              <option value="public">Public</option>
-              <option value="private">Private</option>
-              <option value="unlisted">Unlisted</option>
-            </select>
-          </FormControl>
+          <Select 
+            onValueChange={field.onChange} 
+            defaultValue={field.value}
+            value={field.value}
+          >
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue placeholder="Select visibility" />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              <SelectItem value="public">Public</SelectItem>
+              <SelectItem value="private">Private</SelectItem>
+              <SelectItem value="unlisted">Unlisted</SelectItem>
+            </SelectContent>
+          </Select>
           <FormMessage />
         </FormItem>
       )}
