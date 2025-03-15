@@ -1,7 +1,6 @@
 
 import React from 'react';
 import GardenSearch from '@/components/garden/GardenSearch';
-import ModelManagement from '@/components/garden/ModelManagement';
 import { DSRPPerspective } from '@/components/garden/ViewModeSelector';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
@@ -23,17 +22,10 @@ const GardenActionBar: React.FC<GardenActionBarProps> = ({
   onCreateDistinction,
   isAuthenticated
 }) => {
-  // Determine if search should be shown
-  const showSearch = activePerspective === 'distinctions' || activePerspective === 'systems';
-
   return (
     <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-      {showSearch && (
-        <GardenSearch searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      )}
-      
       <div className="flex gap-2">
-        {/* Create distinction button for Distinctions perspective */}
+        {/* Only show the create distinction button when authenticated */}
         {activePerspective === 'distinctions' && isAuthenticated && onCreateDistinction && (
           <Button 
             size="sm" 
@@ -43,11 +35,6 @@ const GardenActionBar: React.FC<GardenActionBarProps> = ({
             <Plus size={16} />
             New Distinction
           </Button>
-        )}
-        
-        {/* Only show model management when in Distinctions perspective */}
-        {activePerspective === 'distinctions' && (
-          <ModelManagement onRefresh={onRefresh} />
         )}
       </div>
     </div>

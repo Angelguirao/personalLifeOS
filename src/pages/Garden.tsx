@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -41,18 +40,6 @@ const Garden = () => {
     handleSystemSelect,
   } = useGardenData();
 
-  // Fetch questions
-  const fetchQuestions = async () => {
-    try {
-      const questionsData = await getQuestions();
-      console.log('Questions fetched:', questionsData);
-      setQuestions(questionsData);
-    } catch (error) {
-      console.error('Error fetching questions:', error);
-      toast.error('Failed to load questions');
-    }
-  };
-
   // Handle creating a new question
   const handleCreateQuestion = async (questionData: Omit<Question, 'id'>) => {
     try {
@@ -63,6 +50,18 @@ const Garden = () => {
       console.error('Error creating question:', error);
       toast.error('Failed to create question');
       throw error;
+    }
+  };
+
+  // Fetch questions
+  const fetchQuestions = async () => {
+    try {
+      const questionsData = await getQuestions();
+      console.log('Questions fetched:', questionsData);
+      setQuestions(questionsData);
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+      toast.error('Failed to load questions');
     }
   };
 
@@ -213,7 +212,7 @@ const Garden = () => {
 
       {/* Distinction Type Selection Dialog */}
       <Dialog open={isDistinctionTypeDialogOpen} onOpenChange={setIsDistinctionTypeDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
             <DialogTitle>Create New Distinction</DialogTitle>
             <DialogDescription>
@@ -223,37 +222,37 @@ const Garden = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-4">
             <Button 
               variant="outline" 
-              className="flex flex-col items-center justify-center p-6 h-auto space-y-2 hover:bg-muted transition-colors"
+              className="flex flex-col items-center justify-center h-auto p-4 space-y-2 hover:bg-muted transition-colors"
               onClick={() => handleDistinctionTypeSelect('mentalModel')}
             >
-              <Brain className="h-12 w-12 text-primary" />
-              <span className="font-medium">Mental Model</span>
-              <span className="text-xs text-muted-foreground text-center">
-                Frameworks and concepts for understanding the world
+              <Brain className="h-10 w-10 text-primary mb-2" />
+              <span className="font-medium text-sm">Mental Model</span>
+              <span className="text-xs text-muted-foreground text-center line-clamp-2">
+                Frameworks for understanding
               </span>
             </Button>
             
             <Button 
               variant="outline" 
-              className="flex flex-col items-center justify-center p-6 h-auto space-y-2 hover:bg-muted transition-colors"
+              className="flex flex-col items-center justify-center h-auto p-4 space-y-2 hover:bg-muted transition-colors"
               onClick={() => handleDistinctionTypeSelect('question')}
             >
-              <MessageCircleQuestion className="h-12 w-12 text-indigo-600" />
-              <span className="font-medium">Question</span>
-              <span className="text-xs text-muted-foreground text-center">
-                Inquiries that explore ideas and concepts
+              <MessageCircleQuestion className="h-10 w-10 text-indigo-600 mb-2" />
+              <span className="font-medium text-sm">Question</span>
+              <span className="text-xs text-muted-foreground text-center line-clamp-2">
+                Inquiries to explore
               </span>
             </Button>
             
             <Button 
               variant="outline" 
-              className="flex flex-col items-center justify-center p-6 h-auto space-y-2 hover:bg-muted transition-colors"
+              className="flex flex-col items-center justify-center h-auto p-4 space-y-2 hover:bg-muted transition-colors"
               onClick={() => handleDistinctionTypeSelect('experience')}
             >
-              <Sparkle className="h-12 w-12 text-amber-500" />
-              <span className="font-medium">Experience</span>
-              <span className="text-xs text-muted-foreground text-center">
-                Personal insights and learning moments
+              <Sparkle className="h-10 w-10 text-amber-500 mb-2" />
+              <span className="font-medium text-sm">Experience</span>
+              <span className="text-xs text-muted-foreground text-center line-clamp-2">
+                Personal insights
               </span>
             </Button>
           </div>
