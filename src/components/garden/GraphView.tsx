@@ -10,7 +10,8 @@ import {
   ConnectionLineType, 
   useNodesState, 
   useEdgesState,
-  MarkerType
+  MarkerType,
+  BackgroundVariant
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { GardenNote } from '../../lib/garden/types/legacy-types';
@@ -280,7 +281,7 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
           }
         }}
       >
-        <Background color="#94a3b8" gap={20} variant="dots" />
+        <Background color="#94a3b8" gap={20} variant={BackgroundVariant.DOTS} />
         <Controls />
         <MiniMap 
           nodeColor={(node) => {
