@@ -1,5 +1,5 @@
 
-import supabase from '../garden/client';
+import supabase from '@/lib/supabase/client';
 import { Project } from './types';
 
 // Get all public projects

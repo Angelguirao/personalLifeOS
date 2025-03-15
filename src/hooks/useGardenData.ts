@@ -1,9 +1,10 @@
 
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import { getMentalModels, getConnections, seedInitialData, getSystems } from '@/lib/garden/api';
+import { getMentalModels, getConnections, getSystems } from '@/lib/garden/api';
 import { MentalModel, Connection, System } from '@/lib/garden/types';
-import supabase from '@/lib/garden/client';
+import { useSupabase } from '@/lib/supabase/SupabaseProvider';
+import { useSupabaseSetup } from './useSupabaseSetup';
 
 export function useGardenData() {
   const [models, setModels] = useState<MentalModel[]>([]);
@@ -12,19 +13,10 @@ export function useGardenData() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedModel, setSelectedModel] = useState<MentalModel | undefined>(undefined);
   const [selectedSystem, setSelectedSystem] = useState<System | undefined>(undefined);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Function to check database connection
-  const checkDatabase = async () => {
-    try {
-      toast.info('Checking database connection...', { duration: 2000 });
-      await seedInitialData();
-      toast.success('Database connection verified.');
-    } catch (error) {
-      console.error('Error connecting to database:', error);
-      toast.error('Failed to connect to database.');
-    }
-  };
+  
+  // Use our new Supabase hooks
+  const { isAuthenticated } = useSupabase();
+  const { checkTablesExist } = useSupabaseSetup();
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -68,38 +60,13 @@ export function useGardenData() {
     setSelectedModel(undefined); // Clear model selection when system is selected
   };
 
-  // Check authentication status
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      if (!supabase) return;
-      
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        setIsAuthenticated(!!session);
-      } catch (error) {
-        console.error('Error checking auth status:', error);
-      }
-    };
-
-    checkAuthStatus();
-    
-    // Subscribe to auth changes
-    if (supabase) {
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-        setIsAuthenticated(!!session);
-      });
-      
-      return () => subscription.unsubscribe();
-    }
-  }, []);
-
   useEffect(() => {
     // Fetch data on component mount
     fetchData();
     
-    // Check database connection on load
+    // Check database tables on load if authenticated
     if (isAuthenticated) {
-      checkDatabase();
+      checkTablesExist();
     }
   }, [isAuthenticated]);
 
@@ -112,7 +79,6 @@ export function useGardenData() {
     selectedSystem,
     isAuthenticated,
     fetchData,
-    checkDatabase,
     handleModelSelect,
     handleSystemSelect,
   };

@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { SupabaseProvider } from "@/lib/supabase/SupabaseProvider";
 import Index from "./pages/Index";
 import Philosophy from "./pages/Philosophy";
 import Entrepreneurship from "./pages/Entrepreneurship";
@@ -32,23 +33,25 @@ const ScrollToTop = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/philosophy" element={<Philosophy />} />
-          <Route path="/entrepreneurship" element={<Entrepreneurship />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/garden" element={<Garden />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/tools" element={<Tools />} />
-          <Route path="/constraints" element={<Constraints />} />
-          <Route path="/connect" element={<Connect />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <SupabaseProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/philosophy" element={<Philosophy />} />
+            <Route path="/entrepreneurship" element={<Entrepreneurship />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/garden" element={<Garden />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/tools" element={<Tools />} />
+            <Route path="/constraints" element={<Constraints />} />
+            <Route path="/connect" element={<Connect />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </SupabaseProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

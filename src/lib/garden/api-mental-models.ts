@@ -1,5 +1,5 @@
 
-import supabase, { isSupabaseAvailable } from './client';
+import supabase, { isSupabaseAvailable } from '@/lib/supabase/client';
 import { MentalModel } from './types/mental-model-types';
 import { tableExists } from './utils/table-utils';
 import { transformMentalModelFromSupabase, transformMentalModelToSupabase } from './utils/model-transforms';

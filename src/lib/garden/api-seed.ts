@@ -1,6 +1,5 @@
 
-import supabase, { isSupabaseAvailable } from './client';
-import { tableExists, runSetupScript } from './utils/table-utils';
+import supabase, { isSupabaseAvailable } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 
 export const seedInitialData = async () => {
@@ -17,53 +16,57 @@ export const seedInitialData = async () => {
   console.log('Checking Supabase tables...');
   
   try {
-    // Check if tables exist with schema qualification
-    // We'll check for the main distinctions table first - if it doesn't exist, 
-    // it's likely none of them do
-    const distinctionsTableExists = await tableExists('distinctions.distinctions');
+    // Try to access the distinctions table directly
+    const { error: distinctionsError } = await supabase
+      .from('distinctions.distinctions')
+      .select('id')
+      .limit(1)
+      .single();
     
-    if (!distinctionsTableExists) {
-      console.error('Primary database table does not exist in Supabase.');
+    // Try to access the systems table directly
+    const { error: systemsError } = await supabase
+      .from('systems.systems')
+      .select('id')
+      .limit(1)
+      .single();
+    
+    // Try to access the connections table directly
+    const { error: connectionsError } = await supabase
+      .from('relationships.connections')
+      .select('id')
+      .limit(1)
+      .single();
+    
+    // If all queries failed with table not exist errors, we need to run the setup
+    if (
+      distinctionsError?.message?.includes('does not exist') &&
+      systemsError?.message?.includes('does not exist') &&
+      connectionsError?.message?.includes('does not exist')
+    ) {
+      console.log('Database tables need to be created - displaying setup instructions');
       
-      // Try to run the setup script or guide the user
-      await runSetupScript();
-      
-      // Display a more specific error message with detailed instructions
+      // Show toast with database setup instructions
       toast.error('Database tables need to be set up', {
-        description: 'Copy contents from src/lib/garden/sql/complete_garden_setup.sql and run in the Supabase SQL Editor',
+        description: 'Please run the SQL setup script in the Supabase SQL Editor',
         duration: 10000,
         action: {
-          label: 'Fix It',
-          onClick: () => window.open('https://app.supabase.com/project/_/sql', '_blank')
+          label: 'Setup Instructions',
+          onClick: () => {
+            // Import and call the setup helper dynamically to avoid circular dependency
+            import('./utils/setup-helper').then(module => {
+              module.showSetupInstructions();
+            });
+          }
         }
       });
-      
       return;
     }
     
-    // If the main table exists, check the others
-    const systemsTableExists = await tableExists('systems.systems');
-    const connectionsTableExists = await tableExists('relationships.connections');
-    const inspirationsTableExists = await tableExists('perspectives.inspirations');
-    
-    // Log which tables are missing for debugging
-    if (!systemsTableExists || !connectionsTableExists || !inspirationsTableExists) {
-      console.error('Some database tables do not exist in Supabase.', {
-        'systems.systems': !systemsTableExists,
-        'relationships.connections': !connectionsTableExists,
-        'perspectives.inspirations': !inspirationsTableExists
-      });
-      
-      toast.warning('Some database tables are missing', {
-        description: 'Run the complete setup script to create all required tables',
-        duration: 8000
-      });
-      
-      return;
+    // If at least one table exists, we consider it partially set up
+    if (!distinctionsError || !systemsError || !connectionsError) {
+      console.log('Some database tables are already set up');
+      toast.success('Connected to database successfully');
     }
-    
-    console.log('All required tables exist in Supabase');
-    toast.success('Database connected successfully');
   } catch (error) {
     console.error('Error checking tables:', error);
     toast.error('Error connecting to database', {
@@ -79,5 +82,8 @@ export const setupDatabaseTables = async () => {
     description: 'Follow the instructions to set up your Supabase database',
     duration: 5000
   });
-  return await runSetupScript();
+  
+  // Import and show setup instructions
+  const setupHelper = await import('./utils/setup-helper');
+  return setupHelper.showSetupInstructions();
 };

@@ -1,5 +1,5 @@
 
-import supabase, { isSupabaseAvailable } from './client';
+import supabase, { isSupabaseAvailable } from '@/lib/supabase/client';
 import { Connection } from './types';
 import { tableExists } from './utils/table-utils';
 import { toast } from 'sonner';

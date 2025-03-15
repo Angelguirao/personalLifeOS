@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import supabase from '@/lib/garden/client';
+import supabase from '@/lib/supabase/client';
 
 export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);

@@ -1,5 +1,5 @@
 
-import supabase from '../client';
+import supabase from '@/lib/supabase/client';
 import { System } from '../types/system-types';
 import { tableExists } from '../utils/table-utils';
 import { transformSystemFromSupabase, transformSystemToSupabase } from './transform-utils';

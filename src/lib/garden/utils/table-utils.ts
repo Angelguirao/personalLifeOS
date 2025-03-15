@@ -1,5 +1,5 @@
 
-import supabase, { isSupabaseAvailable } from '../client';
+import supabase, { isSupabaseAvailable } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 
 // Helper function to check if a table exists
