@@ -2,12 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { Menu, X, Github, Twitter, Linkedin, Mail, Bitcoin, Copy } from 'lucide-react';
+import { Menu, X, Github, Twitter, Linkedin, Mail, Bitcoin, Copy, LogIn, UserPlus, LogOut } from 'lucide-react';
 import { toast } from "@/components/ui/use-toast";
+import supabase from '@/lib/garden/client';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
   const location = useLocation();
   
   const navItems = [
@@ -50,6 +53,122 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
   }, [location]);
   
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      setIsAuthLoading(true);
+      if (!supabase) {
+        setIsAuthenticated(false);
+        setIsAuthLoading(false);
+        return;
+      }
+
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setIsAuthenticated(!!session);
+      } catch (error) {
+        console.error('Error checking auth status:', error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsAuthLoading(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
+
+  const handleLoginClick = async () => {
+    if (!supabase) {
+      toast.error('Supabase is not configured properly');
+      return;
+    }
+
+    // Show a simple signin modal with email/password
+    const email = prompt('Enter your email:');
+    const password = prompt('Enter your password:');
+    
+    if (!email || !password) return;
+    
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Success",
+        description: "Signed in successfully",
+      });
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error('Error signing in:', error);
+      toast({
+        title: "Error",
+        description: "Invalid credentials",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleSignUpClick = async () => {
+    if (!supabase) {
+      toast({
+        title: "Error",
+        description: "Supabase is not configured properly",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Show a simple signup modal with email/password
+    const email = prompt('Enter your email to register:');
+    const password = prompt('Create a password:');
+    
+    if (!email || !password) return;
+    
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Success",
+        description: "Signed up successfully! Check your email for confirmation.",
+      });
+    } catch (error) {
+      console.error('Error signing up:', error);
+      toast({
+        title: "Error",
+        description: "Failed to sign up",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleLogout = async () => {
+    if (!supabase) return;
+    
+    try {
+      await supabase.auth.signOut();
+      setIsAuthenticated(false);
+      toast({
+        title: "Success",
+        description: "Signed out successfully",
+      });
+    } catch (error) {
+      console.error('Error signing out:', error);
+      toast({
+        title: "Error",
+        description: "Failed to sign out",
+        variant: "destructive"
+      });
+    }
+  };
+  
   return (
     <header className={cn(
       "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
@@ -78,8 +197,42 @@ const Navbar = () => {
             ))}
           </nav>
           
-          {/* Social Icons */}
+          {/* Authentication and Social Icons */}
           <div className="flex items-center space-x-3 border-l border-border pl-4 opacity-0 animate-fade-in">
+            {!isAuthLoading && (
+              <>
+                {isAuthenticated ? (
+                  <button
+                    onClick={handleLogout}
+                    aria-label="Sign out"
+                    title="Sign out"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <LogOut size={16} />
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={handleLoginClick}
+                      aria-label="Sign in"
+                      title="Sign in"
+                      className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <LogIn size={16} />
+                    </button>
+                    <button
+                      onClick={handleSignUpClick}
+                      aria-label="Sign up"
+                      title="Sign up"
+                      className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <UserPlus size={16} />
+                    </button>
+                  </>
+                )}
+              </>
+            )}
+            
             {socialLinks.map((link, i) => (
               <a 
                 key={i}
@@ -133,6 +286,38 @@ const Navbar = () => {
             </Link>
           ))}
         </nav>
+
+        {/* Mobile Auth Buttons */}
+        {!isAuthLoading && (
+          <div className="flex flex-col space-y-4 mt-8 pt-6 border-t border-border">
+            {isAuthenticated ? (
+              <button
+                onClick={handleLogout}
+                className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <LogOut size={16} className="mr-2" />
+                Sign Out
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={handleLoginClick}
+                  className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <LogIn size={16} className="mr-2" />
+                  Sign In
+                </button>
+                <button
+                  onClick={handleSignUpClick}
+                  className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <UserPlus size={16} className="mr-2" />
+                  Sign Up
+                </button>
+              </>
+            )}
+          </div>
+        )}
 
         {/* Mobile Social Icons */}
         <div className="flex items-center space-x-4 mt-8 pt-6 border-t border-border">

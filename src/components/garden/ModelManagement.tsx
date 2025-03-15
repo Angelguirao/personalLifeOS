@@ -74,7 +74,7 @@ const ModelManagement = ({ selectedModel, onRefresh }: ModelManagementProps) => 
     }
 
     // Show a simple signin modal with email/password
-    const email = prompt('Enter your admin email:');
+    const email = prompt('Enter your email:');
     const password = prompt('Enter your password:');
     
     if (!email || !password) return;
@@ -92,6 +92,33 @@ const ModelManagement = ({ selectedModel, onRefresh }: ModelManagementProps) => 
     } catch (error) {
       console.error('Error signing in:', error);
       toast.error('Invalid credentials');
+    }
+  };
+
+  const handleSignUpClick = async () => {
+    if (!supabase) {
+      toast.error('Supabase is not configured properly');
+      return;
+    }
+
+    // Show a simple signup modal with email/password
+    const email = prompt('Enter your email to register:');
+    const password = prompt('Create a password:');
+    
+    if (!email || !password) return;
+    
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password
+      });
+      
+      if (error) throw error;
+      
+      toast.success('Signed up successfully! Check your email for confirmation.');
+    } catch (error) {
+      console.error('Error signing up:', error);
+      toast.error('Failed to sign up');
     }
   };
 
@@ -121,15 +148,24 @@ const ModelManagement = ({ selectedModel, onRefresh }: ModelManagementProps) => 
       <div className="flex items-center justify-between w-full">
         <div className="text-sm text-muted-foreground flex items-center">
           <Lock size={14} className="mr-1.5" />
-          Manager access is restricted
+          Some features require authentication
         </div>
-        <Button 
-          variant="outline" 
-          size="sm"
-          onClick={handleLoginClick}
-        >
-          Admin Login
-        </Button>
+        <div className="flex space-x-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={handleSignUpClick}
+          >
+            Sign Up
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={handleLoginClick}
+          >
+            Sign In
+          </Button>
+        </div>
       </div>
     );
   }

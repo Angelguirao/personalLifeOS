@@ -17,9 +17,9 @@ const ListView = ({ notes, onSelectModel, selectedModelId }: ListViewProps) => {
   };
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-6 md:grid-cols-2">
       {notes.length === 0 ? (
-        <div className="md:col-span-2 lg:col-span-3 p-6 text-center">
+        <div className="md:col-span-2 p-6 text-center">
           <h3 className="text-lg font-medium mb-2">No mental models found</h3>
           <p className="text-muted-foreground">
             Try adjusting your search or create a new mental model.
