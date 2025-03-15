@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { 
   ReactFlow, 
@@ -281,7 +280,7 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
           }
         }}
       >
-        <Background color="#94a3b8" gap={20} variant={BackgroundVariant.DOTS} />
+        <Background color="#94a3b8" gap={20} variant={BackgroundVariant.Dots} />
         <Controls />
         <MiniMap 
           nodeColor={(node) => {
