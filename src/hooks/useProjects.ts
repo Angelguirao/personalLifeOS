@@ -7,7 +7,7 @@ export const useProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const { isAuthenticated } = useAuth?.() || { isAuthenticated: false };
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const fetchProjects = async () => {

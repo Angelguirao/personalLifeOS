@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -36,7 +35,7 @@ const sampleProjects: Project[] = [
 ];
 
 const Projects = () => {
-  const { isAuthenticated } = useAuth?.() || { isAuthenticated: false };
+  const { isAuthenticated } = useAuth();
   const { projects, isLoading, error } = useProjects();
   
   // Use sample projects if API fails or while loading during first render
