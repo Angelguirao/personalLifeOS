@@ -1,6 +1,6 @@
 
 import supabase, { isSupabaseAvailable } from './client';
-import { tableExists } from './utils/table-utils';
+import { tableExists, runSetupScript } from './utils/table-utils';
 import { toast } from 'sonner';
 
 export const seedInitialData = async () => {
@@ -20,10 +20,9 @@ export const seedInitialData = async () => {
     const connectionsTableExists = await tableExists('relationships.connections');
     const inspirationsTableExists = await tableExists('perspectives.inspirations');
     
-    // If tables don't exist, warn the user
+    // If tables don't exist, try to run setup script or guide the user
     if (!distinctionsTableExists || !systemsTableExists || !connectionsTableExists || !inspirationsTableExists) {
-      console.error('Some database tables do not exist in Supabase. Make sure you run the SQL setup script in the Supabase dashboard.');
-      toast.error('Required database tables not found');
+      console.error('Some database tables do not exist in Supabase.');
       
       // Log which tables are missing for debugging
       console.error('Missing tables:', {
@@ -33,8 +32,14 @@ export const seedInitialData = async () => {
         'perspectives.inspirations': !inspirationsTableExists
       });
       
-      // Display a more user-friendly error message
-      toast.error('Database tables need to be set up. Please run the complete_garden_setup.sql script in the Supabase dashboard SQL Editor.');
+      // Try to run the setup script or provide guidance
+      const setupAttempted = await runSetupScript();
+      
+      // Display a more user-friendly error message with specific instructions
+      toast.error(
+        'Database tables need to be set up. Please run the complete_garden_setup.sql script in the Supabase SQL Editor.',
+        { duration: 8000 }
+      );
       
       return;
     }
@@ -46,4 +51,9 @@ export const seedInitialData = async () => {
     toast.error('Error connecting to database');
     throw error;
   }
+};
+
+// Function to help users run the setup script
+export const setupDatabaseTables = async () => {
+  return await runSetupScript();
 };

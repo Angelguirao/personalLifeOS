@@ -21,7 +21,7 @@ export const getMentalModels = async (): Promise<MentalModel[]> => {
     const modelsExist = await tableExists('distinctions.distinctions');
     if (!modelsExist) {
       console.error('Distinctions table does not exist');
-      toast.error('Database tables not properly configured');
+      toast.error('Database tables not properly set up. Please run the setup script.');
       return [];
     }
     
@@ -104,7 +104,7 @@ export const createMentalModel = async (model: Omit<MentalModel, 'id'>): Promise
     // Check if table exists
     const tableAccessible = await tableExists('distinctions.distinctions');
     if (!tableAccessible) {
-      throw new Error('The distinctions.distinctions table does not exist or is not accessible');
+      throw new Error('The distinctions.distinctions table does not exist or is not accessible. Please run the complete_garden_setup.sql script in the Supabase SQL Editor.');
     }
     
     // Check authentication
@@ -135,7 +135,7 @@ export const createMentalModel = async (model: Omit<MentalModel, 'id'>): Promise
       
       // Handle specific error cases
       if (error.code === '42P01') {
-        throw new Error('Database table not found. Please run setup script.');
+        throw new Error('Database table not found. Please run the complete_garden_setup.sql script in the Supabase SQL Editor.');
       } else if (error.code === '23505') {
         throw new Error('A mental model with this ID already exists.');
       } else if (error.message.includes('permission denied')) {
