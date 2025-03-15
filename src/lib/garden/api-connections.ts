@@ -1,44 +1,45 @@
-
-import supabase from './client';
-import { connections } from './data';
-import { Connection, SupabaseConnection, RelationshipType } from './types/connection-types';
+import supabase, { isSupabaseAvailable } from './client';
+import { Connection } from './types';
 import { tableExists } from './utils/table-utils';
 import { toast } from 'sonner';
 
-// Convert a database connection to a frontend connection
-const mapToFrontendConnection = (dbConnection: SupabaseConnection): Connection => ({
-  id: dbConnection.id,
-  sourceId: dbConnection.source_id,
-  targetId: dbConnection.target_id,
-  // Convert integer strength (0-10) to decimal (0.0-1.0)
-  strength: Number(dbConnection.strength) / 10,
-  relationship: dbConnection.relationship
-});
+// Transform a Supabase connection to our Connection type
+const transformConnectionFromSupabase = (data: any): Connection => {
+  return {
+    id: data.id,
+    sourceId: data.source_id,
+    targetId: data.target_id,
+    strength: data.strength / 10, // Convert 0-10 scale to 0-1
+    relationship: data.relationship
+  };
+};
 
-// Convert a frontend connection to a database connection
-const mapToDatabaseConnection = (frontendConnection: Omit<Connection, 'id'>): Omit<SupabaseConnection, 'id'> => ({
-  source_id: frontendConnection.sourceId,
-  target_id: frontendConnection.targetId,
-  // Convert decimal strength (0.0-1.0) to integer (0-10)
-  strength: Math.round(Number(frontendConnection.strength) * 10),
-  relationship: frontendConnection.relationship
-});
+// Transform our Connection type to Supabase format
+const transformConnectionToSupabase = (connection: Omit<Connection, 'id'>): any => {
+  return {
+    source_id: connection.sourceId,
+    target_id: connection.targetId,
+    strength: Math.round(connection.strength * 10), // Convert 0-1 scale to 0-10
+    relationship: connection.relationship
+  };
+};
 
+// Get all connections
 export const getConnections = async (): Promise<Connection[]> => {
   console.log('Fetching connections...');
   
-  // If Supabase is not initialized, return fallback data
-  if (supabase === null) {
-    console.log('Supabase client not initialized. Using fallback connections data.');
-    return connections;
+  if (!isSupabaseAvailable()) {
+    console.error('Supabase client not initialized.');
+    toast.error('Database connection not available');
+    return [];
   }
   
   try {
-    // Check if table exists
-    const connectionsExist = await tableExists('connections');
-    if (!connectionsExist) {
-      console.log('Connections table does not exist, using fallback data');
-      return connections;
+    const connectionsTableExists = await tableExists('connections');
+    if (!connectionsTableExists) {
+      console.error('Connections table does not exist');
+      toast.error('Database tables not properly configured');
+      return [];
     }
     
     console.log('Fetching connections from Supabase...');
@@ -48,37 +49,32 @@ export const getConnections = async (): Promise<Connection[]> => {
     
     if (error) {
       console.error('Supabase error:', error);
-      return connections; // Return fallback data on error
+      toast.error('Failed to load connections from database');
+      return [];
     }
     
     console.log('Supabase connections data:', data);
     
     if (!data || data.length === 0) {
       console.log('No connections found in Supabase');
-      return connections; // Return fallback data if no connections found
+      return [];
     }
     
-    // Transform from snake_case to camelCase using our mapping function
-    const mappedConnections = data.map(mapToFrontendConnection);
-    console.log('Mapped frontend connections:', mappedConnections);
-    return mappedConnections;
+    return data.map(transformConnectionFromSupabase);
   } catch (error) {
     console.error('Error fetching connections:', error);
-    toast.error('Error fetching connections. Please refresh.');
-    // Return fallback data on error
-    return connections;
+    toast.error('Error fetching connections');
+    return [];
   }
 };
 
+// Create a new connection
 export const createConnection = async (connection: Omit<Connection, 'id'>): Promise<Connection> => {
-  if (!supabase || !(await tableExists('connections'))) {
+  if (!isSupabaseAvailable() || !(await tableExists('connections'))) {
     throw new Error('Cannot create connection: Supabase connection or table not available');
   }
   
-  // Transform to database format using our mapping function
-  const supabaseConnection = mapToDatabaseConnection(connection);
-  
-  console.log('Creating connection with data:', supabaseConnection);
+  const supabaseConnection = transformConnectionToSupabase(connection);
   
   const { data, error } = await supabase
     .from('connections')
@@ -86,81 +82,63 @@ export const createConnection = async (connection: Omit<Connection, 'id'>): Prom
     .select()
     .single();
   
-  if (error) {
-    console.error('Error creating connection:', error);
-    throw error;
-  }
-  
-  // Transform back to frontend format
-  return mapToFrontendConnection(data);
+  if (error) throw error;
+  return transformConnectionFromSupabase(data);
 };
 
-// Get all connections for a specific model (either as source or target)
-export const getNoteConnections = async (modelId: string): Promise<Connection[]> => {
-  if (!supabase || !(await tableExists('connections'))) {
-    throw new Error('Supabase connection or table not available');
+// Get connections for a specific note
+export const getNoteConnections = async (noteId: string): Promise<Connection[]> => {
+  if (!isSupabaseAvailable() || !(await tableExists('connections'))) {
+    return [];
   }
   
   const { data, error } = await supabase
     .from('connections')
     .select('*')
-    .or(`source_id.eq.${modelId},target_id.eq.${modelId}`);
+    .or(`source_id.eq.${noteId},target_id.eq.${noteId}`);
   
   if (error) {
-    console.error('Error fetching model connections:', error);
+    console.error('Error fetching note connections:', error);
     throw error;
   }
   
-  return data.map(mapToFrontendConnection);
+  return data.map(transformConnectionFromSupabase);
+};
+
+// Update an existing connection
+export const updateConnection = async (id: string, updates: Partial<Omit<Connection, 'id'>>): Promise<Connection> => {
+  if (!isSupabaseAvailable() || !(await tableExists('connections'))) {
+    throw new Error('Cannot update connection: Supabase connection or table not available');
+  }
+  
+  const supabaseUpdates: any = {};
+  
+  if (updates.sourceId !== undefined) supabaseUpdates.source_id = updates.sourceId;
+  if (updates.targetId !== undefined) supabaseUpdates.target_id = updates.targetId;
+  if (updates.strength !== undefined) supabaseUpdates.strength = Math.round(updates.strength * 10);
+  if (updates.relationship !== undefined) supabaseUpdates.relationship = updates.relationship;
+  
+  const { data, error } = await supabase
+    .from('connections')
+    .update(supabaseUpdates)
+    .eq('id', id)
+    .select()
+    .single();
+  
+  if (error) throw error;
+  return transformConnectionFromSupabase(data);
 };
 
 // Delete a connection
-export const deleteConnection = async (connectionId: number): Promise<void> => {
-  if (!supabase || !(await tableExists('connections'))) {
+export const deleteConnection = async (id: string): Promise<void> => {
+  if (!isSupabaseAvailable() || !(await tableExists('connections'))) {
     throw new Error('Cannot delete connection: Supabase connection or table not available');
   }
   
   const { error } = await supabase
     .from('connections')
     .delete()
-    .eq('id', connectionId);
+    .eq('id', id);
   
-  if (error) {
-    console.error('Error deleting connection:', error);
-    throw error;
-  }
-};
-
-// Update an existing connection
-export const updateConnection = async (
-  connectionId: number, 
-  updates: Partial<Omit<Connection, 'id'>>
-): Promise<Connection> => {
-  if (!supabase || !(await tableExists('connections'))) {
-    throw new Error('Cannot update connection: Supabase connection or table not available');
-  }
-  
-  const supabaseUpdates: Partial<Omit<SupabaseConnection, 'id'>> = {};
-  
-  if (updates.sourceId !== undefined) supabaseUpdates.source_id = updates.sourceId;
-  if (updates.targetId !== undefined) supabaseUpdates.target_id = updates.targetId;
-  if (updates.relationship !== undefined) supabaseUpdates.relationship = updates.relationship as RelationshipType;
-  if (updates.strength !== undefined) {
-    // Convert decimal strength to integer for DB
-    supabaseUpdates.strength = Math.round(Number(updates.strength) * 10);
-  }
-  
-  const { data, error } = await supabase
-    .from('connections')
-    .update(supabaseUpdates)
-    .eq('id', connectionId)
-    .select()
-    .single();
-  
-  if (error) {
-    console.error('Error updating connection:', error);
-    throw error;
-  }
-  
-  return mapToFrontendConnection(data);
+  if (error) throw error;
 };

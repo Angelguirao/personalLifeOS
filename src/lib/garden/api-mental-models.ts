@@ -1,5 +1,5 @@
-import supabase from './client';
-import { mentalModels } from './data';
+
+import supabase, { isSupabaseAvailable } from './client';
 import { MentalModel } from './types/mental-model-types';
 import { tableExists } from './utils/table-utils';
 import { transformMentalModelFromSupabase, transformMentalModelToSupabase } from './utils/model-transforms';
@@ -8,19 +8,20 @@ import { toast } from 'sonner';
 export const getMentalModels = async (): Promise<MentalModel[]> => {
   console.log('Fetching mental models...');
   
-  // If Supabase is not initialized, return fallback data
-  if (supabase === null) {
-    console.log('Using fallback mental models data');
-    return mentalModels;
+  // Check if Supabase is available
+  if (!isSupabaseAvailable()) {
+    console.error('Supabase client not initialized.');
+    toast.error('Database connection not available');
+    return [];
   }
   
   try {
-    // Check if tables exist
+    // Check if table exists
     const modelsExist = await tableExists('mental_models');
     if (!modelsExist) {
-      console.log('Mental models table does not exist');
-      toast.info('Digital Garden is running in offline mode. Connect to Supabase for persistent storage.');
-      return mentalModels;
+      console.error('Mental models table does not exist');
+      toast.error('Database tables not properly configured');
+      return [];
     }
     
     console.log('Fetching mental models from Supabase...');
@@ -31,30 +32,29 @@ export const getMentalModels = async (): Promise<MentalModel[]> => {
     if (error) {
       console.error('Supabase error:', error);
       toast.error('Failed to load mental models from database');
-      return mentalModels; // Return fallback data on error
+      return [];
     }
     
     console.log('Supabase mental models data:', data);
     
     if (!data || data.length === 0) {
-      console.log('No mental models found in Supabase, using fallback data');
-      // We could add a function to seed the new tables here
-      return mentalModels;
+      console.log('No mental models found in Supabase');
+      return [];
     }
     
     return data.map(transformMentalModelFromSupabase);
   } catch (error) {
     console.error('Error fetching mental models:', error);
     toast.error('Error fetching mental models');
-    // Fallback to the sample data if there's an error
-    return mentalModels;
+    return [];
   }
 };
 
 export const getMentalModelById = async (id: string): Promise<MentalModel | undefined> => {
-  if (!supabase || !(await tableExists('mental_models'))) {
-    console.log('Using fallback for mental model details');
-    return mentalModels.find(model => model.id === id);
+  if (!isSupabaseAvailable() || !(await tableExists('mental_models'))) {
+    console.error('Database not available or mental models table does not exist');
+    toast.error('Database connection not available');
+    return undefined;
   }
   
   try {
@@ -68,14 +68,14 @@ export const getMentalModelById = async (id: string): Promise<MentalModel | unde
     return data ? transformMentalModelFromSupabase(data) : undefined;
   } catch (error) {
     console.error('Error fetching mental model by id:', error);
-    // Fallback to finding the model in the sample data
-    return mentalModels.find(model => model.id === id);
+    toast.error('Error loading mental model details');
+    return undefined;
   }
 };
 
 // Helper function to check if the user is authenticated
 const checkAuthentication = async () => {
-  if (!supabase) {
+  if (!isSupabaseAvailable()) {
     throw new Error('Supabase client is not available');
   }
   

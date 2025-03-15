@@ -1,7 +1,5 @@
-
-import supabase from './client';
-import { inspirations } from './data';
-import { Inspiration, SourceType } from './types';
+import supabase, { isSupabaseAvailable } from './client';
+import { Inspiration } from './types';
 import { tableExists } from './utils/table-utils';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
@@ -30,16 +28,18 @@ const mapToDatabaseInspiration = (frontendInspiration: Omit<Inspiration, 'id'>):
 
 // Get all inspirations
 export const getInspirations = async (): Promise<Inspiration[]> => {
-  if (supabase === null) {
-    console.log('Supabase client not initialized. Using fallback inspirations data.');
-    return inspirations;
+  if (!isSupabaseAvailable()) {
+    console.error('Supabase client not initialized.');
+    toast.error('Database connection not available');
+    return [];
   }
   
   try {
     const inspirationsExist = await tableExists('inspirations');
     if (!inspirationsExist) {
-      console.log('Inspirations table does not exist, using fallback data');
-      return inspirations;
+      console.error('Inspirations table does not exist');
+      toast.error('Database tables not properly configured');
+      return [];
     }
     
     const { data, error } = await supabase
@@ -48,18 +48,19 @@ export const getInspirations = async (): Promise<Inspiration[]> => {
     
     if (error) {
       console.error('Supabase error:', error);
-      return inspirations;
+      toast.error('Failed to load inspirations from database');
+      return [];
     }
     
     if (!data || data.length === 0) {
-      return inspirations;
+      return [];
     }
     
     return data.map(mapToFrontendInspiration);
   } catch (error) {
     console.error('Error fetching inspirations:', error);
-    toast.error('Error fetching inspirations. Please refresh.');
-    return inspirations;
+    toast.error('Error fetching inspirations');
+    return [];
   }
 };
 

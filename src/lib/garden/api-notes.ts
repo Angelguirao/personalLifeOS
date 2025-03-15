@@ -1,12 +1,8 @@
-
-import supabase from './client';
-import { MentalModel } from './types/mental-model-types';
+import supabase, { isSupabaseAvailable } from './client';
 import { GardenNote } from './types/legacy-types';
-import { convertMentalModelToNote } from './types/conversion-utils';
-import { tableExists } from './utils/table-utils';
-import { transformMentalModelFromSupabase } from './utils/model-transforms';
-import { toast } from 'sonner';
 import { getMentalModels } from './api-mental-models';
+import { convertMentalModelToNote } from './types/conversion-utils';
+import { toast } from 'sonner';
 
 // Update this function to get mental models and convert them to garden notes for compatibility
 export const getNotes = async (): Promise<GardenNote[]> => {
