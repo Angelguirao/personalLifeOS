@@ -83,7 +83,7 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
           </div>
         </div>
         
-        {/* Use our own state to control the dialog */}
+        {/* Dialog component with proper state management */}
         <NoteDialog 
           note={note} 
           isOpen={isDialogOpen} 

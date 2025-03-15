@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { Link2, ExternalLink, Sprout } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Link2, ExternalLink, Sprout, X } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '../ui/dialog';
 import { GardenNote } from '../../lib/garden/types/legacy-types';
+import { Button } from '../ui/button';
 
 interface NoteDialogProps {
   note: GardenNote;
@@ -26,7 +27,12 @@ const NoteDialog = ({ note, isOpen, onOpenChange }: NoteDialogProps) => {
       <DialogContent className="max-w-3xl overflow-y-auto max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="font-serif text-xl font-semibold">{note.title}</DialogTitle>
+          <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </DialogClose>
         </DialogHeader>
+        
         <div className="mb-3 flex items-center text-xs text-muted-foreground">
           <div className="flex items-center">
             <Sprout size={16} className={getStageColor(note.stage)} />
@@ -67,6 +73,16 @@ const NoteDialog = ({ note, isOpen, onOpenChange }: NoteDialogProps) => {
               ))}
             </div>
           )}
+        </div>
+        
+        <div className="flex justify-center mt-6">
+          <Button 
+            variant="outline" 
+            onClick={() => onOpenChange(false)}
+            className="gap-2"
+          >
+            Close
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
