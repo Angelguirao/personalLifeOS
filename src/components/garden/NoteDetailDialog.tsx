@@ -29,6 +29,11 @@ const NoteDetailDialog = ({ note, isOpen, onOpenChange }: NoteDetailDialogProps)
      note.connections.includes("book") ||
      note.fullContent.match(/['"].*['"]/) !== null);
 
+  // Check if content sections are empty
+  const hasSubtitle = note.subtitle && note.subtitle.trim() !== '';
+  const hasFullContent = note.fullContent && note.fullContent.trim() !== '';
+  const hasConnections = note.connections && note.connections.length > 0;
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl overflow-y-auto max-h-[90vh]">
@@ -53,18 +58,22 @@ const NoteDetailDialog = ({ note, isOpen, onOpenChange }: NoteDetailDialogProps)
         
         <div className="mt-4 space-y-4">
           {/* Show subtitle if available */}
-          {note.subtitle && (
+          {hasSubtitle && (
             <p className="text-muted-foreground italic">
               {note.subtitle}
             </p>
           )}
           
-          <div className="prose prose-slate dark:prose-invert max-w-none">
-            <p>
-              {note.fullContent}
-            </p>
-          </div>
+          {/* Show content if available */}
+          {hasFullContent && (
+            <div className="prose prose-slate dark:prose-invert max-w-none">
+              <p>
+                {note.fullContent}
+              </p>
+            </div>
+          )}
           
+          {/* Show book reference if detected */}
           {hasBookReference && (
             <div className="mt-4 pt-2 border-t border-border">
               <div className="flex items-center text-sm text-muted-foreground">
@@ -74,7 +83,8 @@ const NoteDetailDialog = ({ note, isOpen, onOpenChange }: NoteDetailDialogProps)
             </div>
           )}
           
-          {note.connections && note.connections.length > 0 && (
+          {/* Show connections if available */}
+          {hasConnections && (
             <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
               <span className="text-xs text-muted-foreground mr-2">Connected concepts:</span>
               {note.connections.map((tag) => (

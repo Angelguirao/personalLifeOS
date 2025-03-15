@@ -8,6 +8,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from '@/components/ui/form';
 import { 
   Select,
@@ -18,10 +19,11 @@ import {
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '@/components/ui/separator';
-import { X, Plus } from 'lucide-react';
+import { X, Plus, InfoIcon } from 'lucide-react';
 import { MentalModelFormValues } from './types';
 import { RelationshipType } from '@/lib/garden/types/connection-types';
 import { getMentalModels } from '@/lib/garden/api';
+import { getRelationshipDescription, getStrengthDescription } from '../relationshipUtils';
 
 interface ConnectionsTabProps {
   control: Control<MentalModelFormValues>;
@@ -92,6 +94,17 @@ export const ConnectionsTab = ({ control, modelId }: ConnectionsTabProps) => {
       <p className="text-sm text-muted-foreground mb-4">
         Connect this model to other models in your garden to build a network of knowledge
       </p>
+      
+      <div className="p-4 bg-muted/30 rounded-md mb-6">
+        <h4 className="text-sm font-medium flex items-center gap-2 mb-2">
+          <InfoIcon size={16} className="text-blue-500" />
+          Understanding Relationships
+        </h4>
+        <p className="text-sm text-muted-foreground">
+          Connections between models create a meaningful network of ideas. Choose the relationship type that best 
+          describes how this model relates to others. The strength value indicates how strong the connection is.
+        </p>
+      </div>
       
       {isLoading ? (
         <p>Loading available models...</p>
@@ -170,6 +183,11 @@ export const ConnectionsTab = ({ control, modelId }: ConnectionsTabProps) => {
                           </SelectContent>
                         </Select>
                       </FormControl>
+                      {field.value && (
+                        <FormDescription>
+                          {getRelationshipDescription(field.value as RelationshipType)}
+                        </FormDescription>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -192,6 +210,9 @@ export const ConnectionsTab = ({ control, modelId }: ConnectionsTabProps) => {
                           onValueChange={(vals) => field.onChange(vals[0])}
                         />
                       </FormControl>
+                      <FormDescription>
+                        {getStrengthDescription(field.value)}
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

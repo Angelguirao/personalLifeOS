@@ -32,8 +32,7 @@ const NoteCard = ({ note, index, onRefresh }: NoteCardProps) => {
   // Extract first sentence for a concise description
   const firstSentence = note.summary.split('.')[0] + '.';
   
-  const handleOpenDialog = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleOpenDialog = () => {
     setIsDialogOpen(true);
   };
   
@@ -45,7 +44,8 @@ const NoteCard = ({ note, index, onRefresh }: NoteCardProps) => {
   return (
     <BlurEffect className={`animation-delay-${(index + 1) * 100}`}>
       <article 
-        className="glass p-6 h-full transition-transform hover:-translate-y-1 flex flex-col"
+        className="glass p-6 h-full transition-transform hover:-translate-y-1 flex flex-col cursor-pointer"
+        onClick={handleOpenDialog}
       >
         <div className="mb-3 flex items-center text-xs text-muted-foreground">
           <div className="flex items-center">
@@ -84,7 +84,7 @@ const NoteCard = ({ note, index, onRefresh }: NoteCardProps) => {
             <Button 
               variant="ghost" 
               className="text-primary hover:text-primary/90 gap-1"
-              onClick={handleOpenDialog}
+              onClick={(e) => e.stopPropagation()}
             >
               Read more
               <ChevronRight size={16} />

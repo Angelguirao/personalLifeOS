@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   ReactFlow, 
   Background, 
@@ -21,7 +21,7 @@ import { MentalModel } from '../../lib/garden/types';
 import NoteNode from './NoteNode';
 import NoteDetailDialog from './NoteDetailDialog';
 import LegendPanel from './LegendPanel';
-import { getRelationshipColor } from './relationshipUtils';
+import { getRelationshipColor, getRelationshipDescription } from './relationshipUtils';
 import { toast } from 'sonner';
 
 interface GraphViewProps {
@@ -114,7 +114,7 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
     });
   };
   
-  // Create initial edges - updated to handle UUID strings
+  // Create initial edges - updated to handle UUID strings and with improved styling
   const createInitialEdges = (): Edge[] => {
     if (!connections || connections.length === 0) {
       console.warn('No connections available to create edges');
@@ -176,24 +176,46 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
         // Get color based on relationship type
         const edgeColor = getRelationshipColor(connection.relationship as RelationshipType);
         
+        // Get relationship description
+        const relationshipDesc = getRelationshipDescription(connection.relationship as RelationshipType);
+        
         console.log(`Creating edge from ${sourceNode.id} to ${targetNode.id} with relationship ${connection.relationship}`);
         
         return {
           id: `edge-${connection.id}`, // Ensure unique edge IDs
           source: sourceNode.id.toString(),
           target: targetNode.id.toString(),
-          type: 'smoothstep',
-          animated: true,
+          type: 'default', // Use default instead of smoothstep for cleaner appearance
+          animated: strengthValue > 7, // Only animate strong connections
           style: { 
             stroke: edgeColor, 
-            strokeWidth: Math.max(1, strengthValue * 3)
+            strokeWidth: Math.max(1, strengthValue/3),
+            opacity: 0.8,
           },
           label: connection.relationship,
-          labelStyle: { fill: '#64748b', fontFamily: 'sans-serif', fontSize: 12, fontWeight: 500 },
-          labelBgStyle: { fill: 'rgba(255, 255, 255, 0.75)', rx: 4, padding: 2 },
+          data: {
+            description: relationshipDesc,
+            strength: strengthValue
+          },
+          labelStyle: { 
+            fill: '#64748b', 
+            fontFamily: 'sans-serif', 
+            fontSize: 10, 
+            fontWeight: 500,
+            letterSpacing: '0.02em'
+          },
+          labelBgStyle: { 
+            fill: 'rgba(255, 255, 255, 0.95)', 
+            rx: 4, 
+            padding: 4,
+            fillOpacity: 0.8
+          },
+          labelShowBg: true,
           markerEnd: {
             type: MarkerType.ArrowClosed,
             color: edgeColor,
+            width: 15,
+            height: 15,
           },
         };
       })
@@ -245,17 +267,20 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
         onNodeClick={onNodeClick}
         nodeTypes={nodeTypes}
         fitView
-        fitViewOptions={{ padding: 0.3 }} 
+        fitViewOptions={{ padding: 0.5 }} 
         minZoom={0.1}
         maxZoom={4}
         attributionPosition="bottom-right"
-        connectionLineType={ConnectionLineType.SmoothStep}
+        connectionLineType={ConnectionLineType.Straight}
         defaultEdgeOptions={{
-          type: 'smoothstep',
-          animated: true
+          type: 'default',
+          style: { 
+            strokeWidth: 1.5,
+            opacity: 0.8
+          }
         }}
       >
-        <Background color="#94a3b8" gap={16} />
+        <Background color="#94a3b8" gap={20} variant="dots" />
         <Controls />
         <MiniMap 
           nodeColor={(node) => {
@@ -267,7 +292,11 @@ const GraphView = ({ nodes, connections, models }: GraphViewProps) => {
               default: return '#94a3b8';
             }
           }}
-          maskColor="#0f172a20"
+          maskColor="#0f172a10"
+          style={{
+            borderRadius: '8px',
+            border: '1px solid rgba(0,0,0,0.05)'
+          }}
         />
         <LegendPanel />
       </ReactFlow>

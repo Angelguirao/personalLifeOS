@@ -19,3 +19,41 @@ export const getRelationshipColor = (relationship: RelationshipType): string => 
     default: return '#94a3b8'; // default slate
   }
 };
+
+// Add descriptions for each relationship type
+export const getRelationshipDescription = (relationship: RelationshipType): string => {
+  switch (relationship) {
+    case 'related':
+      return 'General connection between concepts';
+    case 'supports':
+      return 'Provides evidence or reasoning that strengthens the other model';
+    case 'extends':
+      return 'Builds upon and expands the other model';
+    case 'contradicts':
+      return 'Challenges or opposes the other model';
+    case 'example':
+      return 'Provides a concrete instance of the other model';
+    case 'question':
+    case 'questions':
+      return 'Poses inquiries about the other model';
+    case 'implementation':
+      return 'Practical application of the other model';
+    case 'inspires':
+      return 'Creatively influenced by the other model';
+    case 'builds_on':
+      return 'Develops further based on the other model';
+    case 'contrasts':
+      return 'Shows differences compared to the other model';
+    case 'references':
+      return 'Cites or mentions the other model';
+    default:
+      return 'Connected to';
+  }
+};
+
+// Get relationship strength description
+export const getStrengthDescription = (strength: number): string => {
+  if (strength >= 8) return 'Strong connection';
+  if (strength >= 5) return 'Moderate connection';
+  return 'Weak connection';
+};

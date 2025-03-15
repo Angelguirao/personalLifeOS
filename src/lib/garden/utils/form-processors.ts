@@ -1,3 +1,4 @@
+
 import { MentalModelFormValues } from "@/components/garden/forms/types";
 import { MentalModel } from "../types";
 
@@ -43,13 +44,13 @@ export const processFormDataForSubmission = (formData: MentalModelFormValues): O
   // Combine all tags
   const allTags = [...tagsArray, ...domainTags, ...frameworkTags, ...applicationTags];
   
-  // Prepare LATCH attributes
+  // Prepare LATCH attributes - with hierarchyLevel defaulting to 1
   const latchAttributes = {
     location: formData.latchLocation || '',
     alphabeticalIndex: formData.latchAlphabetical || '',
     time: formData.latchTime || '',
     category: formData.latchCategory || '',
-    hierarchyLevel: parseInt(formData.latchHierarchyLevel || '3')
+    hierarchyLevel: parseInt(formData.latchHierarchyLevel || '1')
   };
   
   // Prepare DSRP structure
@@ -194,7 +195,7 @@ export const processModelForForm = (model: MentalModel): MentalModelFormValues =
     latchAlphabetical: model.latchAttributes?.alphabeticalIndex || '',
     latchTime: model.latchAttributes?.time || '',
     latchCategory: model.latchAttributes?.category || '',
-    latchHierarchyLevel: model.latchAttributes?.hierarchyLevel?.toString() || '3',
+    latchHierarchyLevel: model.latchAttributes?.hierarchyLevel?.toString() || '1',
     
     // DSRP Structure
     dsrpDistinctions: model.dsrpStructure?.distinctions || '',
