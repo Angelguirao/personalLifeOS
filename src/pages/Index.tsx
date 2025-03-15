@@ -8,6 +8,7 @@ import EntrepreneurshipPreview from '../components/home/EntrepreneurshipPreview'
 import ProjectsPreview from '../components/home/ProjectsPreview';
 import GardenPreview from '../components/home/GardenPreview';
 import AboutPreview from '../components/home/AboutPreview';
+import ConsciousnessOS from '../components/private/ConsciousnessOS';
 import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
@@ -23,13 +24,18 @@ const Index = () => {
       <Navbar />
       <main className="overflow-hidden">
         <Hero />
-        <div id="philosophy-preview" className="bg-gradient-to-br from-background to-purple-50/10">
-          <PhilosophyPreview />
-        </div>
         
-        {/* Only show these sections for public (non-authenticated) users */}
-        {!isAuthenticated && (
+        {isAuthenticated ? (
+          // Display Consciousness OS for authenticated users
+          <div id="consciousness-os" className="bg-gradient-to-br from-background to-purple-50/10">
+            <ConsciousnessOS />
+          </div>
+        ) : (
+          // Display public sections for non-authenticated users
           <>
+            <div id="philosophy-preview" className="bg-gradient-to-br from-background to-purple-50/10">
+              <PhilosophyPreview />
+            </div>
             <EntrepreneurshipPreview />
             <div className="bg-gradient-to-br from-background to-amber-50/10">
               <ProjectsPreview />
