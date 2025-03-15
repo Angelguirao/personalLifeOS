@@ -1,9 +1,10 @@
 
-import React from 'react';
-import { Link2, Sprout, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link2, Sprout, ExternalLink, ChevronRight } from 'lucide-react';
 import BlurEffect from '../ui/BlurEffect';
 import { GardenNote } from '../../lib/garden/types/legacy-types';
 import NoteDialog from './NoteDialog';
+import { Button } from '../ui/button';
 
 interface NoteCardProps {
   note: GardenNote;
@@ -25,12 +26,21 @@ const getStageIcon = (stage: string) => {
 };
 
 const NoteCard = ({ note, index }: NoteCardProps) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
   // Extract first sentence for a concise description
   const firstSentence = note.summary.split('.')[0] + '.';
   
+  const handleCardClick = () => {
+    setIsDialogOpen(true);
+  };
+  
   return (
     <BlurEffect className={`animation-delay-${(index + 1) * 100}`}>
-      <article className="glass p-6 h-full transition-transform hover:-translate-y-1">
+      <article 
+        className="glass p-6 h-full transition-transform hover:-translate-y-1 cursor-pointer flex flex-col"
+        onClick={handleCardClick}
+      >
         <div className="mb-3 flex items-center text-xs text-muted-foreground">
           <div className="flex items-center">
             {getStageIcon(note.stage)}
@@ -44,7 +54,7 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
           {note.title}
         </h2>
         
-        <p className="text-muted-foreground mb-4">
+        <p className="text-muted-foreground mb-6 flex-grow">
           {firstSentence}
         </p>
         
@@ -58,8 +68,27 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
             ))}
           </div>
           
-          <NoteDialog note={note} />
+          <div className="flex justify-center mt-4">
+            <Button 
+              variant="ghost" 
+              className="text-primary hover:text-primary/90 gap-1"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent card click when button is clicked
+                setIsDialogOpen(true);
+              }}
+            >
+              Read more
+              <ChevronRight size={16} />
+            </Button>
+          </div>
         </div>
+        
+        {/* Use our own state to control the dialog */}
+        <NoteDialog 
+          note={note} 
+          isOpen={isDialogOpen} 
+          onOpenChange={setIsDialogOpen} 
+        />
       </article>
     </BlurEffect>
   );

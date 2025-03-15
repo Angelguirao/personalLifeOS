@@ -11,6 +11,8 @@ import { MentalModel, Connection } from '@/lib/garden/types';
 import { DataModelAdapter } from '@/lib/garden/adapters';
 import RevealText from '@/components/ui/RevealText';
 import BlurEffect from '@/components/ui/BlurEffect';
+import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 // Views available in the garden
 type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart';
@@ -80,6 +82,11 @@ const Garden = () => {
       <Navbar />
       <main className="pt-28 pb-16">
         <div className="container-narrow">
+          <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors">
+            <ArrowLeft size={16} className="mr-1.5" />
+            Back to home
+          </Link>
+          
           <div className="space-y-4 mb-16 relative">
             <h1 className="heading-lg">
               <RevealText>Digital Garden</RevealText>

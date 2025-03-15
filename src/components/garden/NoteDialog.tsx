@@ -1,14 +1,16 @@
 
 import React from 'react';
 import { Link2, ExternalLink, Sprout } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { GardenNote } from '../../lib/garden/types/legacy-types';
 
 interface NoteDialogProps {
   note: GardenNote;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-const NoteDialog = ({ note }: NoteDialogProps) => {
+const NoteDialog = ({ note, isOpen, onOpenChange }: NoteDialogProps) => {
   const getStageColor = (stage: string) => {
     switch(stage) {
       case "seedling": return "text-green-400";
@@ -20,13 +22,7 @@ const NoteDialog = ({ note }: NoteDialogProps) => {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <button className="flex items-center text-sm text-primary hover:underline group">
-          Read more
-          <ExternalLink size={14} className="ml-1" />
-        </button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl overflow-y-auto max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="font-serif text-xl font-semibold">{note.title}</DialogTitle>
