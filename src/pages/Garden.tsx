@@ -16,6 +16,7 @@ import { ArrowLeft, Search, Database } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import ModelManagement from '@/components/garden/ModelManagement';
 import { Button } from '@/components/ui/button';
+import ModelFormDialog from '@/components/garden/ModelFormDialog';
 
 // Views available in the garden
 type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart';
@@ -27,6 +28,7 @@ const Garden = () => {
   const [activeView, setActiveView] = useState<ViewMode>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedModel, setSelectedModel] = useState<MentalModel | undefined>(undefined);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   // Function to check database connection
   const checkDatabase = async () => {
@@ -146,7 +148,7 @@ const Garden = () => {
                 <p className="text-muted-foreground text-center mb-6">
                   Your digital garden is empty. Start by creating your first mental model.
                 </p>
-                <Button onClick={() => document.getElementById('add-model-button')?.click()}>
+                <Button onClick={() => setIsCreateDialogOpen(true)}>
                   Create Your First Mental Model
                 </Button>
               </div>
@@ -193,6 +195,13 @@ const Garden = () => {
         </div>
       </main>
       <Footer />
+      
+      {/* Create Dialog - Added at the root level */}
+      <ModelFormDialog
+        isOpen={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+        onSuccess={fetchData}
+      />
     </>
   );
 };
