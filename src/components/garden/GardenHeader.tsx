@@ -13,12 +13,12 @@ const GardenHeader = () => {
         Back to home
       </Link>
       
-      <div className="space-y-4 mb-8 relative">
+      <div className="space-y-4 mb-10 relative text-center">
         <h1 className="heading-lg">
           <RevealText>Digital Garden</RevealText>
         </h1>
         <BlurEffect className="animation-delay-200">
-          <p className="body-lg text-muted-foreground max-w-2xl">
+          <p className="body-lg text-muted-foreground mx-auto max-w-2xl">
             A space for growing and cultivating ideas. These notes connect with one another to form a network of related concepts.
           </p>
         </BlurEffect>

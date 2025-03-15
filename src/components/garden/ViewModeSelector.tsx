@@ -1,10 +1,10 @@
 
 import React from 'react';
-import { Layers, Network, List, Table2, MessageCircle, GitBranch, Sprout, BookText, BookOpen, Book, HelpCircle } from 'lucide-react';
+import { Layers, Network, List, Table2, MessageCircle, GitBranch, Sprout, BookText, BookOpen, Book, HelpCircle, Brain, Activity, Layout } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 
 // The top-level hierarchical perspective
-export type HierarchicalPerspective = 'questions' | 'mentalModels';
+export type HierarchicalPerspective = 'mentalModels' | 'questions' | 'experiences' | 'frameworks' | 'systems';
 
 // The view mode within each perspective
 export type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart' | 'hierarchy';
@@ -23,17 +23,17 @@ const ViewModeSelector = ({
   onViewChange 
 }: ViewModeSelectorProps) => {
   return (
-    <div className="space-y-4 w-full">
+    <div className="space-y-6 w-full">
       {/* Perspective Selection */}
       <div className="flex flex-col items-center w-full">
-        <div className="text-sm text-muted-foreground mb-2">
+        <div className="text-sm text-muted-foreground mb-3">
           From which hierarchical perspective would you like to explore this garden?
         </div>
         <ToggleGroup 
           type="single" 
           value={activePerspective} 
           onValueChange={(value) => value && onPerspectiveChange(value as HierarchicalPerspective)} 
-          className="flex flex-wrap justify-center"
+          className="flex flex-wrap justify-center gap-2"
         >
           <ToggleGroupItem 
             value="mentalModels" 
@@ -41,7 +41,7 @@ const ViewModeSelector = ({
             size="sm" 
             className={`flex-1 sm:flex-initial ${activePerspective === 'mentalModels' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
           >
-            <Book size={16} className="mr-2" />
+            <Brain size={16} className="mr-2" />
             Mental Models
           </ToggleGroupItem>
           
@@ -54,17 +54,53 @@ const ViewModeSelector = ({
             <HelpCircle size={16} className="mr-2" />
             Questions
           </ToggleGroupItem>
+
+          <ToggleGroupItem 
+            value="experiences" 
+            variant="outline" 
+            size="sm" 
+            className={`flex-1 sm:flex-initial ${activePerspective === 'experiences' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+            disabled={true}
+          >
+            <Activity size={16} className="mr-2" />
+            Experiences
+          </ToggleGroupItem>
+
+          <ToggleGroupItem 
+            value="frameworks" 
+            variant="outline" 
+            size="sm" 
+            className={`flex-1 sm:flex-initial ${activePerspective === 'frameworks' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+            disabled={true}
+          >
+            <Layout size={16} className="mr-2" />
+            Frameworks
+          </ToggleGroupItem>
+
+          <ToggleGroupItem 
+            value="systems" 
+            variant="outline" 
+            size="sm" 
+            className={`flex-1 sm:flex-initial ${activePerspective === 'systems' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+            disabled={true}
+          >
+            <Layers size={16} className="mr-2" />
+            Systems
+          </ToggleGroupItem>
         </ToggleGroup>
       </div>
 
-      {/* View Mode Selection (only show if Mental Models is selected) */}
+      {/* View Mode Selection (for Mental Models, more could be added for other perspectives) */}
       {activePerspective === 'mentalModels' && (
-        <div className="flex justify-center w-full">
+        <div className="flex flex-col items-center w-full">
+          <div className="text-sm text-muted-foreground mb-3">
+            Choose a view mode for Mental Models
+          </div>
           <ToggleGroup 
             type="single" 
             value={activeView} 
             onValueChange={(value) => value && onViewChange(value as ViewMode)} 
-            className="flex flex-wrap justify-center"
+            className="flex flex-wrap justify-center gap-2"
           >
             <ToggleGroupItem 
               value="hierarchy" 
@@ -116,6 +152,31 @@ const ViewModeSelector = ({
             >
               <Table2 size={16} className="mr-2" />
               Table
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+      )}
+
+      {/* Questions perspective only has QA view for now */}
+      {activePerspective === 'questions' && (
+        <div className="flex flex-col items-center w-full">
+          <div className="text-sm text-muted-foreground mb-3">
+            Choose a view mode for Questions
+          </div>
+          <ToggleGroup 
+            type="single" 
+            value="qa" 
+            onValueChange={(value) => value && onViewChange(value as ViewMode)} 
+            className="flex flex-wrap justify-center gap-2"
+          >
+            <ToggleGroupItem 
+              value="qa" 
+              variant="outline" 
+              size="sm" 
+              className="flex-1 sm:flex-initial bg-black text-white hover:bg-black/90"
+            >
+              <MessageCircle size={16} className="mr-2" />
+              Q&A
             </ToggleGroupItem>
           </ToggleGroup>
         </div>

@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ListView from '@/components/garden/ListView';
 import GraphView from '@/components/garden/GraphView';
-import ViewModeSelector, { HierarchicalPerspective } from '@/components/garden/ViewModeSelector';
+import ViewModeSelector, { HierarchicalPerspective, ViewMode } from '@/components/garden/ViewModeSelector';
 import { QuestionsView } from '@/components/garden/questions/QuestionsView';
 import HierarchyView from '@/components/garden/HierarchyView';
 import { DataModelAdapter } from '@/lib/garden/adapters';
@@ -19,9 +18,6 @@ import { useGardenData } from '@/hooks/useGardenData';
 import { createQuestion, getQuestions } from '@/lib/garden/api';
 import { Question } from '@/lib/garden/types';
 import { toast } from 'sonner';
-
-// Views available in the garden
-type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart' | 'hierarchy';
 
 const Garden = () => {
   // State for hierarchical perspective and view mode
@@ -73,10 +69,8 @@ const Garden = () => {
     
     // Set appropriate default view for each perspective
     if (perspective === 'questions') {
-      // Questions perspective only has one view
       setActiveView('qa');
-    } else if (perspective === 'mentalModels' && activeView === 'qa') {
-      // If switching to mental models from questions, set default view
+    } else if (perspective === 'mentalModels') {
       setActiveView('hierarchy');
     }
   };
@@ -99,6 +93,9 @@ const Garden = () => {
     fetchQuestions();
   }, [isAuthenticated]);
 
+  // Determine if search should be shown
+  const showSearch = activePerspective === 'mentalModels';
+
   return (
     <>
       <Navbar />
@@ -106,39 +103,44 @@ const Garden = () => {
         <div className="container-narrow">
           <GardenHeader />
           
-          <div className="flex flex-col space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between gap-4">
+          <div className="flex flex-col space-y-8">
+            {/* Perspective and View Selection */}
+            <div className="border-b pb-6">
               <ViewModeSelector 
                 activePerspective={activePerspective}
                 activeView={activeView} 
                 onPerspectiveChange={handlePerspectiveChange}
                 onViewChange={setActiveView} 
               />
-              
-              <div className="flex space-x-2">
-                <GardenSearch searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-              </div>
             </div>
             
-            {/* Only show model management when in Mental Models perspective */}
-            {activePerspective === 'mentalModels' && (
-              <div className="flex justify-between items-center">
-                <ModelManagement onRefresh={fetchData} />
-                {isAuthenticated && (
-                  <Button variant="outline" size="sm" onClick={checkDatabase} className="flex items-center gap-2">
-                    <Database size={16} />
-                    <span>Check Database</span>
-                  </Button>
-                )}
-              </div>
-            )}
+            {/* Action Area: Search and Controls */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+              {showSearch && (
+                <GardenSearch searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+              )}
+              
+              {/* Only show model management when in Mental Models perspective */}
+              {activePerspective === 'mentalModels' && (
+                <div className="flex gap-2">
+                  <ModelManagement onRefresh={fetchData} />
+                  {isAuthenticated && (
+                    <Button variant="outline" size="sm" onClick={checkDatabase} className="flex items-center gap-2">
+                      <Database size={16} />
+                      <span className="hidden md:inline">Check Database</span>
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
             
+            {/* Content Area */}
             {isLoading ? (
               <div className="h-64 flex items-center justify-center">
                 <div className="animate-spin h-8 w-8 border-t-2 border-primary rounded-full"></div>
               </div>
             ) : (
-              <>
+              <div className="mt-6">
                 {/* Questions Perspective */}
                 {activePerspective === 'questions' && (
                   <QuestionsView 
@@ -196,9 +198,37 @@ const Garden = () => {
                         </div>
                       </div>
                     )}
+
+                    {/* Disabled Views - can be implemented later */}
+                    {(activeView === 'flowchart' || activeView === 'table') && (
+                      <div className="h-[400px] rounded-xl border shadow-sm overflow-hidden flex items-center justify-center">
+                        <div className="text-center p-6 max-w-md">
+                          <h3 className="text-lg font-medium mb-2">
+                            {activeView === 'flowchart' ? 'Flowchart View' : 'Table View'} Coming Soon
+                          </h3>
+                          <p className="text-muted-foreground">
+                            This view is still under development. Please check back later.
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </>
                 )}
-              </>
+
+                {/* Other perspectives - placeholder for future implementation */}
+                {['experiences', 'frameworks', 'systems'].includes(activePerspective) && (
+                  <div className="h-[400px] rounded-xl border shadow-sm overflow-hidden flex items-center justify-center">
+                    <div className="text-center p-6 max-w-md">
+                      <h3 className="text-lg font-medium mb-2">
+                        {activePerspective.charAt(0).toUpperCase() + activePerspective.slice(1)} View Coming Soon
+                      </h3>
+                      <p className="text-muted-foreground">
+                        This perspective is still under development. Please check back later.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>
