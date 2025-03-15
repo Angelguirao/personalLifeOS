@@ -13,8 +13,9 @@ import { mentalModelSchema } from './forms/schema';
 import { BasicInfoTab } from './forms/BasicInfoTab';
 import { MetadataTab } from './forms/MetadataTab';
 import { AnalysisTab } from './forms/AnalysisTab';
-import { AdditionalTab } from './forms/AdditionalTab';
-import { OriginTab } from './forms/OriginTab';
+import { QuestionsTab } from './forms/QuestionsTab';
+import { InspirationsTab } from './forms/InspirationsTab';
+import { VersioningTab } from './forms/VersioningTab';
 import { JsonTab } from './forms/JsonTab';
 import { ConnectionsTab } from './forms/ConnectionsTab';
 import { processModelForForm } from '@/lib/garden/utils/form-processors';
@@ -139,17 +140,18 @@ const MentalModelForm = ({ model, initialData, onSubmit, onCancel, isSubmitting 
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-7 mb-4">
+          <TabsList className="grid grid-cols-2 md:grid-cols-8 mb-4">
             <TabsTrigger value="basic">Basic</TabsTrigger>
             <TabsTrigger value="metadata">Metadata</TabsTrigger>
             <TabsTrigger value="analysis">Analysis</TabsTrigger>
-            <TabsTrigger value="origin">Origin</TabsTrigger>
-            <TabsTrigger value="additional">Additional</TabsTrigger>
             <TabsTrigger value="connections">Connections</TabsTrigger>
+            <TabsTrigger value="questions">Questions</TabsTrigger>
+            <TabsTrigger value="inspirations">Inspirations</TabsTrigger>
+            <TabsTrigger value="versioning">Versioning</TabsTrigger>
             <TabsTrigger value="json">JSON</TabsTrigger>
           </TabsList>
           
-          {/* Basic Information Tab */}
+          {/* Basic Information Tab (now includes Origin) */}
           <TabsContent value="basic" className="space-y-4">
             <BasicInfoTab control={form.control} />
           </TabsContent>
@@ -164,19 +166,24 @@ const MentalModelForm = ({ model, initialData, onSubmit, onCancel, isSubmitting 
             <AnalysisTab control={form.control} />
           </TabsContent>
           
-          {/* Origin Tab */}
-          <TabsContent value="origin" className="space-y-4">
-            <OriginTab control={form.control} />
-          </TabsContent>
-          
-          {/* Additional Tab */}
-          <TabsContent value="additional" className="space-y-4">
-            <AdditionalTab control={form.control} />
-          </TabsContent>
-          
           {/* Connections Tab */}
           <TabsContent value="connections" className="space-y-4">
             <ConnectionsTab control={form.control} modelId={model?.id} />
+          </TabsContent>
+          
+          {/* Questions Tab (formerly part of Additional) */}
+          <TabsContent value="questions" className="space-y-4">
+            <QuestionsTab control={form.control} />
+          </TabsContent>
+          
+          {/* Inspirations Tab (formerly part of Additional) */}
+          <TabsContent value="inspirations" className="space-y-4">
+            <InspirationsTab control={form.control} />
+          </TabsContent>
+          
+          {/* Versioning Tab (new, formerly part of Origin) */}
+          <TabsContent value="versioning" className="space-y-4">
+            <VersioningTab control={form.control} />
           </TabsContent>
           
           {/* JSON Tab */}

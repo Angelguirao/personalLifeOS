@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import MentalModelForm, { MentalModelFormValues } from './MentalModelForm';
@@ -190,6 +191,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
               await deleteInspiration(existingBookInspiration.id);
               await createInspiration(bookInspiration);
             }
+            // If only other fields changed, update would go here
           } else {
             // Create new inspiration
             await createInspiration(bookInspiration);
