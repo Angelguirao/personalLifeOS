@@ -46,7 +46,6 @@ export const ConnectionsTab = ({ control, modelId }: ConnectionsTabProps) => {
       try {
         setIsLoading(true);
         const models = await getMentalModels();
-        console.log('Fetched models for connections:', models);
         
         // Filter out the current model if we have an ID
         const filteredModels = modelId
@@ -57,7 +56,6 @@ export const ConnectionsTab = ({ control, modelId }: ConnectionsTabProps) => {
           id: model.id,
           title: model.title
         })));
-        console.log('Available models for connections:', filteredModels);
       } catch (error) {
         console.error('Failed to load mental models:', error);
       } finally {
@@ -81,27 +79,12 @@ export const ConnectionsTab = ({ control, modelId }: ConnectionsTabProps) => {
 
   // Add a new connection
   const handleAddConnection = () => {
-    console.log('Add connection clicked');
-    console.log('Unconnected models:', unconnectedModels);
-    
     if (unconnectedModels.length > 0) {
-      // Add the first available unconnected model
       append({
         targetId: unconnectedModels[0].id,
         relationship: 'related' as RelationshipType,
         strength: 5
       });
-      console.log('Connection added');
-    } else if (availableModels.length > 0) {
-      // If all models are connected, use the first available model as fallback
-      append({
-        targetId: availableModels[0].id,
-        relationship: 'related' as RelationshipType,
-        strength: 5
-      });
-      console.log('Fallback connection added');
-    } else {
-      console.log('No models available to connect');
     }
   };
 
@@ -152,6 +135,7 @@ export const ConnectionsTab = ({ control, modelId }: ConnectionsTabProps) => {
                         <Select
                           value={field.value}
                           onValueChange={field.onChange}
+                          disabled={availableModels.length === 0}
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Select a model" />
@@ -241,6 +225,7 @@ export const ConnectionsTab = ({ control, modelId }: ConnectionsTabProps) => {
             type="button"
             variant="outline"
             onClick={handleAddConnection}
+            disabled={unconnectedModels.length === 0}
             className="w-full mt-4"
           >
             <Plus className="mr-2 h-4 w-4" /> Add Connection
