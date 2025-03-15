@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -5,6 +6,7 @@ import ListView from '@/components/garden/ListView';
 import GraphView from '@/components/garden/GraphView';
 import ViewModeSelector from '@/components/garden/ViewModeSelector';
 import { QuestionsView } from '@/components/garden/questions/QuestionsView';
+import HierarchyView from '@/components/garden/HierarchyView';
 import { DataModelAdapter } from '@/lib/garden/adapters';
 import { Input } from '@/components/ui/input';
 import ModelManagement from '@/components/garden/ModelManagement';
@@ -20,10 +22,10 @@ import { Question } from '@/lib/garden/types';
 import { toast } from 'sonner';
 
 // Views available in the garden
-type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart';
+type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart' | 'hierarchy';
 
 const Garden = () => {
-  const [activeView, setActiveView] = useState<ViewMode>('list');
+  const [activeView, setActiveView] = useState<ViewMode>('hierarchy'); // Set default to hierarchy
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -112,13 +114,21 @@ const Garden = () => {
               <div className="h-64 flex items-center justify-center">
                 <div className="animate-spin h-8 w-8 border-t-2 border-primary rounded-full"></div>
               </div>
-            ) : models.length === 0 && activeView !== 'qa' ? (
+            ) : models.length === 0 && activeView !== 'qa' && activeView !== 'hierarchy' ? (
               <EmptyGarden 
                 onCreateModel={() => setIsCreateDialogOpen(true)} 
                 isAuthenticated={isAuthenticated}
               />
             ) : (
               <>
+                {activeView === 'hierarchy' && (
+                  <HierarchyView 
+                    models={filteredModels}
+                    questions={questions}
+                    onSelectModel={handleModelSelect}
+                  />
+                )}
+
                 {activeView === 'list' && (
                   <ListView 
                     notes={filteredModels} 

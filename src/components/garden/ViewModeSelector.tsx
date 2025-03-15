@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { Sprout, Network, List, Table2, MessageCircle, GitBranch } from 'lucide-react';
+import { Sprout, Network, List, Table2, MessageCircle, GitBranch, Layers } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 
-export type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart';
+export type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart' | 'hierarchy';
 
 interface ViewModeSelectorProps {
   activeView: ViewMode;
@@ -19,6 +19,16 @@ const ViewModeSelector = ({ activeView, onViewChange }: ViewModeSelectorProps) =
         onValueChange={(value) => value && onViewChange(value as ViewMode)} 
         className="flex flex-wrap justify-center"
       >
+        <ToggleGroupItem 
+          value="hierarchy" 
+          variant="outline" 
+          size="sm" 
+          className={`flex-1 sm:flex-initial ${activeView === 'hierarchy' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+        >
+          <Layers size={16} className="mr-2" />
+          Hierarchy
+        </ToggleGroupItem>
+        
         <ToggleGroupItem 
           value="list" 
           variant="outline" 
