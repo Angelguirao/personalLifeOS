@@ -8,6 +8,7 @@ const ADMIN_EMAIL = 'angelguirao92@gmail.com';
 
 const NavbarAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAdminButton, setShowAdminButton] = useState(false);
 
   // Check authentication status on mount
   useEffect(() => {
@@ -33,6 +34,27 @@ const NavbarAuth = () => {
       return () => subscription.unsubscribe();
     }
   }, []);
+
+  // Add key combination listener (Alt+Shift+A)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Check for Alt+Shift+A key combination
+      if (e.altKey && e.shiftKey && e.key === 'A') {
+        setShowAdminButton(prevState => !prevState);
+        
+        if (!showAdminButton) {
+          // Only show the toast when enabling the button
+          toast({
+            title: "Admin Access",
+            description: "Admin login button is now visible",
+          });
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showAdminButton]);
 
   const handleAdminLogin = async () => {
     if (!supabase) {
@@ -92,6 +114,8 @@ const NavbarAuth = () => {
         title: "Success",
         description: "Signed out successfully",
       });
+      // Hide admin button on logout
+      setShowAdminButton(false);
     } catch (error) {
       console.error('Error signing out:', error);
       toast({
@@ -101,6 +125,11 @@ const NavbarAuth = () => {
       });
     }
   };
+
+  // Don't render anything if not authenticated and admin button is hidden
+  if (!isAuthenticated && !showAdminButton) {
+    return null;
+  }
 
   return (
     <>
@@ -114,7 +143,7 @@ const NavbarAuth = () => {
           <LogOut size={16} />
           <span className="hidden sm:inline">Sign Out</span>
         </button>
-      ) : (
+      ) : showAdminButton && (
         <button
           onClick={handleAdminLogin}
           aria-label="Admin Sign In"
