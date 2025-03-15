@@ -27,13 +27,15 @@ try {
       },
     });
     
-    // Test connection by making a simple query
-    supabase.from('mental_models').select('id').limit(1)
+    // Test connection by making a simple query to the distinctions schema
+    supabase.from('distinctions.distinctions').select('id').limit(1)
       .then(response => {
         if (response.error) {
           console.warn('Supabase connection test failed:', response.error.message);
           if (response.error.message.includes('permission denied')) {
             console.log('This appears to be a permissions issue. Check your RLS policies.');
+          } else if (response.error.message.includes('does not exist')) {
+            console.log('The table does not exist. Check that the schema and table are created correctly.');
           }
         } else {
           console.log('Supabase connection test successful!');

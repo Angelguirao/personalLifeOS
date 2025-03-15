@@ -1,3 +1,4 @@
+
 import supabase, { isSupabaseAvailable } from './client';
 import { Connection } from './types';
 import { tableExists } from './utils/table-utils';
@@ -10,7 +11,7 @@ const transformConnectionFromSupabase = (data: any): Connection => {
     sourceId: data.source_id,
     targetId: data.target_id,
     strength: data.strength / 10, // Convert 0-10 scale to 0-1
-    relationship: data.relationship
+    relationship: data.relationship_type_id // Map relationship type ID to name if needed
   };
 };
 
@@ -20,7 +21,7 @@ const transformConnectionToSupabase = (connection: Omit<Connection, 'id'>): any 
     source_id: connection.sourceId,
     target_id: connection.targetId,
     strength: Math.round(connection.strength * 10), // Convert 0-1 scale to 0-10
-    relationship: connection.relationship
+    relationship_type_id: connection.relationship
   };
 };
 
@@ -35,7 +36,7 @@ export const getConnections = async (): Promise<Connection[]> => {
   }
   
   try {
-    const connectionsTableExists = await tableExists('connections');
+    const connectionsTableExists = await tableExists('relationships.connections');
     if (!connectionsTableExists) {
       console.error('Connections table does not exist');
       toast.error('Database tables not properly configured');
@@ -44,7 +45,7 @@ export const getConnections = async (): Promise<Connection[]> => {
     
     console.log('Fetching connections from Supabase...');
     const { data, error } = await supabase
-      .from('connections')
+      .from('relationships.connections')
       .select('*');
     
     if (error) {
@@ -68,16 +69,19 @@ export const getConnections = async (): Promise<Connection[]> => {
   }
 };
 
+// The rest of the functions follow the same pattern - update table name to 'relationships.connections'
+// Only showing the modified sections
+
 // Create a new connection
 export const createConnection = async (connection: Omit<Connection, 'id'>): Promise<Connection> => {
-  if (!isSupabaseAvailable() || !(await tableExists('connections'))) {
-    throw new Error('Cannot create connection: Supabase connection or table not available');
+  if (!isSupabaseAvailable()) {
+    throw new Error('Cannot create connection: Supabase connection not available');
   }
   
   const supabaseConnection = transformConnectionToSupabase(connection);
   
   const { data, error } = await supabase
-    .from('connections')
+    .from('relationships.connections')
     .insert(supabaseConnection)
     .select()
     .single();
@@ -88,12 +92,12 @@ export const createConnection = async (connection: Omit<Connection, 'id'>): Prom
 
 // Get connections for a specific note
 export const getNoteConnections = async (noteId: string): Promise<Connection[]> => {
-  if (!isSupabaseAvailable() || !(await tableExists('connections'))) {
+  if (!isSupabaseAvailable()) {
     return [];
   }
   
   const { data, error } = await supabase
-    .from('connections')
+    .from('relationships.connections')
     .select('*')
     .or(`source_id.eq.${noteId},target_id.eq.${noteId}`);
   
@@ -107,8 +111,8 @@ export const getNoteConnections = async (noteId: string): Promise<Connection[]> 
 
 // Update an existing connection
 export const updateConnection = async (id: string, updates: Partial<Omit<Connection, 'id'>>): Promise<Connection> => {
-  if (!isSupabaseAvailable() || !(await tableExists('connections'))) {
-    throw new Error('Cannot update connection: Supabase connection or table not available');
+  if (!isSupabaseAvailable()) {
+    throw new Error('Cannot update connection: Supabase connection not available');
   }
   
   const supabaseUpdates: any = {};
@@ -116,10 +120,10 @@ export const updateConnection = async (id: string, updates: Partial<Omit<Connect
   if (updates.sourceId !== undefined) supabaseUpdates.source_id = updates.sourceId;
   if (updates.targetId !== undefined) supabaseUpdates.target_id = updates.targetId;
   if (updates.strength !== undefined) supabaseUpdates.strength = Math.round(updates.strength * 10);
-  if (updates.relationship !== undefined) supabaseUpdates.relationship = updates.relationship;
+  if (updates.relationship !== undefined) supabaseUpdates.relationship_type_id = updates.relationship;
   
   const { data, error } = await supabase
-    .from('connections')
+    .from('relationships.connections')
     .update(supabaseUpdates)
     .eq('id', id)
     .select()
@@ -131,12 +135,12 @@ export const updateConnection = async (id: string, updates: Partial<Omit<Connect
 
 // Delete a connection
 export const deleteConnection = async (id: string): Promise<void> => {
-  if (!isSupabaseAvailable() || !(await tableExists('connections'))) {
-    throw new Error('Cannot delete connection: Supabase connection or table not available');
+  if (!isSupabaseAvailable()) {
+    throw new Error('Cannot delete connection: Supabase connection not available');
   }
   
   const { error } = await supabase
-    .from('connections')
+    .from('relationships.connections')
     .delete()
     .eq('id', id);
   

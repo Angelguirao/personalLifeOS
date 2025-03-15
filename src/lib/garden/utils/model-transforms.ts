@@ -1,63 +1,66 @@
 
-import { MentalModel } from '../types/mental-model-types';
+import { MentalModel } from '../types';
 
-// Helper function to transform mental model from Supabase to our interface
+// Transform a row from the Supabase database to our MentalModel type
 export const transformMentalModelFromSupabase = (data: any): MentalModel => {
   return {
     id: data.id,
     title: data.title || '',
     subtitle: data.subtitle || '',
+    summary: data.summary || '',
+    fullContent: data.content || '', // Map from content to fullContent
     developmentStage: data.development_stage || 'seedling',
     confidenceLevel: data.confidence_level || 'working',
-    summary: data.summary || '',
-    fullContent: data.full_content || '',
-    imageUrl: data.image_url,
+    imageUrl: data.image_url || '',
     tags: data.tags || [],
-    timestamps: data.timestamps || {
-      created: new Date().toISOString(),
-      modified: new Date().toISOString()
-    },
-    originMoment: data.origin_moment,
-    applications: data.applications,
-    consequences: data.consequences,
-    openQuestions: data.open_questions || [],
-    latchAttributes: data.latch_attributes || { hierarchyLevel: 3 },
-    dsrpStructure: data.dsrp_structure,
-    socraticAttributes: data.socratic_attributes,
-    hierarchicalView: data.hierarchical_view,
     visibility: data.visibility || 'public',
+    createdAt: data.created_at ? new Date(data.created_at) : new Date(),
+    updatedAt: data.updated_at ? new Date(data.updated_at) : new Date(),
+    
+    // Optional complex fields
+    timestamps: data.timestamps || null,
+    originMoment: data.origin_moment || null,
+    applications: data.applications || null,
+    consequences: data.consequences || null,
+    openQuestions: data.open_questions || [],
+    latchAttributes: data.latch_attributes || null,
+    dsrpStructure: data.dsrp_structure || null,
+    socraticAttributes: data.socratic_attributes || null,
+    hierarchicalView: data.hierarchical_view || null,
+    
+    // Legacy fields (for compatibility)
+    stage: data.development_stage || 'seedling',
+    lastUpdated: data.updated_at ? new Date(data.updated_at) : new Date(),
     questionsLinked: data.questions_linked || [],
-    // For backward compatibility
-    stage: data.stage || data.development_stage,
-    lastUpdated: data.last_updated || data.timestamps?.modified
   };
 };
 
-// Helper function to transform mental model to Supabase format
-export const transformMentalModelToSupabase = (model: Partial<MentalModel> & { id?: string }) => {
+// Transform our MentalModel type to a format for Supabase database
+export const transformMentalModelToSupabase = (model: MentalModel): any => {
   return {
-    id: model.id, // Include the ID when provided
+    id: model.id,
+    type: 'mental_model', // Explicitly set type for distinctions.distinctions table
     title: model.title,
     subtitle: model.subtitle,
+    summary: model.summary,
+    content: model.fullContent, // Map from fullContent to content
     development_stage: model.developmentStage,
     confidence_level: model.confidenceLevel,
-    summary: model.summary,
-    full_content: model.fullContent,
     image_url: model.imageUrl,
-    tags: model.tags || [],
+    tags: model.tags,
+    visibility: model.visibility,
+    
+    // Optional complex fields
     timestamps: model.timestamps,
     origin_moment: model.originMoment,
     applications: model.applications,
     consequences: model.consequences,
-    open_questions: model.openQuestions || [],
+    open_questions: model.openQuestions,
     latch_attributes: model.latchAttributes,
     dsrp_structure: model.dsrpStructure,
     socratic_attributes: model.socraticAttributes,
     hierarchical_view: model.hierarchicalView,
-    visibility: model.visibility,
-    questions_linked: model.questionsLinked || [],
-    // For backward compatibility
-    stage: model.stage,
-    last_updated: model.lastUpdated
+    
+    // We don't need to map created_at and updated_at as they're handled by the database
   };
 };

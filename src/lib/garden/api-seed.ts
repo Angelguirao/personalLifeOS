@@ -14,7 +14,7 @@ export const seedInitialData = async () => {
   console.log('Checking Supabase tables...');
   
   try {
-    // Check if tables exist - using schema qualification now
+    // Check if tables exist with schema qualification
     const distinctionsTableExists = await tableExists('distinctions.distinctions');
     const systemsTableExists = await tableExists('systems.systems');
     const connectionsTableExists = await tableExists('relationships.connections');
@@ -22,7 +22,7 @@ export const seedInitialData = async () => {
     
     // If tables don't exist, warn the user
     if (!distinctionsTableExists || !systemsTableExists || !connectionsTableExists || !inspirationsTableExists) {
-      console.error('Some database tables do not exist in Supabase. Tables need to be created in the Supabase dashboard.');
+      console.error('Some database tables do not exist in Supabase. Make sure you run the SQL setup script in the Supabase dashboard.');
       toast.error('Required database tables not found');
       
       // Log which tables are missing for debugging
@@ -32,6 +32,9 @@ export const seedInitialData = async () => {
         'relationships.connections': !connectionsTableExists,
         'perspectives.inspirations': !inspirationsTableExists
       });
+      
+      // Display a more user-friendly error message
+      toast.error('Database tables need to be set up. Please run the complete_garden_setup.sql script in the Supabase dashboard SQL Editor.');
       
       return;
     }

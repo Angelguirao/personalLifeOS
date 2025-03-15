@@ -12,40 +12,20 @@ export const tableExists = async (tableName: string): Promise<boolean> => {
   try {
     // Split the table name to handle schema-qualified names
     const parts = tableName.split('.');
-    let schema = 'public';
-    let table = tableName;
+    const fullyQualifiedName = parts.length > 1 ? tableName : `public.${tableName}`;
     
-    if (parts.length > 1) {
-      schema = parts[0];
-      table = parts[1];
-    }
-    
-    // Query the information_schema to check if the table exists
-    const { data, error } = await supabase
-      .from('information_schema.tables')
-      .select('table_name')
-      .eq('table_schema', schema)
-      .eq('table_name', table)
+    // Query the table directly as a simpler approach
+    const { error } = await supabase
+      .from(tableName)
+      .select('*')
       .limit(1);
-    
+      
     if (error) {
-      console.error(`Error checking if table ${tableName} exists:`, error);
-      
-      // Try alternative approach - query the table directly
-      const { error: queryError } = await supabase
-        .from(tableName)
-        .select('*')
-        .limit(1);
-        
-      if (queryError) {
-        console.warn(`Table ${tableName} does not exist in Supabase`);
-        return false;
-      }
-      
-      return true;
+      console.warn(`Table ${tableName} does not exist in Supabase or is inaccessible: ${error.message}`);
+      return false;
     }
     
-    return data && data.length > 0;
+    return true;
   } catch (error) {
     console.error(`Error checking if table ${tableName} exists:`, error);
     return false;

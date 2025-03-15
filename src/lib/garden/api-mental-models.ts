@@ -1,4 +1,3 @@
-
 import supabase, { isSupabaseAvailable } from './client';
 import { MentalModel } from './types/mental-model-types';
 import { tableExists } from './utils/table-utils';
@@ -17,18 +16,19 @@ export const getMentalModels = async (): Promise<MentalModel[]> => {
   }
   
   try {
-    // Check if table exists
-    const modelsExist = await tableExists('mental_models');
+    // Check if distinctions table exists
+    const modelsExist = await tableExists('distinctions.distinctions');
     if (!modelsExist) {
-      console.error('Mental models table does not exist');
+      console.error('Distinctions table does not exist');
       toast.error('Database tables not properly configured');
       return [];
     }
     
     console.log('Fetching mental models from Supabase...');
     const { data, error } = await supabase
-      .from('mental_models')
-      .select('*');
+      .from('distinctions.distinctions')
+      .select('*')
+      .eq('type', 'mental_model');
     
     if (error) {
       console.error('Supabase error:', error);
@@ -52,17 +52,18 @@ export const getMentalModels = async (): Promise<MentalModel[]> => {
 };
 
 export const getMentalModelById = async (id: string): Promise<MentalModel | undefined> => {
-  if (!isSupabaseAvailable() || !(await tableExists('mental_models'))) {
-    console.error('Database not available or mental models table does not exist');
+  if (!isSupabaseAvailable()) {
+    console.error('Database not available');
     toast.error('Database connection not available');
     return undefined;
   }
   
   try {
     const { data, error } = await supabase
-      .from('mental_models')
+      .from('distinctions.distinctions')
       .select('*')
       .eq('id', id)
+      .eq('type', 'mental_model')
       .single();
     
     if (error) throw error;
@@ -89,8 +90,8 @@ const checkAuthentication = async () => {
 };
 
 export const createMentalModel = async (model: Omit<MentalModel, 'id'>): Promise<MentalModel> => {
-  if (!supabase || !(await tableExists('mental_models'))) {
-    throw new Error('Cannot create mental model: Supabase connection or table not available');
+  if (!supabase) {
+    throw new Error('Cannot create mental model: Supabase connection not available');
   }
   
   // Check authentication
@@ -102,13 +103,16 @@ export const createMentalModel = async (model: Omit<MentalModel, 'id'>): Promise
     id: uuidv4()
   };
   
-  // Transform to Supabase format
-  const supabaseModel = transformMentalModelToSupabase(modelWithId);
+  // Transform to Supabase format and ensure type is set to mental_model
+  const supabaseModel = {
+    ...transformMentalModelToSupabase(modelWithId),
+    type: 'mental_model'
+  };
   
   console.log('Creating mental model with data:', supabaseModel);
   
   const { data, error } = await supabase
-    .from('mental_models')
+    .from('distinctions.distinctions')
     .insert(supabaseModel)
     .select()
     .single();
@@ -121,8 +125,8 @@ export const createMentalModel = async (model: Omit<MentalModel, 'id'>): Promise
 };
 
 export const updateMentalModel = async (id: string, model: Partial<MentalModel>): Promise<MentalModel> => {
-  if (!supabase || !(await tableExists('mental_models'))) {
-    throw new Error('Cannot update mental model: Supabase connection or table not available');
+  if (!supabase) {
+    throw new Error('Cannot update mental model: Supabase connection not available');
   }
   
   // Check authentication
@@ -134,7 +138,7 @@ export const updateMentalModel = async (id: string, model: Partial<MentalModel>)
   if (model.title !== undefined) updates.title = model.title;
   if (model.subtitle !== undefined) updates.subtitle = model.subtitle;
   if (model.summary !== undefined) updates.summary = model.summary;
-  if (model.fullContent !== undefined) updates.full_content = model.fullContent;
+  if (model.fullContent !== undefined) updates.content = model.fullContent;
   if (model.developmentStage !== undefined) updates.development_stage = model.developmentStage;
   if (model.confidenceLevel !== undefined) updates.confidence_level = model.confidenceLevel;
   if (model.imageUrl !== undefined) updates.image_url = model.imageUrl;
@@ -149,16 +153,12 @@ export const updateMentalModel = async (id: string, model: Partial<MentalModel>)
   if (model.socraticAttributes !== undefined) updates.socratic_attributes = model.socraticAttributes;
   if (model.hierarchicalView !== undefined) updates.hierarchical_view = model.hierarchicalView;
   if (model.visibility !== undefined) updates.visibility = model.visibility;
-  if (model.questionsLinked !== undefined) updates.questions_linked = model.questionsLinked;
-  
-  // Legacy fields
-  if (model.stage !== undefined) updates.stage = model.stage;
-  if (model.lastUpdated !== undefined) updates.last_updated = model.lastUpdated;
   
   const { data, error } = await supabase
-    .from('mental_models')
+    .from('distinctions.distinctions')
     .update(updates)
     .eq('id', id)
+    .eq('type', 'mental_model')
     .select()
     .single();
   
@@ -167,17 +167,18 @@ export const updateMentalModel = async (id: string, model: Partial<MentalModel>)
 };
 
 export const deleteMentalModel = async (id: string): Promise<void> => {
-  if (!supabase || !(await tableExists('mental_models'))) {
-    throw new Error('Cannot delete mental model: Supabase connection or table not available');
+  if (!supabase) {
+    throw new Error('Cannot delete mental model: Supabase connection not available');
   }
   
   // Check authentication
   await checkAuthentication();
   
   const { error } = await supabase
-    .from('mental_models')
+    .from('distinctions.distinctions')
     .delete()
-    .eq('id', id);
+    .eq('id', id)
+    .eq('type', 'mental_model');
   
   if (error) throw error;
 };
