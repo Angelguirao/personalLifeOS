@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import ViewModeSelector, { HierarchicalPerspective, ViewMode } from '@/components/garden/ViewModeSelector';
+import ViewModeSelector, { DSRPPerspective, ViewMode } from '@/components/garden/ViewModeSelector';
 import ModelFormDialog from '@/components/garden/ModelFormDialog';
 import GardenHeader from '@/components/garden/GardenHeader';
 import { useGardenData } from '@/hooks/useGardenData';
@@ -14,12 +14,10 @@ import GardenActionBar from '@/components/garden/GardenActionBar';
 import GardenContent from '@/components/garden/GardenContent';
 import SystemsView from '@/components/garden/SystemsView';
 import SystemFormDialog from '@/components/garden/SystemFormDialog';
-import { createSelfSystem } from '@/lib/garden/utils/self-system-seeder';
-import { UserCog } from 'lucide-react';
 
 const Garden = () => {
-  // State for hierarchical perspective and view mode
-  const [activePerspective, setActivePerspective] = useState<HierarchicalPerspective>('mentalModels');
+  // State for DSRP perspective and view mode
+  const [activePerspective, setActivePerspective] = useState<DSRPPerspective>('distinctions');
   const [activeView, setActiveView] = useState<ViewMode>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -64,34 +62,18 @@ const Garden = () => {
     }
   };
 
-  // Handle creating self system
-  const handleCreateSelfSystem = async () => {
-    try {
-      // Get relevant model IDs for self system
-      const identityModels = models.filter(model => 
-        model.tags?.includes('identity') || 
-        model.tags?.includes('self') ||
-        model.tags?.includes('personal')
-      ).map(model => model.id);
-      
-      await createSelfSystem(undefined, identityModels);
-      fetchData();
-    } catch (error) {
-      console.error('Error creating self system:', error);
-      toast.error('Failed to create self system');
-    }
-  };
-
   // Handle perspective change
-  const handlePerspectiveChange = (perspective: HierarchicalPerspective) => {
+  const handlePerspectiveChange = (perspective: DSRPPerspective) => {
     setActivePerspective(perspective);
     
     // Set appropriate default view for each perspective
-    if (perspective === 'questions') {
-      setActiveView('qa');
-    } else if (perspective === 'mentalModels') {
+    if (perspective === 'distinctions') {
       setActiveView('list');
     } else if (perspective === 'systems') {
+      setActiveView('list');
+    } else if (perspective === 'relationships') {
+      setActiveView('graph');
+    } else if (perspective === 'perspectives') {
       setActiveView('list');
     }
   };
@@ -114,9 +96,6 @@ const Garden = () => {
         (system.description && system.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (system.category && system.category.toLowerCase().includes(searchQuery.toLowerCase()))
       );
-
-  // Check if a Self system exists
-  const selfSystemExists = systems.some(system => system.isSelf);
 
   // Fetch questions when component mounts or auth status changes
   useEffect(() => {
@@ -153,17 +132,6 @@ const Garden = () => {
               {/* System-specific actions */}
               {activePerspective === 'systems' && isAuthenticated && (
                 <div className="flex gap-2">
-                  {!selfSystemExists && (
-                    <Button 
-                      variant="secondary" 
-                      size="sm" 
-                      className="whitespace-nowrap gap-1"
-                      onClick={handleCreateSelfSystem}
-                    >
-                      <UserCog size={16} />
-                      Create Self System
-                    </Button>
-                  )}
                   <Button 
                     size="sm" 
                     onClick={() => setIsCreateSystemDialogOpen(true)}

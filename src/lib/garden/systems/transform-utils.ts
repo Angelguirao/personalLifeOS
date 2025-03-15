@@ -13,7 +13,6 @@ export const transformSystemFromSupabase = (data: any): System => {
     importanceLevel: data.importance_level || 3,
     visibility: data.visibility || 'public',
     relatedModels: data.related_models || [],
-    isSelf: data.is_self || false,
     parentSystem: data.parent_system,
     distinctions: data.distinctions || [],
     metadata: data.metadata,
@@ -34,7 +33,6 @@ export const transformSystemToSupabase = (system: Partial<System> & { id?: strin
     importance_level: system.importanceLevel,
     visibility: system.visibility,
     related_models: system.relatedModels || [],
-    is_self: system.isSelf,
     parent_system: system.parentSystem,
     distinctions: system.distinctions || [],
     metadata: system.metadata

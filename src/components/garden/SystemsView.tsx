@@ -6,10 +6,9 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { Loader2, CircleOff, Circle, Brain, User, Database, Plus, Edit, Trash2, Eye } from 'lucide-react';
+import { Loader2, CircleOff, Circle, Brain, Database, Plus, Edit, Trash2 } from 'lucide-react';
 import SystemFormDialog from './SystemFormDialog';
 import DeleteConfirmDialog from './note-dialog/DeleteConfirmDialog';
-import { useNavigate } from 'react-router-dom';
 
 interface SystemsViewProps {
   onSelectSystem?: (system: System) => void;
@@ -18,18 +17,12 @@ interface SystemsViewProps {
 }
 
 const getSystemIcon = (system: System) => {
-  // Use the custom icon if provided, otherwise use a default based on category
-  if (system.isSelf) {
-    return <User className="h-5 w-5 text-indigo-500" />;
-  }
-  
+  // Use icon based on category
   switch (system.category) {
     case 'cognitive':
       return <Brain className="h-5 w-5 text-blue-500" />;
     case 'data':
       return <Database className="h-5 w-5 text-green-500" />;
-    case 'social':
-      return <Eye className="h-5 w-5 text-purple-500" />;
     case 'personal':
       return <Circle className="h-5 w-5 text-green-500" />;
     default:
@@ -38,7 +31,6 @@ const getSystemIcon = (system: System) => {
 };
 
 const SystemsView = ({ onSelectSystem, isAuthenticated = false, onRefresh }: SystemsViewProps) => {
-  const navigate = useNavigate();
   const [systems, setSystems] = useState<System[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSystemId, setSelectedSystemId] = useState<string | null>(null);
@@ -119,14 +111,6 @@ const SystemsView = ({ onSelectSystem, isAuthenticated = false, onRefresh }: Sys
     if (onRefresh) onRefresh();
   };
 
-  // Navigate to the Self page if it's a self system
-  const viewSelfPage = (e: React.MouseEvent, system: System) => {
-    e.stopPropagation(); // Prevent row click handler
-    if (system.isSelf) {
-      navigate('/about');
-    }
-  };
-
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-40">
@@ -195,7 +179,6 @@ const SystemsView = ({ onSelectSystem, isAuthenticated = false, onRefresh }: Sys
                 </TableCell>
                 <TableCell className="font-medium">
                   {system.name}
-                  {system.isSelf && <Badge className="ml-2 bg-indigo-500">Self</Badge>}
                 </TableCell>
                 <TableCell>{system.category || 'Uncategorized'}</TableCell>
                 <TableCell>
@@ -218,16 +201,6 @@ const SystemsView = ({ onSelectSystem, isAuthenticated = false, onRefresh }: Sys
                 {isAuthenticated && (
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
-                      {system.isSelf && (
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          onClick={(e) => viewSelfPage(e, system)}
-                          title="View Self Page"
-                        >
-                          <Eye size={16} />
-                        </Button>
-                      )}
                       <Button 
                         variant="ghost" 
                         size="icon" 

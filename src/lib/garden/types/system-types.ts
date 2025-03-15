@@ -12,7 +12,6 @@ export interface System {
   importanceLevel: number; // 1-5 scale
   visibility: VisibilityLevel;
   relatedModels: string[]; // Array of model IDs
-  isSelf: boolean;
   parentSystem?: string; // ID of parent system
   distinctions?: string[]; // Array of distinctions (experiences, thoughts, actions, etc.)
   metadata?: Record<string, any>;

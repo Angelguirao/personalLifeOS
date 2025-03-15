@@ -1,17 +1,18 @@
+
 import React from 'react';
-import { Layers, Network, List, Table2, MessageCircle, GitBranch, Sprout, BookText, BookOpen, Book, HelpCircle, Brain, Activity, Layout } from 'lucide-react';
+import { Layers, Network, List, Table2, MessageCircle, GitBranch, Split, BookText, Shuffle, Book, HelpCircle, Brain, Activity, Layout } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 
-// The top-level hierarchical perspective
-export type HierarchicalPerspective = 'mentalModels' | 'questions' | 'experiences' | 'frameworks' | 'systems';
+// The DSRP framework perspectives
+export type DSRPPerspective = 'distinctions' | 'systems' | 'relationships' | 'perspectives';
 
 // The view mode within each perspective
 export type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart';
 
 interface ViewModeSelectorProps {
-  activePerspective: HierarchicalPerspective;
+  activePerspective: DSRPPerspective;
   activeView: ViewMode;
-  onPerspectiveChange: (perspective: HierarchicalPerspective) => void;
+  onPerspectiveChange: (perspective: DSRPPerspective) => void;
   onViewChange: (mode: ViewMode) => void;
 }
 
@@ -23,59 +24,27 @@ const ViewModeSelector = ({
 }: ViewModeSelectorProps) => {
   return (
     <div className="space-y-6 w-full">
-      {/* Perspective Selection */}
+      {/* DSRP Perspective Selection */}
       <div className="flex flex-col items-center w-full">
         <div className="text-sm text-muted-foreground mb-3">
-          From which hierarchical perspective would you like to explore this garden?
+          How would you like to explore this garden?
         </div>
         <ToggleGroup 
           type="single" 
           value={activePerspective} 
-          onValueChange={(value) => value && onPerspectiveChange(value as HierarchicalPerspective)} 
+          onValueChange={(value) => value && onPerspectiveChange(value as DSRPPerspective)} 
           className="flex flex-wrap justify-center gap-2"
         >
           <ToggleGroupItem 
-            value="experiences" 
+            value="distinctions" 
             variant="outline" 
             size="sm" 
-            className={`flex-1 sm:flex-initial ${activePerspective === 'experiences' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
-            disabled={true}
+            className={`flex-1 sm:flex-initial ${activePerspective === 'distinctions' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
           >
-            <Activity size={16} className="mr-2" />
-            Experiences
+            <Split size={16} className="mr-2" />
+            Distinctions
           </ToggleGroupItem>
           
-          <ToggleGroupItem 
-            value="questions" 
-            variant="outline" 
-            size="sm" 
-            className={`flex-1 sm:flex-initial ${activePerspective === 'questions' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
-          >
-            <HelpCircle size={16} className="mr-2" />
-            Questions
-          </ToggleGroupItem>
-
-          <ToggleGroupItem 
-            value="mentalModels" 
-            variant="outline" 
-            size="sm" 
-            className={`flex-1 sm:flex-initial ${activePerspective === 'mentalModels' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
-          >
-            <Brain size={16} className="mr-2" />
-            Mental Models
-          </ToggleGroupItem>
-
-          <ToggleGroupItem 
-            value="frameworks" 
-            variant="outline" 
-            size="sm" 
-            className={`flex-1 sm:flex-initial ${activePerspective === 'frameworks' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
-            disabled={true}
-          >
-            <Layout size={16} className="mr-2" />
-            Frameworks
-          </ToggleGroupItem>
-
           <ToggleGroupItem 
             value="systems" 
             variant="outline" 
@@ -85,14 +54,34 @@ const ViewModeSelector = ({
             <Layers size={16} className="mr-2" />
             Systems
           </ToggleGroupItem>
+
+          <ToggleGroupItem 
+            value="relationships" 
+            variant="outline" 
+            size="sm" 
+            className={`flex-1 sm:flex-initial ${activePerspective === 'relationships' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+          >
+            <Network size={16} className="mr-2" />
+            Relationships
+          </ToggleGroupItem>
+
+          <ToggleGroupItem 
+            value="perspectives" 
+            variant="outline" 
+            size="sm" 
+            className={`flex-1 sm:flex-initial ${activePerspective === 'perspectives' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+          >
+            <Shuffle size={16} className="mr-2" />
+            Perspectives
+          </ToggleGroupItem>
         </ToggleGroup>
       </div>
 
-      {/* View Mode Selection (for Mental Models, more could be added for other perspectives) */}
-      {activePerspective === 'mentalModels' && (
+      {/* View Mode Selection for Distinctions perspective */}
+      {activePerspective === 'distinctions' && (
         <div className="flex flex-col items-center w-full">
           <div className="text-sm text-muted-foreground mb-3">
-            Choose a view mode for Mental Models
+            Choose a view mode for Distinctions
           </div>
           <ToggleGroup 
             type="single" 
@@ -121,50 +110,38 @@ const ViewModeSelector = ({
             </ToggleGroupItem>
             
             <ToggleGroupItem 
-              value="flowchart" 
+              value="qa" 
               variant="outline" 
               size="sm" 
-              className={`flex-1 sm:flex-initial ${activeView === 'flowchart' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
-              disabled={true}
+              className={`flex-1 sm:flex-initial ${activeView === 'qa' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
             >
-              <GitBranch size={16} className="mr-2" />
-              Flowchart
-            </ToggleGroupItem>
-            
-            <ToggleGroupItem 
-              value="table" 
-              variant="outline" 
-              size="sm" 
-              className={`flex-1 sm:flex-initial ${activeView === 'table' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
-              disabled={true}
-            >
-              <Table2 size={16} className="mr-2" />
-              Table
+              <MessageCircle size={16} className="mr-2" />
+              Q&A
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
       )}
 
-      {/* Questions perspective only has QA view for now */}
-      {activePerspective === 'questions' && (
+      {/* Relationships perspective view options */}
+      {activePerspective === 'relationships' && (
         <div className="flex flex-col items-center w-full">
           <div className="text-sm text-muted-foreground mb-3">
-            Choose a view mode for Questions
+            Choose a view mode for Relationships
           </div>
           <ToggleGroup 
             type="single" 
-            value="qa" 
+            value={activeView}
             onValueChange={(value) => value && onViewChange(value as ViewMode)} 
             className="flex flex-wrap justify-center gap-2"
           >
             <ToggleGroupItem 
-              value="qa" 
+              value="graph" 
               variant="outline" 
               size="sm" 
               className="flex-1 sm:flex-initial bg-black text-white hover:bg-black/90"
             >
-              <MessageCircle size={16} className="mr-2" />
-              Q&A
+              <Network size={16} className="mr-2" />
+              Graph
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
@@ -178,7 +155,32 @@ const ViewModeSelector = ({
           </div>
           <ToggleGroup 
             type="single" 
-            value="list" 
+            value={activeView} 
+            onValueChange={(value) => value && onViewChange(value as ViewMode)} 
+            className="flex flex-wrap justify-center gap-2"
+          >
+            <ToggleGroupItem 
+              value="list" 
+              variant="outline" 
+              size="sm" 
+              className="flex-1 sm:flex-initial bg-black text-white hover:bg-black/90"
+            >
+              <List size={16} className="mr-2" />
+              List
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+      )}
+
+      {/* Perspectives view options */}
+      {activePerspective === 'perspectives' && (
+        <div className="flex flex-col items-center w-full">
+          <div className="text-sm text-muted-foreground mb-3">
+            Choose a view mode for Perspectives
+          </div>
+          <ToggleGroup 
+            type="single" 
+            value={activeView} 
             onValueChange={(value) => value && onViewChange(value as ViewMode)} 
             className="flex flex-wrap justify-center gap-2"
           >

@@ -10,7 +10,6 @@ import { System } from '@/lib/garden/types';
 import { createSystem, updateSystem, getSystems } from '@/lib/garden/api';
 import { toast } from 'sonner';
 import { CircleDashed } from 'lucide-react';
-import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { X } from 'lucide-react';
 
@@ -37,7 +36,6 @@ const SystemFormDialog: React.FC<SystemFormDialogProps> = ({
       category: 'personal',
       importanceLevel: 3,
       visibility: 'public',
-      isSelf: false,
       color: '#3b82f6',
       distinctions: []
     }
@@ -75,11 +73,6 @@ const SystemFormDialog: React.FC<SystemFormDialogProps> = ({
   // Handle select changes
   const handleSelectChange = (name: string, value: string | number) => {
     setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  // Handle toggle changes
-  const handleToggleChange = (name: string, checked: boolean) => {
-    setFormData(prev => ({ ...prev, [name]: checked }));
   };
 
   // Handle adding new distinction
@@ -290,19 +283,6 @@ const SystemFormDialog: React.FC<SystemFormDialogProps> = ({
                 <SelectItem value="5">5 - High</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-
-          {/* Is Self System */}
-          <div className="flex items-center justify-between">
-            <div>
-              <Label htmlFor="isSelf" className="block mb-1">Self System</Label>
-              <p className="text-sm text-muted-foreground">Mark this as your primary self system</p>
-            </div>
-            <Switch
-              id="isSelf"
-              checked={formData.isSelf}
-              onCheckedChange={(checked) => handleToggleChange('isSelf', checked)}
-            />
           </div>
 
           {/* Visibility */}

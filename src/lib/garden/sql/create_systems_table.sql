@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS systems (
   importance_level INTEGER DEFAULT 3, -- Scale 1-5
   visibility TEXT NOT NULL DEFAULT 'public',
   related_models TEXT[] DEFAULT '{}',
-  is_self BOOLEAN DEFAULT false,
   parent_system UUID,
   distinctions TEXT[] DEFAULT '{}',
   metadata JSONB,
