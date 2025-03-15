@@ -3,11 +3,11 @@ import React, { useState, useMemo } from 'react';
 import { Layers, ChevronRight, ChevronDown } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MentalModel } from '@/lib/garden/types';
+import { MentalModel, Question } from '@/lib/garden/types';
 
 interface HierarchyViewProps {
   models: MentalModel[];
-  questions?: never; // This is now optional since questions are in a separate view
+  questions?: Question[]; // Changed from never to Question[]
   onSelectModel?: (model: MentalModel) => void;
 }
 
