@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useSupabase } from '@/lib/supabase/SupabaseProvider';
 import { toast } from 'sonner';
 import supabase from '@/lib/supabase/client';
+import { setupDatabaseTables } from '@/lib/edge/setup-database';
 
 export function useSupabaseSetup() {
   const { isConnected, isAuthenticated, checkSetup } = useSupabase();
@@ -22,6 +23,21 @@ export function useSupabaseSetup() {
     }
   };
   
+  // Function to set up database via edge function
+  const setupDatabaseViaEdge = async () => {
+    setIsSettingUp(true);
+    try {
+      const result = await setupDatabaseTables();
+      return result.success;
+    } catch (error) {
+      console.error('Error setting up database via edge function:', error);
+      toast.error('Error setting up database tables');
+      return false;
+    } finally {
+      setIsSettingUp(false);
+    }
+  };
+  
   // Function to check if tables exist
   const checkTablesExist = async () => {
     if (!supabase) {
@@ -32,7 +48,7 @@ export function useSupabaseSetup() {
     try {
       setIsSettingUp(true);
       
-      // Try to query the tables (this will be expanded with your table-utils)
+      // Try to query the tables
       const { error: distinctionsError } = await supabase
         .from('distinctions.distinctions')
         .select('id')
@@ -58,11 +74,13 @@ export function useSupabaseSetup() {
         connectionsError?.message?.includes('does not exist')
       ) {
         toast.error('Database tables need to be set up', {
-          description: 'Please run the SQL setup script in the Supabase SQL Editor',
+          description: 'Would you like to run the setup via Edge Function?',
+          action: {
+            label: 'Run Setup',
+            onClick: setupDatabaseViaEdge
+          }
         });
         
-        // Show setup instructions
-        await showSetupInstructions();
         return false;
       }
       
@@ -87,6 +105,7 @@ export function useSupabaseSetup() {
     isSettingUp,
     checkTablesExist,
     showSetupInstructions,
+    setupDatabaseViaEdge,
     checkConnection: checkSetup
   };
 }

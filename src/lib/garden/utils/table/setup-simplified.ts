@@ -1,67 +1,20 @@
 
-import supabase, { isSupabaseAvailable } from '@/lib/supabase/client';
 import { toast } from 'sonner';
-import { executeSQL } from '@/lib/garden/client';
+import supabase, { isSupabaseAvailable } from '@/lib/supabase/client';
+import { setupDatabaseTables } from '@/lib/edge/setup-database';
 
 /**
  * Runs a simplified setup script that only creates the distinctions schema and table
- * for the polymorphic approach (mental models, questions, experiences)
+ * Uses edge function instead of client-side SQL
  */
 export const runSimplifiedSetup = async (): Promise<boolean> => {
-  if (!isSupabaseAvailable()) {
-    toast.error('Database connection not available');
-    return false;
-  }
-  
   try {
-    toast.info('Setting up distinctions schema and table...');
+    toast.info('Setting up distinctions schema and table via Edge Function...');
     
-    // SQL to create just the distinctions schema and table
-    const setupSQL = `
-    -- Create distinctions schema
-    CREATE SCHEMA IF NOT EXISTS distinctions;
+    const result = await setupDatabaseTables();
     
-    -- Distinctions Table (unified table for mental models, questions, experiences)
-    CREATE TABLE IF NOT EXISTS distinctions.distinctions (
-      id UUID PRIMARY KEY,
-      type TEXT NOT NULL, -- 'mentalModel', 'question', 'experience'
-      title TEXT NOT NULL,
-      subtitle TEXT,
-      content TEXT,
-      summary TEXT,
-      development_stage TEXT,
-      confidence_level TEXT,
-      image_url TEXT,
-      tags TEXT[] DEFAULT '{}',
-      category TEXT,
-      importance_rank INTEGER,
-      clarification_needed BOOLEAN DEFAULT false,
-      related_items TEXT[] DEFAULT '{}',
-      timestamps JSONB,
-      origin_moment JSONB,
-      applications JSONB,
-      consequences JSONB,
-      open_questions TEXT[] DEFAULT '{}',
-      latch_attributes JSONB,
-      dsrp_structure JSONB,
-      socratic_attributes JSONB,
-      hierarchical_view JSONB,
-      visibility TEXT NOT NULL DEFAULT 'public',
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-    );
-    
-    -- Create indexes for faster lookups
-    CREATE INDEX IF NOT EXISTS idx_distinctions_type ON distinctions.distinctions(type);
-    CREATE INDEX IF NOT EXISTS idx_distinctions_title ON distinctions.distinctions(title);
-    CREATE INDEX IF NOT EXISTS idx_distinctions_visibility ON distinctions.distinctions(visibility);
-    `;
-    
-    // Attempt to execute the script using executeSQL helper from garden client
-    const success = await executeSQL(setupSQL);
-    
-    if (success) {
-      toast.success('Distinctions table created successfully!');
+    if (result.success) {
+      toast.success('Distinctions table created successfully via Edge Function!');
       return true;
     } else {
       toast.error('Failed to create distinctions table');

@@ -1,36 +1,20 @@
-
-import supabase, { isSupabaseAvailable } from '@/lib/supabase/client';
 import { toast } from 'sonner';
+import { setupDatabaseTables } from '@/lib/edge/setup-database';
+import supabase, { isSupabaseAvailable } from '@/lib/supabase/client';
 import { executeSQL } from '@/lib/garden/client';
 
-// Helper to run SQL script against Supabase
+// Helper to run setup script through edge function
 export const runSetupScript = async (): Promise<boolean> => {
-  if (!isSupabaseAvailable()) {
-    toast.error('Database connection not available');
-    return false;
-  }
-  
   try {
-    toast.info('Attempting to run database setup script...');
+    toast.info('Attempting to run database setup script via Edge Function...');
     
-    console.log('Running complete garden setup script...');
+    const result = await setupDatabaseTables();
     
-    // Try to get the complete SQL script
-    const setupScript = await getCompleteSetupScript();
-    
-    if (!setupScript) {
-      toast.error('Failed to load setup script');
-      return false;
-    }
-    
-    // Attempt to execute the script using executeSQL helper from garden client
-    const success = await executeSQL(setupScript);
-    
-    if (success) {
-      toast.success('Database tables created successfully!');
+    if (result.success) {
+      toast.success('Database setup completed successfully via Edge Function');
       return true;
     } else {
-      // If direct execution failed, show instructions for manual setup
+      // If edge function execution failed, show instructions for manual setup
       // Import the setup helper dynamically to avoid circular dependency
       const setupHelper = await import('../setup-helper');
       setupHelper.showSetupInstructions();
@@ -44,6 +28,8 @@ export const runSetupScript = async (): Promise<boolean> => {
   }
 };
 
+// These functions are kept for reference, but most functionality 
+// has been moved to the edge function
 // Helper to fetch the complete setup script
 export const getCompleteSetupScript = async (): Promise<string | null> => {
   try {
