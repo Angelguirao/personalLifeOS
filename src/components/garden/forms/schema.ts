@@ -42,6 +42,12 @@ export const mentalModelSchema = z.object({
   consequencesInterpersonal: z.string().optional(),
   consequencesSocietal: z.string().optional(),
   
+  // Origin Moment
+  originDatetime: z.string().optional(),
+  originLocation: z.string().optional(),
+  originEmotions: z.string().optional(),
+  originPerceptions: z.string().optional(),
+  
   // Open Questions
   openQuestions: z.string().optional(),
   
@@ -53,4 +59,8 @@ export const mentalModelSchema = z.object({
   // Visibility and Metadata
   visibility: z.enum(['public', 'private', 'unlisted']).default('public'),
   imageUrl: z.string().optional(),
+  
+  // For JSON import/export
+  jsonData: z.string().optional(),
 });
+

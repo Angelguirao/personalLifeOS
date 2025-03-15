@@ -9,8 +9,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from '@/components/ui/form';
 import { MentalModelFormValues } from '../MentalModelForm';
+import { Image } from 'lucide-react';
 
 interface BasicInfoTabProps {
   control: Control<MentalModelFormValues>;
@@ -119,6 +121,23 @@ export const BasicInfoTab = ({ control }: BasicInfoTabProps) => {
             <FormControl>
               <Textarea placeholder="Detailed explanation of this mental model" rows={6} {...field} />
             </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      
+      <FormField
+        control={control}
+        name="imageUrl"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="flex items-center gap-1">
+              <Image size={16} /> Image URL
+            </FormLabel>
+            <FormControl>
+              <Input placeholder="URL to an image representing this model" {...field} />
+            </FormControl>
+            <FormDescription>An image that visually represents this mental model</FormDescription>
             <FormMessage />
           </FormItem>
         )}

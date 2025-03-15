@@ -36,7 +36,7 @@ export const processFormDataForSubmission = (formData: MentalModelFormValues): O
   const dsrpStructure = {
     distinctions: formData.dsrpDistinctions,
     systemStructure: formData.dsrpSystems,
-    relationships: formData.dsrpRelationships ? JSON.parse(`{"text": "${formData.dsrpRelationships}"}`) : undefined,
+    relationships: formData.dsrpRelationships ? JSON.parse(formData.dsrpRelationships) : undefined,
     perspectives: processStringsToArray(formData.dsrpPerspectives)
   };
   
@@ -48,6 +48,14 @@ export const processFormDataForSubmission = (formData: MentalModelFormValues): O
     alternativePerspectives: processStringsToArray(formData.socraticPerspectives),
     implications: formData.socraticImplications
   };
+  
+  // Prepare origin moment
+  const originMoment = formData.originDatetime ? {
+    datetime: formData.originDatetime,
+    location: formData.originLocation,
+    emotions: processStringsToArray(formData.originEmotions),
+    perceptions: formData.originPerceptions
+  } : undefined;
   
   // Prepare consequences
   const consequences = {
@@ -83,6 +91,7 @@ export const processFormDataForSubmission = (formData: MentalModelFormValues): O
     latchAttributes,
     dsrpStructure,
     socraticAttributes,
+    originMoment,
     consequences,
     openQuestions,
     bookInfo,

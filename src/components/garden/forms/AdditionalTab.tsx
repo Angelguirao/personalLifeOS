@@ -147,20 +147,6 @@ export const AdditionalTab = ({ control }: AdditionalTabProps) => {
           )}
         />
       </div>
-      
-      <FormField
-        control={control}
-        name="imageUrl"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Image URL</FormLabel>
-            <FormControl>
-              <Input placeholder="URL to an image representing this model" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
     </>
   );
 };
