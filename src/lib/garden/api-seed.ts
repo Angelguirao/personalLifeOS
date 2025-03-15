@@ -1,12 +1,7 @@
 
 import supabase, { isSupabaseAvailable } from './client';
-import { tableExists, createTablesIfNotExist } from './utils/table-utils';
+import { tableExists } from './utils/table-utils';
 import { toast } from 'sonner';
-import { seedMentalModels } from './seed/seed-models';
-import { seedModelVersions } from './seed/seed-versions';
-import { seedQuestions } from './seed/seed-questions';
-import { seedInspirations } from './seed/seed-inspirations';
-import { seedConnections } from './seed/seed-connections';
 
 export const seedInitialData = async () => {
   // If supabase is null, just return without trying to seed
@@ -15,12 +10,9 @@ export const seedInitialData = async () => {
     return;
   }
   
-  console.log('Checking Supabase tables and seeding data if needed...');
+  console.log('Checking Supabase tables...');
   
   try {
-    // First, try to create tables if they don't exist
-    await createTablesIfNotExist();
-    
     // Check if tables exist
     const mentalModelsTableExists = await tableExists('mental_models');
     const connectionsTableExists = await tableExists('connections');
@@ -29,54 +21,18 @@ export const seedInitialData = async () => {
     const inspirationsTableExists = await tableExists('inspirations');
     
     // If mental models table doesn't exist, warn the user
-    if (!mentalModelsTableExists) {
-      console.warn('Mental models table does not exist in Supabase. Please create it manually in the Supabase dashboard.');
+    if (!mentalModelsTableExists || !connectionsTableExists || !versionsTableExists || 
+        !questionsTableExists || !inspirationsTableExists) {
+      console.warn('Some database tables do not exist in Supabase. Please create them manually in the Supabase dashboard.');
       console.warn('Using fallback data for now.');
       toast.warning('Database tables not found. Using local data instead.');
       return;
     }
     
-    // Improved seeding order to handle dependencies correctly:
-    // 1. First clear versions (to remove foreign key constraints)
-    if (versionsTableExists) {
-      console.log('Starting to seed model versions...');
-      await seedModelVersions();
-    }
-    
-    // 2. Seed mental models
-    console.log('Starting to seed mental models...');
-    const modelsSeedResult = await seedMentalModels();
-    console.log('Mental models seeding result:', modelsSeedResult);
-    
-    // 3. Re-seed model versions 
-    if (versionsTableExists && modelsSeedResult) {
-      console.log('Re-seeding model versions with new references...');
-      await seedModelVersions();
-    }
-    
-    // 4. Seed connections (after mental models)
-    if (connectionsTableExists && modelsSeedResult) {
-      console.log('Starting to seed connections...');
-      await seedConnections();
-    }
-    
-    // 5. Seed questions
-    if (questionsTableExists) {
-      console.log('Starting to seed questions...');
-      await seedQuestions();
-    }
-    
-    // 6. Seed inspirations
-    if (inspirationsTableExists) {
-      console.log('Starting to seed inspirations...');
-      await seedInspirations();
-    }
-    
-    console.log('Initial data seeding completed');
-    toast.success('Data seeded to database successfully');
+    console.log('All required tables exist in Supabase');
   } catch (error) {
-    console.error('Error during seeding process:', error);
-    toast.error('Error seeding data to database');
-    throw error; // Re-throw to be caught by the Garden component
+    console.error('Error checking tables:', error);
+    toast.error('Error connecting to database');
+    throw error;
   }
 };
