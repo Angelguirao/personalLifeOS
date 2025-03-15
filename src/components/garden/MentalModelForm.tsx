@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -31,7 +30,7 @@ export type MentalModelFormValues = z.infer<typeof mentalModelSchema>;
 
 interface MentalModelFormProps {
   model?: MentalModel;
-  onSubmit: (data: MentalModelFormValues & { tags: string[] }) => Promise<void>;
+  onSubmit: (data: MentalModelFormValues) => Promise<void>;
   onCancel: () => void;
   isSubmitting: boolean;
 }
@@ -51,13 +50,7 @@ const MentalModelForm = ({ model, onSubmit, onCancel, isSubmitting }: MentalMode
   });
 
   const handleSubmit = async (data: MentalModelFormValues) => {
-    // Process tags from comma-separated string to array
-    const processedData = {
-      ...data,
-      tags: data.tags ? data.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') : [],
-    };
-    
-    await onSubmit(processedData);
+    await onSubmit(data);
   };
 
   return (

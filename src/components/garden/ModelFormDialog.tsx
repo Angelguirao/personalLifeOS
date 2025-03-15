@@ -17,7 +17,7 @@ interface ModelFormDialogProps {
 const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDialogProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (formData: MentalModelFormValues & { tags: string[] }) => {
+  const handleSubmit = async (formData: MentalModelFormValues) => {
     setIsSubmitting(true);
     try {
       // Check authentication status before proceeding
@@ -34,10 +34,16 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
       // Generate a timestamp
       const now = new Date().toISOString();
       
+      // Process tags from comma-separated string to array
+      const tagsArray = formData.tags 
+        ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') 
+        : [];
+      
       if (model) {
         // Update existing model
         await updateMentalModel(model.id, {
           ...formData,
+          tags: tagsArray,
           timestamps: {
             ...model.timestamps,
             modified: now
@@ -45,9 +51,15 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
         });
         toast.success('Mental model updated successfully');
       } else {
-        // Create new model
+        // Create new model - ensure all required properties are provided
         await createMentalModel({
-          ...formData,
+          title: formData.title,
+          subtitle: formData.subtitle || '',
+          developmentStage: formData.developmentStage,
+          confidenceLevel: formData.confidenceLevel,
+          summary: formData.summary,
+          fullContent: formData.fullContent,
+          tags: tagsArray,
           timestamps: {
             created: now,
             modified: now,
