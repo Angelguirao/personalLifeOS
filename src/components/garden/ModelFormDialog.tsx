@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import MentalModelForm, { MentalModelFormValues } from './MentalModelForm';
-import { MentalModel } from '@/lib/garden/types';
+import { MentalModel, SourceType, RelationshipType } from '@/lib/garden/types';
 import { 
   createMentalModel, 
   updateMentalModel, 
@@ -18,7 +17,6 @@ import {
 import { toast } from 'sonner';
 import supabase from '@/lib/garden/client';
 import { processFormDataForSubmission, processModelForForm } from '@/lib/garden/utils/form-processors';
-import { RelationshipType } from '@/lib/garden/types/connection-types';
 
 interface ModelFormDialogProps {
   isOpen: boolean;
