@@ -25,17 +25,11 @@ const GardenActionBar: React.FC<GardenActionBarProps> = ({
   return (
     <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
       <div className="flex gap-2">
-        {/* Only show the create distinction button when authenticated */}
-        {activePerspective === 'distinctions' && isAuthenticated && onCreateDistinction && (
-          <Button 
-            size="sm" 
-            onClick={onCreateDistinction}
-            className="flex items-center gap-1"
-          >
-            <Plus size={16} />
-            New Distinction
-          </Button>
-        )}
+        {/* Search component will be implemented here if needed */}
+        <GardenSearch 
+          searchQuery={searchQuery} 
+          setSearchQuery={setSearchQuery} 
+        />
       </div>
     </div>
   );

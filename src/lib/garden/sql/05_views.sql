@@ -19,3 +19,19 @@ LEFT JOIN
   relationships.relationship_types rt ON c.relationship_type_id = rt.id
 WHERE 
   d.visibility = 'public';
+
+-- Create a view for mental models (a type of distinction)
+CREATE VIEW distinctions.mental_models_view AS
+SELECT 
+  id,
+  title,
+  summary, 
+  full_content,
+  tags,
+  visibility,
+  created_at,
+  updated_at
+FROM 
+  distinctions.distinctions
+WHERE 
+  type = 'mental_model';

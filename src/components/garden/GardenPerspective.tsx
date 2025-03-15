@@ -5,7 +5,6 @@ import GardenActionBar from '@/components/garden/GardenActionBar';
 import GardenContent from '@/components/garden/GardenContent';
 import SystemsView from '@/components/garden/SystemsView';
 import { MentalModel, Connection, Question, System } from '@/lib/garden/types';
-import { Button } from '@/components/ui/button';
 
 interface GardenPerspectiveProps {
   activePerspective: DSRPPerspective;
@@ -52,8 +51,8 @@ const GardenPerspective = ({
 }: GardenPerspectiveProps) => {
   return (
     <>
-      {/* Action Area: Search and Controls */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* Action Area: Search */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
         <GardenActionBar 
           activePerspective={activePerspective}
           searchQuery={searchQuery}
@@ -62,22 +61,10 @@ const GardenPerspective = ({
           onCreateDistinction={onCreateDistinction}
           isAuthenticated={isAuthenticated}
         />
-        
-        {/* System-specific actions */}
-        {activePerspective === 'systems' && isAuthenticated && (
-          <div className="flex gap-2">
-            <Button 
-              size="sm" 
-              onClick={onCreateSystem}
-            >
-              New System
-            </Button>
-          </div>
-        )}
       </div>
       
       {/* Content Area */}
-      <div className="mt-6">
+      <div>
         {activePerspective === 'systems' ? (
           <SystemsView 
             onSelectSystem={handleSystemSelect} 
