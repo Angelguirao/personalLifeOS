@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/form';
 import { MentalModelFormValues } from '../MentalModelForm';
 import { Clock, MapPin, Heart, Eye } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface OriginTabProps {
   control: Control<MentalModelFormValues>;
@@ -105,11 +106,9 @@ export const OriginTab = ({ control }: OriginTabProps) => {
             render={({ field }) => (
               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                 <FormControl>
-                  <input
-                    type="checkbox"
-                    checked={field.value}
-                    onChange={field.onChange}
-                    className="h-4 w-4 mt-1"
+                  <Checkbox
+                    checked={field.value || false}
+                    onCheckedChange={field.onChange}
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">

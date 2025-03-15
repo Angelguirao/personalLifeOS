@@ -1,5 +1,6 @@
 
 import { z } from 'zod';
+import { RelationshipType } from '@/lib/garden/types/connection-types';
 
 // Form schema for validation
 export const mentalModelSchema = z.object({

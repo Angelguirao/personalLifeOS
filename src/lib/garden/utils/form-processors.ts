@@ -96,6 +96,20 @@ export const processFormDataForSubmission = (formData: MentalModelFormValues): O
     createNewVersion: formData.createNewVersion || false,
     versionNote: formData.versionNote || `Update to ${formData.title}`
   };
+
+  // Prepare connections - ensure all required fields are present
+  const connections = formData.connections?.map(conn => ({
+    targetId: String(conn.targetId),
+    relationship: String(conn.relationship),
+    strength: conn.strength
+  })) || [];
+
+  // Prepare questions - ensure all required fields are present
+  const relatedQuestions = formData.relatedQuestions?.map(q => ({
+    id: q.id,
+    questionText: q.questionText || '', // Default to empty string if missing
+    isNew: q.isNew || false
+  })) || [];
   
   return {
     title: formData.title,
@@ -119,8 +133,8 @@ export const processFormDataForSubmission = (formData: MentalModelFormValues): O
     imageUrl: formData.imageUrl,
     visibility: formData.visibility,
     // Additional fields for related entities
-    connections: formData.connections || [],
-    relatedQuestions: formData.relatedQuestions || [],
+    connections, 
+    relatedQuestions,
     versionInfo
   };
 };

@@ -44,7 +44,14 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
           // Update form data with connections
           setFormData(prevData => {
             if (!prevData) return processModelForForm(model);
-            return { ...prevData, connections: formattedConnections };
+            return { 
+              ...prevData, 
+              connections: formattedConnections.map(conn => ({
+                targetId: String(conn.targetId), // Ensure targetId is a string
+                relationship: String(conn.relationship), // Convert relationship to string
+                strength: conn.strength
+              }))
+            };
           });
         } catch (error) {
           console.error('Error fetching connections:', error);
@@ -125,7 +132,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
             if (existingConn.strength !== conn.strength || existingConn.relationship !== conn.relationship) {
               await updateConnection(existingConn.id, {
                 strength: conn.strength,
-                relationship: conn.relationship
+                relationship: String(conn.relationship)
               });
             }
           } else {
@@ -134,7 +141,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
               sourceId: modelId,
               targetId: conn.targetId,
               strength: conn.strength,
-              relationship: conn.relationship
+              relationship: String(conn.relationship)
             });
           }
         }
