@@ -82,7 +82,12 @@ const checkAuthentication = async () => {
     throw new Error('Supabase client is not available');
   }
   
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session }, error } = await supabase.auth.getSession();
+  if (error) {
+    console.error('Authentication error:', error);
+    throw new Error(`Authentication error: ${error.message}`);
+  }
+  
   if (!session) {
     throw new Error('You must be authenticated to perform this action');
   }
@@ -95,24 +100,30 @@ export const createMentalModel = async (model: Omit<MentalModel, 'id'>): Promise
     throw new Error('Cannot create mental model: Supabase connection not available');
   }
   
-  // Check authentication
-  await checkAuthentication();
-  
-  // Generate a new UUID for the model
-  const modelWithId = {
-    ...model,
-    id: uuidv4()
-  };
-  
-  // Transform to Supabase format and ensure type is set to mental_model
-  const supabaseModel = {
-    ...transformMentalModelToSupabase(modelWithId),
-    type: 'mental_model'
-  };
-  
-  console.log('Creating mental model with data:', supabaseModel);
-  
   try {
+    // Check if table exists
+    const tableAccessible = await tableExists('distinctions.distinctions');
+    if (!tableAccessible) {
+      throw new Error('The distinctions.distinctions table does not exist or is not accessible');
+    }
+    
+    // Check authentication
+    await checkAuthentication();
+    
+    // Generate a new UUID for the model if not provided
+    const modelWithId = {
+      ...model,
+      id: model.id || uuidv4()
+    };
+    
+    // Transform to Supabase format and ensure type is set to mental_model
+    const supabaseModel = {
+      ...transformMentalModelToSupabase(modelWithId),
+      type: 'mental_model'
+    };
+    
+    console.log('Creating mental model with data:', supabaseModel);
+    
     const { data, error } = await supabase
       .from('distinctions.distinctions')
       .insert(supabaseModel)
@@ -121,7 +132,17 @@ export const createMentalModel = async (model: Omit<MentalModel, 'id'>): Promise
     
     if (error) {
       console.error('Supabase error when creating mental model:', error);
-      throw new Error(`Failed to create mental model: ${error.message}`);
+      
+      // Handle specific error cases
+      if (error.code === '42P01') {
+        throw new Error('Database table not found. Please run setup script.');
+      } else if (error.code === '23505') {
+        throw new Error('A mental model with this ID already exists.');
+      } else if (error.message.includes('permission denied')) {
+        throw new Error('Permission denied. Check your database policies.');
+      } else {
+        throw new Error(`Failed to create mental model: ${error.message}`);
+      }
     }
     
     if (!data) {

@@ -12,6 +12,7 @@ try {
   
   if (!supabaseUrl || !supabaseKey) {
     console.log('Supabase credentials not found in environment variables. Using fallback data.');
+    toast.error('Database credentials missing. Check your environment variables.');
     supabase = null;
   } else {
     console.log('Supabase credentials found. URL format valid:', 
@@ -31,16 +32,16 @@ try {
     supabase.from('distinctions.distinctions').select('id').limit(1)
       .then(response => {
         if (response.error) {
-          console.warn('Supabase connection test failed:', response.error.message);
+          console.warn('Supabase connection test failed:', response.error.message, response.error);
           if (response.error.code === '42P01') {  // Table or view does not exist
             console.log('The table does not exist. You may need to run the setup SQL script in the Supabase dashboard.');
-            toast.error('Database tables not set up properly. Please run the setup script.');
-          } else if (response.error.message.includes('permission denied')) {
+            toast.error('Database tables not set up. Please run the setup script.');
+          } else if (response.error.message && response.error.message.includes('permission denied')) {
             console.log('This appears to be a permissions issue. Check your RLS policies.');
             toast.error('Database permission issue. Check your policies.');
           } else {
             console.log('Unknown database error:', response.error);
-            toast.error('Database connection issue occurred');
+            toast.error('Database connection issue: ' + response.error.message);
           }
         } else {
           console.log('Supabase connection test successful!');
@@ -48,8 +49,8 @@ try {
         }
       })
       .catch(error => {
-        console.error('Supabase connection test error:', error.message);
-        toast.error('Failed to connect to database');
+        console.error('Supabase connection test error:', error.message, error);
+        toast.error('Failed to connect to database: ' + error.message);
       });
     
     console.log('Supabase client initialized successfully');

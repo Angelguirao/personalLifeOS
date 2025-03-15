@@ -8,6 +8,7 @@ import { processFormDataForSubmission } from '@/lib/garden/utils/form-processors
 import { handleConnections } from './ConnectionHandler';
 import { handleBookInspiration } from './InspirationHandler';
 import { v4 as uuidv4 } from 'uuid';
+import { tableExists } from '@/lib/garden/utils/table-utils';
 
 export const handleModelSubmit = async (
   formData: MentalModelFormValues, 
@@ -25,12 +26,24 @@ export const handleModelSubmit = async (
       return;
     }
     
+    // Check if database tables exist before proceeding
+    if (supabase) {
+      // Check if the required table exists
+      const tablesExist = await tableExists('distinctions.distinctions');
+      if (!tablesExist) {
+        toast.error('Database tables not properly set up. Please run the setup script.');
+        setIsSubmitting(false);
+        onOpenChange(false);
+        return;
+      }
+    }
+    
     // Check authentication status before proceeding
     if (supabase) {
       const { data: { session }, error: authError } = await supabase.auth.getSession();
       if (authError) {
         console.error('Authentication error:', authError);
-        toast.error('Authentication error occurred');
+        toast.error(`Authentication error: ${authError.message}`);
         setIsSubmitting(false);
         onOpenChange(false);
         return;
@@ -78,7 +91,10 @@ export const handleModelSubmit = async (
         toast.success('Mental model updated successfully');
       } catch (updateError) {
         console.error('Error updating mental model:', updateError);
-        toast.error(`Failed to update mental model: ${updateError instanceof Error ? updateError.message : 'Unknown error'}`);
+        const errorMessage = updateError instanceof Error 
+          ? updateError.message 
+          : 'Unknown error';
+        toast.error(`Failed to update mental model: ${errorMessage}`);
         setIsSubmitting(false);
         return;
       }
@@ -96,7 +112,21 @@ export const handleModelSubmit = async (
         toast.success('Mental model created successfully');
       } catch (createError) {
         console.error('Error creating mental model:', createError);
-        toast.error(`Failed to create mental model: ${createError instanceof Error ? createError.message : 'Unknown error'}`);
+        const errorMessage = createError instanceof Error 
+          ? createError.message 
+          : 'Unknown error';
+        
+        // Provide more user-friendly error messages based on common issues
+        if (errorMessage.includes('table does not exist')) {
+          toast.error('Database tables not set up. Please run the setup script.');
+        } else if (errorMessage.includes('permission denied')) {
+          toast.error('Database permission error. Please check your policies.');
+        } else if (errorMessage.includes('authentication')) {
+          toast.error('Authentication error. Please log in again.');
+        } else {
+          toast.error(`Failed to create mental model: ${errorMessage}`);
+        }
+        
         setIsSubmitting(false);
         return;
       }
@@ -131,7 +161,9 @@ export const handleModelSubmit = async (
     
     // Provide more specific error messages based on the error
     if (error instanceof Error) {
-      if (error.message.includes('id')) {
+      if (error.message.includes('table does not exist') || error.message.includes('42P01')) {
+        toast.error('Database table not found. Please run the setup script.');
+      } else if (error.message.includes('id')) {
         toast.error('Error with model ID generation. Please try again.');
       } else if (error.message.includes('not-null constraint')) {
         toast.error('Missing required fields. Please check the form.');

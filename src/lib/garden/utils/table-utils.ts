@@ -23,9 +23,9 @@ export const tableExists = async (tableName: string): Promise<boolean> => {
       
     if (error) {
       if (error.code === '42P01') {  // Table or view does not exist
-        console.warn(`Table ${tableName} does not exist in Supabase: ${error.message}`);
+        console.warn(`Table ${tableName} does not exist in Supabase: ${error.message}`, error);
       } else {
-        console.warn(`Error accessing table ${tableName}: ${error.message}`);
+        console.warn(`Error accessing table ${tableName}: ${error.message}`, error);
       }
       return false;
     }
