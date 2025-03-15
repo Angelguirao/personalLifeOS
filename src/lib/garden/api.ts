@@ -41,6 +41,16 @@ export {
   deleteMentalModel
 } from './api-mental-models';
 
+// Export questions API functions (new)
+export {
+  getQuestions,
+  getQuestionById,
+  createQuestion,
+  updateQuestion,
+  deleteQuestion,
+  getQuestionsForModel
+} from './api-questions';
+
 // Export inspirations API functions
 export {
   getInspirations,

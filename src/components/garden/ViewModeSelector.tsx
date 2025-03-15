@@ -40,6 +40,16 @@ const ViewModeSelector = ({ activeView, onViewChange }: ViewModeSelectorProps) =
         </ToggleGroupItem>
         
         <ToggleGroupItem 
+          value="qa" 
+          variant="outline" 
+          size="sm" 
+          className={`flex-1 sm:flex-initial ${activeView === 'qa' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+        >
+          <MessageCircle size={16} className="mr-2" />
+          Q&A
+        </ToggleGroupItem>
+        
+        <ToggleGroupItem 
           value="table" 
           variant="outline" 
           size="sm" 
@@ -48,17 +58,6 @@ const ViewModeSelector = ({ activeView, onViewChange }: ViewModeSelectorProps) =
         >
           <Table2 size={16} className="mr-2" />
           Table
-        </ToggleGroupItem>
-        
-        <ToggleGroupItem 
-          value="qa" 
-          variant="outline" 
-          size="sm" 
-          className={`flex-1 sm:flex-initial ${activeView === 'qa' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
-          disabled={true}
-        >
-          <MessageCircle size={16} className="mr-2" />
-          Q&A
         </ToggleGroupItem>
         
         <ToggleGroupItem 

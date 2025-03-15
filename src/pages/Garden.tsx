@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ListView from '@/components/garden/ListView';
 import GraphView from '@/components/garden/GraphView';
 import ViewModeSelector from '@/components/garden/ViewModeSelector';
+import { QuestionsView } from '@/components/garden/questions/QuestionsView';
 import { DataModelAdapter } from '@/lib/garden/adapters';
 import { Input } from '@/components/ui/input';
 import ModelManagement from '@/components/garden/ModelManagement';
@@ -15,6 +16,9 @@ import GardenHeader from '@/components/garden/GardenHeader';
 import GardenSearch from '@/components/garden/GardenSearch';
 import EmptyGarden from '@/components/garden/EmptyGarden';
 import { useGardenData } from '@/hooks/useGardenData';
+import { createQuestion, getQuestions } from '@/lib/garden/api';
+import { Question } from '@/lib/garden/types';
+import { toast } from 'sonner';
 
 // Views available in the garden
 type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart';
@@ -23,6 +27,7 @@ const Garden = () => {
   const [activeView, setActiveView] = useState<ViewMode>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [questions, setQuestions] = useState<Question[]>([]);
   
   const {
     models,
@@ -34,6 +39,32 @@ const Garden = () => {
     checkDatabase,
     handleModelSelect,
   } = useGardenData();
+
+  // Fetch questions
+  const fetchQuestions = async () => {
+    try {
+      const questionsData = await getQuestions();
+      console.log('Questions fetched:', questionsData);
+      setQuestions(questionsData);
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+      toast.error('Failed to load questions');
+    }
+  };
+
+  // Handle creating a new question
+  const handleCreateQuestion = async (questionData: Omit<Question, 'id'>) => {
+    try {
+      const newQuestion = await createQuestion(questionData);
+      setQuestions(prev => [...prev, newQuestion]);
+      toast.success('Question created successfully');
+      return newQuestion;
+    } catch (error) {
+      console.error('Error creating question:', error);
+      toast.error('Failed to create question');
+      throw error;
+    }
+  };
 
   // Convert to garden notes for legacy components
   const gardenNotes = DataModelAdapter.modelsToNotes(models);
@@ -47,6 +78,11 @@ const Garden = () => {
         model.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (model.tags && model.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
       );
+
+  // Fetch questions when component mounts or auth status changes
+  useEffect(() => {
+    fetchQuestions();
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -78,7 +114,7 @@ const Garden = () => {
               <div className="h-64 flex items-center justify-center">
                 <div className="animate-spin h-8 w-8 border-t-2 border-primary rounded-full"></div>
               </div>
-            ) : models.length === 0 ? (
+            ) : models.length === 0 && activeView !== 'qa' ? (
               <EmptyGarden 
                 onCreateModel={() => setIsCreateDialogOpen(true)} 
                 isAuthenticated={isAuthenticated}
@@ -116,6 +152,14 @@ const Garden = () => {
                       </Button>
                     </div>
                   </div>
+                )}
+                
+                {activeView === 'qa' && (
+                  <QuestionsView 
+                    questions={questions} 
+                    models={models.map(m => ({ id: m.id, title: m.title }))}
+                    onCreateQuestion={handleCreateQuestion}
+                  />
                 )}
               </>
             )}
