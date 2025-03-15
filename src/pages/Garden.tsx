@@ -12,7 +12,9 @@ import { DataModelAdapter } from '@/lib/garden/adapters';
 import RevealText from '@/components/ui/RevealText';
 import BlurEffect from '@/components/ui/BlurEffect';
 import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import ModelManagement from '@/components/garden/ModelManagement';
 
 // Views available in the garden
 type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart';
@@ -22,6 +24,8 @@ const Garden = () => {
   const [connections, setConnections] = useState<Connection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeView, setActiveView] = useState<ViewMode>('list');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedModel, setSelectedModel] = useState<MentalModel | undefined>(undefined);
 
   // Function to seed data
   const seedData = async () => {
@@ -45,6 +49,7 @@ const Garden = () => {
       const mentalModelsData = await getMentalModels();
       console.log('Mental models fetched:', mentalModelsData);
       setModels(mentalModelsData);
+      setSelectedModel(undefined);
       
       // Fetch connections
       const connectionsData = await getConnections();
@@ -70,12 +75,20 @@ const Garden = () => {
   // Convert to garden notes for legacy components
   const gardenNotes = DataModelAdapter.modelsToNotes(models);
 
-  // Check if we have valid connections
-  useEffect(() => {
-    if (connections.length > 0 && gardenNotes.length > 0) {
-      console.log(`Ready to display graph with ${connections.length} connections and ${gardenNotes.length} nodes`);
-    }
-  }, [connections, gardenNotes]);
+  // Handle model selection
+  const handleModelSelect = (model: MentalModel) => {
+    setSelectedModel(model);
+  };
+
+  // Filter models based on search query
+  const filteredModels = searchQuery.trim() === '' 
+    ? models 
+    : models.filter(model => 
+        model.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (model.subtitle && model.subtitle.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        model.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (model.tags && model.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
+      );
 
   return (
     <>
@@ -87,7 +100,7 @@ const Garden = () => {
             Back to home
           </Link>
           
-          <div className="space-y-4 mb-16 relative">
+          <div className="space-y-4 mb-8 relative">
             <h1 className="heading-lg">
               <RevealText>Digital Garden</RevealText>
             </h1>
@@ -98,8 +111,24 @@ const Garden = () => {
             </BlurEffect>
           </div>
           
-          <div className="space-y-6">
-            <ViewModeSelector activeView={activeView} onViewChange={setActiveView} />
+          <div className="flex flex-col space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between gap-4">
+              <ViewModeSelector activeView={activeView} onViewChange={setActiveView} />
+              
+              <div className="flex space-x-2">
+                <div className="relative w-full sm:w-64">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search mental models..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+            
+            <ModelManagement selectedModel={selectedModel} onRefresh={fetchData} />
             
             {isLoading ? (
               <div className="h-64 flex items-center justify-center">
@@ -108,7 +137,11 @@ const Garden = () => {
             ) : (
               <>
                 {activeView === 'list' && (
-                  <ListView notes={models} />
+                  <ListView 
+                    notes={filteredModels} 
+                    onSelectModel={handleModelSelect}
+                    selectedModelId={selectedModel?.id}
+                  />
                 )}
                 
                 {activeView === 'graph' && connections.length > 0 && gardenNotes.length > 0 ? (

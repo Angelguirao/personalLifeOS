@@ -44,8 +44,7 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
   return (
     <BlurEffect className={`animation-delay-${(index + 1) * 100}`}>
       <article 
-        className="glass p-6 h-full transition-transform hover:-translate-y-1 cursor-pointer flex flex-col"
-        onClick={handleOpenDialog}
+        className="glass p-6 h-full transition-transform hover:-translate-y-1 flex flex-col"
       >
         <div className="mb-3 flex items-center text-xs text-muted-foreground">
           <div className="flex items-center">
@@ -93,7 +92,6 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
         </div>
       </article>
       
-      {/* Passing MentalModel directly to NoteDialog */}
       <NoteDialog 
         note={note} 
         isOpen={isDialogOpen} 

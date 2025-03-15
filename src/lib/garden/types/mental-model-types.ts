@@ -85,7 +85,7 @@ export interface MentalModel {
   // Legacy compatibility
   stage?: 'seedling' | 'growing' | 'evergreen'; // For backward compatibility
   lastUpdated?: string; // For backward compatibility
-  // Add bookInfo property - included directly for simplicity
+  // Book info property - included directly for simplicity
   bookInfo?: BookInfo;
 }
 
