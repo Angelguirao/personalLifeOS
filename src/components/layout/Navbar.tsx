@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
@@ -78,7 +77,11 @@ const Navbar = () => {
 
   const handleLoginClick = async () => {
     if (!supabase) {
-      toast.error('Supabase is not configured properly');
+      toast({
+        title: "Error",
+        description: "Supabase is not configured properly",
+        variant: "destructive"
+      });
       return;
     }
 
