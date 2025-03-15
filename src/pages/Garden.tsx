@@ -15,6 +15,7 @@ import { useGardenData } from '@/hooks/useGardenData';
 import { createQuestion, getQuestions } from '@/lib/garden/api';
 import { Question } from '@/lib/garden/types';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 
 const Garden = () => {
   // State for hierarchical perspective and view mode
