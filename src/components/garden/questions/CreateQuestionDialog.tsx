@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -33,6 +34,7 @@ import { Check, ChevronsUpDown } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
 import { cn } from '@/lib/utils';
 
+// Define a strict schema that matches our Question type requirements
 const questionSchema = z.object({
   questionText: z.string().min(1, 'Question text is required'),
   category: z.enum(['philosophical', 'ethical', 'practical', 'scientific', 'social', 'personal']),
@@ -41,6 +43,7 @@ const questionSchema = z.object({
   relatedModels: z.array(z.string()).default([]),
 });
 
+// This ensures the form values will match the expected Omit<Question, "id"> type
 type QuestionFormValues = z.infer<typeof questionSchema>;
 
 interface CreateQuestionDialogProps {
@@ -69,7 +72,16 @@ export const CreateQuestionDialog = ({
 
   const handleSubmit = async (values: QuestionFormValues) => {
     try {
-      await onCreateQuestion(values);
+      // Cast the values to ensure TypeScript recognizes this as Omit<Question, "id">
+      const questionData: Omit<Question, 'id'> = {
+        questionText: values.questionText,
+        category: values.category,
+        clarificationNeeded: values.clarificationNeeded,
+        importanceRank: values.importanceRank,
+        relatedModels: values.relatedModels,
+      };
+      
+      await onCreateQuestion(questionData);
       form.reset();
       onOpenChange(false);
     } catch (error) {
