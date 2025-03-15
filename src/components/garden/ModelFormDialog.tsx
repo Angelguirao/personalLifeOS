@@ -135,7 +135,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
           if (existingConn) {
             // Update existing connection if needed
             if (existingConn.strength !== conn.strength || existingConn.relationship !== conn.relationship) {
-              await updateConnection(existingConn.id, {
+              await updateConnection(existingConn.id.toString(), {
                 strength: conn.strength,
                 relationship: conn.relationship as RelationshipType
               });
@@ -158,7 +158,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
           );
           
           if (!stillExists) {
-            await deleteConnection(existingConn.id);
+            await deleteConnection(existingConn.id.toString());
           }
         }
       }
@@ -189,7 +189,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
           if (existingBookInspiration) {
             // Delete old inspiration if book title changed
             if (existingBookInspiration.sourceName !== processedData.bookInfo.title) {
-              await deleteInspiration(existingBookInspiration.id);
+              await deleteInspiration(existingBookInspiration.id.toString());
               await createInspiration(bookInspiration);
             }
             // If only other fields changed, update would go here
