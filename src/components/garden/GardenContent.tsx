@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ListView from '@/components/garden/ListView';
 import GraphView from '@/components/garden/GraphView';

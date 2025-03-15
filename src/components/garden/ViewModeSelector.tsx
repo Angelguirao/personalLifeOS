@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Layers, Network, List, Table2, MessageCircle, GitBranch, Sprout, BookText, BookOpen, Book, HelpCircle, Brain, Activity, Layout } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
@@ -82,7 +81,6 @@ const ViewModeSelector = ({
             variant="outline" 
             size="sm" 
             className={`flex-1 sm:flex-initial ${activePerspective === 'systems' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
-            disabled={true}
           >
             <Layers size={16} className="mr-2" />
             Systems
@@ -167,6 +165,31 @@ const ViewModeSelector = ({
             >
               <MessageCircle size={16} className="mr-2" />
               Q&A
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+      )}
+
+      {/* Systems perspective view options */}
+      {activePerspective === 'systems' && (
+        <div className="flex flex-col items-center w-full">
+          <div className="text-sm text-muted-foreground mb-3">
+            Choose a view mode for Systems
+          </div>
+          <ToggleGroup 
+            type="single" 
+            value="list" 
+            onValueChange={(value) => value && onViewChange(value as ViewMode)} 
+            className="flex flex-wrap justify-center gap-2"
+          >
+            <ToggleGroupItem 
+              value="list" 
+              variant="outline" 
+              size="sm" 
+              className="flex-1 sm:flex-initial bg-black text-white hover:bg-black/90"
+            >
+              <List size={16} className="mr-2" />
+              List
             </ToggleGroupItem>
           </ToggleGroup>
         </div>

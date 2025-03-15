@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import GardenActionBar from '@/components/garden/GardenActionBar';
 import GardenContent from '@/components/garden/GardenContent';
+import SystemsView from '@/components/garden/SystemsView';
 
 const Garden = () => {
   // State for hierarchical perspective and view mode
@@ -24,11 +25,14 @@ const Garden = () => {
   const {
     models,
     connections,
+    systems,
     isLoading,
     selectedModel,
+    selectedSystem,
     isAuthenticated,
     fetchData,
     handleModelSelect,
+    handleSystemSelect,
   } = useGardenData();
 
   // Fetch questions
@@ -65,6 +69,8 @@ const Garden = () => {
       setActiveView('qa');
     } else if (perspective === 'mentalModels') {
       setActiveView('list');
+    } else if (perspective === 'systems') {
+      setActiveView('list');
     }
   };
 
@@ -76,6 +82,15 @@ const Garden = () => {
         (model.subtitle && model.subtitle.toLowerCase().includes(searchQuery.toLowerCase())) ||
         model.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (model.tags && model.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
+      );
+
+  // Filter systems based on search query
+  const filteredSystems = searchQuery.trim() === ''
+    ? systems
+    : systems.filter(system =>
+        system.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (system.description && system.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (system.category && system.category.toLowerCase().includes(searchQuery.toLowerCase()))
       );
 
   // Fetch questions when component mounts or auth status changes
@@ -111,21 +126,25 @@ const Garden = () => {
             
             {/* Content Area */}
             <div className="mt-6">
-              <GardenContent 
-                activePerspective={activePerspective}
-                activeView={activeView}
-                models={models}
-                filteredModels={filteredModels}
-                connections={connections}
-                questions={questions}
-                selectedModel={selectedModel}
-                isLoading={isLoading}
-                isAuthenticated={isAuthenticated}
-                onCreateModel={() => setIsCreateDialogOpen(true)}
-                handleModelSelect={handleModelSelect}
-                onCreateQuestion={handleCreateQuestion}
-                fetchData={fetchData}
-              />
+              {activePerspective === 'systems' ? (
+                <SystemsView onSelectSystem={handleSystemSelect} />
+              ) : (
+                <GardenContent 
+                  activePerspective={activePerspective}
+                  activeView={activeView}
+                  models={models}
+                  filteredModels={filteredModels}
+                  connections={connections}
+                  questions={questions}
+                  selectedModel={selectedModel}
+                  isLoading={isLoading}
+                  isAuthenticated={isAuthenticated}
+                  onCreateModel={() => setIsCreateDialogOpen(true)}
+                  handleModelSelect={handleModelSelect}
+                  onCreateQuestion={handleCreateQuestion}
+                  fetchData={fetchData}
+                />
+              )}
             </div>
           </div>
         </div>
