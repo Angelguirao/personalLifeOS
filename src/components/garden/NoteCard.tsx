@@ -32,12 +32,16 @@ const NoteCard = ({ note, index, onRefresh }: NoteCardProps) => {
   // Extract first sentence for a concise description
   const firstSentence = note.summary.split('.')[0] + '.';
   
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent event bubbling
+    setIsDialogOpen(true);
+  };
+  
+  const handleCardClick = () => {
     setIsDialogOpen(true);
   };
   
   const handleDialogOpenChange = (open: boolean) => {
-    console.log("Dialog open state changed to:", open);
     setIsDialogOpen(open);
   };
   
@@ -45,7 +49,7 @@ const NoteCard = ({ note, index, onRefresh }: NoteCardProps) => {
     <BlurEffect className={`animation-delay-${(index + 1) * 100}`}>
       <article 
         className="glass p-6 h-full transition-transform hover:-translate-y-1 flex flex-col cursor-pointer"
-        onClick={handleOpenDialog}
+        onClick={handleCardClick}
       >
         <div className="mb-3 flex items-center text-xs text-muted-foreground">
           <div className="flex items-center">
