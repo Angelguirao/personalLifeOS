@@ -31,11 +31,13 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
   // Extract first sentence for a concise description
   const firstSentence = note.summary.split('.')[0] + '.';
   
-  const handleCardClick = () => {
+  const handleOpenDialog = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsDialogOpen(true);
   };
   
   const handleDialogOpenChange = (open: boolean) => {
+    console.log("Dialog open state changed to:", open);
     setIsDialogOpen(open);
   };
   
@@ -43,7 +45,7 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
     <BlurEffect className={`animation-delay-${(index + 1) * 100}`}>
       <article 
         className="glass p-6 h-full transition-transform hover:-translate-y-1 cursor-pointer flex flex-col"
-        onClick={handleCardClick}
+        onClick={handleOpenDialog}
       >
         <div className="mb-3 flex items-center text-xs text-muted-foreground">
           <div className="flex items-center">
@@ -76,24 +78,21 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
             <Button 
               variant="ghost" 
               className="text-primary hover:text-primary/90 gap-1"
-              onClick={(e) => {
-                e.stopPropagation(); // Prevent card click when button is clicked
-                setIsDialogOpen(true);
-              }}
+              onClick={handleOpenDialog}
             >
               Read more
               <ChevronRight size={16} />
             </Button>
           </div>
         </div>
-        
-        {/* Dialog component with proper state management */}
-        <NoteDialog 
-          note={note} 
-          isOpen={isDialogOpen} 
-          onOpenChange={handleDialogOpenChange}
-        />
       </article>
+      
+      {/* Separate dialog component from article markup */}
+      <NoteDialog 
+        note={note} 
+        isOpen={isDialogOpen} 
+        onOpenChange={handleDialogOpenChange}
+      />
     </BlurEffect>
   );
 };

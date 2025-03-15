@@ -22,10 +22,6 @@ const NoteDialog = ({ note, isOpen, onOpenChange }: NoteDialogProps) => {
     }
   };
 
-  const handleClose = () => {
-    onOpenChange(false);
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl overflow-y-auto max-h-[90vh]">
@@ -36,13 +32,11 @@ const NoteDialog = ({ note, isOpen, onOpenChange }: NoteDialogProps) => {
           </DialogDescription>
         </DialogHeader>
         
-        <div 
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground cursor-pointer"
-          onClick={handleClose}
-        >
+        {/* Use the built-in DialogClose component instead of a custom div */}
+        <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
-        </div>
+        </DialogClose>
         
         <div className="mb-3 flex items-center text-xs text-muted-foreground">
           <div className="flex items-center">
@@ -87,13 +81,14 @@ const NoteDialog = ({ note, isOpen, onOpenChange }: NoteDialogProps) => {
         </div>
         
         <div className="flex justify-center mt-6">
-          <Button 
-            variant="outline" 
-            onClick={handleClose}
-            className="gap-2"
-          >
-            Close
-          </Button>
+          <DialogClose asChild>
+            <Button 
+              variant="outline" 
+              className="gap-2"
+            >
+              Close
+            </Button>
+          </DialogClose>
         </div>
       </DialogContent>
     </Dialog>
