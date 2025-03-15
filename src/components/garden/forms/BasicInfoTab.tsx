@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { Control } from 'react-hook-form';
+import React, { useState } from 'react';
+import { Control, useWatch, useFormContext } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -14,12 +13,69 @@ import {
 import { MentalModelFormValues } from './types';
 import { Image, Clock, MapPin, Heart, Eye } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { v4 as uuidv4 } from 'uuid';
+import supabase from '@/lib/garden/client';
+import { toast } from 'sonner';
 
 interface BasicInfoTabProps {
   control: Control<MentalModelFormValues>;
 }
 
 export const BasicInfoTab = ({ control }: BasicInfoTabProps) => {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  // This will track the field value to show preview or placeholder
+  const imageUrl = useWatch({
+    control,
+    name: "imageUrl",
+    defaultValue: ""
+  });
+
+  // File upload handler
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    
+    // Check if Supabase is available
+    if (!supabase) {
+      toast.error('File upload requires Supabase. Please connect to Supabase or paste an image URL instead.');
+      return;
+    }
+    
+    try {
+      setIsUploading(true);
+      
+      // Generate a unique file name
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${uuidv4()}.${fileExt}`;
+      const filePath = `mental-models/${fileName}`;
+      
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('garden')
+        .upload(filePath, file);
+      
+      if (error) throw error;
+      
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('garden')
+        .getPublicUrl(filePath);
+      
+      // Set the URL in the form
+      form.setValue("imageUrl", publicUrl);
+      setPreviewUrl(URL.createObjectURL(file));
+      
+      toast.success('Image uploaded successfully');
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      toast.error('Failed to upload image. Please try again or use an external URL.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <>
       <h3 className="text-lg font-semibold">Basic Information</h3>
@@ -127,22 +183,60 @@ export const BasicInfoTab = ({ control }: BasicInfoTabProps) => {
         )}
       />
       
-      <FormField
-        control={control}
-        name="imageUrl"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="flex items-center gap-1">
-              <Image size={16} /> Image URL
-            </FormLabel>
-            <FormControl>
-              <Input placeholder="URL to an image representing this model" {...field} />
-            </FormControl>
-            <FormDescription>An image that visually represents this mental model</FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <div className="space-y-2">
+        <FormField
+          control={control}
+          name="imageUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="flex items-center gap-1">
+                <Image size={16} /> Image
+              </FormLabel>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <FormControl>
+                    <Input 
+                      placeholder="URL to an image representing this model" 
+                      {...field} 
+                      className="mb-2"
+                    />
+                  </FormControl>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      className="max-w-64"
+                      disabled={isUploading}
+                    />
+                    {isUploading && (
+                      <div className="animate-spin h-4 w-4 border-2 border-primary rounded-full border-t-transparent"></div>
+                    )}
+                  </div>
+                  <FormDescription>
+                    Upload an image or paste a URL that visually represents this mental model
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+                <div className="h-32 md:h-40 relative border rounded-md overflow-hidden bg-muted/20">
+                  {(imageUrl || previewUrl) ? (
+                    <img 
+                      src={previewUrl || imageUrl} 
+                      alt="Preview" 
+                      className="w-full h-full object-cover"
+                      onError={() => setPreviewUrl(null)}
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+                      <Image size={32} strokeWidth={1} />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </FormItem>
+          )}
+        />
+      </div>
       
       <FormField
         control={control}
