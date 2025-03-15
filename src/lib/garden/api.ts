@@ -60,6 +60,18 @@ export {
   deleteInspiration
 } from './api-inspirations';
 
+// Export systems API functions
+export {
+  getSystems,
+  getSystemById,
+  createSystem,
+  updateSystem,
+  deleteSystem,
+  getSystemModelRelations,
+  createSystemModelRelation,
+  deleteSystemModelRelation
+} from './api-systems';
+
 // Export utility functions if needed externally
 export {
   tableExists,
