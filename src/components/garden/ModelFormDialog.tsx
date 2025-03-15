@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import MentalModelForm from './MentalModelForm';
+import MentalModelForm, { MentalModelFormValues } from './MentalModelForm';
 import { MentalModel } from '@/lib/garden/types';
 import { createMentalModel, updateMentalModel } from '@/lib/garden/api';
 import { toast } from 'sonner';
+import supabase from '@/lib/garden/client';
 
 interface ModelFormDialogProps {
   isOpen: boolean;
@@ -16,9 +17,20 @@ interface ModelFormDialogProps {
 const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDialogProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: MentalModelFormValues & { tags: string[] }) => {
     setIsSubmitting(true);
     try {
+      // Check authentication status before proceeding
+      if (supabase) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          toast.error('You must be logged in to perform this action');
+          setIsSubmitting(false);
+          onOpenChange(false);
+          return;
+        }
+      }
+      
       // Generate a timestamp
       const now = new Date().toISOString();
       

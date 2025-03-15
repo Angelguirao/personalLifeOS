@@ -1,4 +1,3 @@
-
 import supabase from './client';
 import { mentalModels } from './data';
 import { MentalModel } from './types/mental-model-types';
@@ -74,10 +73,27 @@ export const getMentalModelById = async (id: string): Promise<MentalModel | unde
   }
 };
 
+// Helper function to check if the user is authenticated
+const checkAuthentication = async () => {
+  if (!supabase) {
+    throw new Error('Supabase client is not available');
+  }
+  
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) {
+    throw new Error('You must be authenticated to perform this action');
+  }
+  
+  return session;
+};
+
 export const createMentalModel = async (model: Omit<MentalModel, 'id'>): Promise<MentalModel> => {
   if (!supabase || !(await tableExists('mental_models'))) {
     throw new Error('Cannot create mental model: Supabase connection or table not available');
   }
+  
+  // Check authentication
+  await checkAuthentication();
   
   const supabaseModel = transformMentalModelToSupabase(model);
   
@@ -95,6 +111,9 @@ export const updateMentalModel = async (id: string, model: Partial<MentalModel>)
   if (!supabase || !(await tableExists('mental_models'))) {
     throw new Error('Cannot update mental model: Supabase connection or table not available');
   }
+  
+  // Check authentication
+  await checkAuthentication();
   
   const updates: any = {};
   
@@ -138,6 +157,9 @@ export const deleteMentalModel = async (id: string): Promise<void> => {
   if (!supabase || !(await tableExists('mental_models'))) {
     throw new Error('Cannot delete mental model: Supabase connection or table not available');
   }
+  
+  // Check authentication
+  await checkAuthentication();
   
   const { error } = await supabase
     .from('mental_models')

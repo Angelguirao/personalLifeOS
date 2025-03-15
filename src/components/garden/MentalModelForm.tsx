@@ -27,11 +27,11 @@ const mentalModelSchema = z.object({
   tags: z.string().optional(),
 });
 
-type MentalModelFormValues = z.infer<typeof mentalModelSchema>;
+export type MentalModelFormValues = z.infer<typeof mentalModelSchema>;
 
 interface MentalModelFormProps {
   model?: MentalModel;
-  onSubmit: (data: any) => Promise<void>;
+  onSubmit: (data: MentalModelFormValues & { tags: string[] }) => Promise<void>;
   onCancel: () => void;
   isSubmitting: boolean;
 }
