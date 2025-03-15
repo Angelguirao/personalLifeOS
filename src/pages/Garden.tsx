@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -58,7 +57,6 @@ const Garden = () => {
       const newQuestion = await createQuestion(questionData);
       setQuestions(prev => [...prev, newQuestion]);
       toast.success('Question created successfully');
-      return newQuestion;
     } catch (error) {
       console.error('Error creating question:', error);
       toast.error('Failed to create question');

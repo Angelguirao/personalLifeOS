@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -33,7 +32,6 @@ import {
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
 import { cn } from '@/lib/utils';
-import { v4 as uuidv4 } from 'uuid';
 
 const questionSchema = z.object({
   questionText: z.string().min(1, 'Question text is required'),
@@ -71,10 +69,7 @@ export const CreateQuestionDialog = ({
 
   const handleSubmit = async (values: QuestionFormValues) => {
     try {
-      await onCreateQuestion({
-        ...values,
-        id: uuidv4(), // This will be ignored on the API side as the backend will generate its own ID
-      });
+      await onCreateQuestion(values);
       form.reset();
       onOpenChange(false);
     } catch (error) {
