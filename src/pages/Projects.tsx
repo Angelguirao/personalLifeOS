@@ -71,8 +71,8 @@ const Projects = () => {
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-16 min-h-screen">
-        <div className="container-wide px-4 sm:px-6">
+      <main className="pt-28 pb-16">
+        <div className="container-narrow">
           <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors">
             <ArrowLeft size={16} className="mr-1.5" />
             Back to home

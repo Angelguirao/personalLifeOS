@@ -78,8 +78,8 @@ const Garden = () => {
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-16 min-h-screen">
-        <div className="container-wide px-4 sm:px-6">
+      <main className="pt-28 pb-16">
+        <div className="container-narrow">
           <div className="space-y-4 mb-16 relative">
             <h1 className="heading-lg">
               <RevealText>Digital Garden</RevealText>
