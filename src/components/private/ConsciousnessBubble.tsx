@@ -21,14 +21,14 @@ const ConsciousnessBubble = ({ title, description, icon }: ConsciousnessBubblePr
   
   const BubbleContent = () => (
     <motion.div 
-      className="p-6 bg-card/80 backdrop-blur-sm border border-border rounded-lg transition-all duration-300 hover:shadow-lg hover:border-primary/40 group"
+      className="h-full p-6 bg-card/80 backdrop-blur-sm border border-border rounded-lg transition-all duration-300 hover:shadow-lg hover:border-primary/40 group flex flex-col"
       variants={bubbleVariants}
       initial="initial"
       animate="animate"
       whileHover="hover"
     >
-      <div className="flex items-start gap-4">
-        <div className="bg-primary/10 p-3 rounded-lg text-primary">
+      <div className="flex items-start gap-4 h-full">
+        <div className="bg-primary/10 p-3 rounded-lg text-primary shrink-0">
           {icon}
         </div>
         <div className="space-y-2">
@@ -44,11 +44,11 @@ const ConsciousnessBubble = ({ title, description, icon }: ConsciousnessBubblePr
   );
   
   return isSelfBubble ? (
-    <Link to="/about" className={cn("block", isSelfBubble && "cursor-pointer")}>
+    <Link to="/about" className={cn("block h-full", isSelfBubble && "cursor-pointer")}>
       <BubbleContent />
     </Link>
   ) : (
-    <div>
+    <div className="h-full">
       <BubbleContent />
     </div>
   );
