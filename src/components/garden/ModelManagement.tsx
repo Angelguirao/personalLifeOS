@@ -31,7 +31,6 @@ const ModelManagement = ({ selectedModel, onRefresh }: ModelManagementProps) => 
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   useEffect(() => {
-    // Check authentication status on mount
     const checkAuthStatus = async () => {
       setIsAuthLoading(true);
       if (!supabase) {
