@@ -4,6 +4,7 @@ import { ArrowDownIcon } from 'lucide-react';
 import RevealText from '../ui/RevealText';
 import BlurEffect from '../ui/BlurEffect';
 import { useAuth } from '@/hooks/useAuth';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   const { isAuthenticated } = useAuth();
@@ -45,12 +46,17 @@ const Hero = () => {
           </BlurEffect>
           
           <div className="mt-12 opacity-0 animate-fade-in animation-delay-700">
-            <a href="#philosophy-preview" className="inline-flex flex-col items-center text-foreground hover:text-primary transition-colors group">
-              <span className="text-base font-medium mb-3">
-                {isAuthenticated ? "Explore your OS" : "Scroll to explore"}
-              </span>
-              <ArrowDownIcon className="animate-bounce h-6 w-6 group-hover:text-primary" />
-            </a>
+            {isAuthenticated ? (
+              <Link to="#consciousness-os" className="inline-flex flex-col items-center text-foreground hover:text-primary transition-colors group">
+                <span className="text-base font-medium mb-3">Explore your OS</span>
+                <ArrowDownIcon className="animate-bounce h-6 w-6 group-hover:text-primary" />
+              </Link>
+            ) : (
+              <a href="#philosophy-preview" className="inline-flex flex-col items-center text-foreground hover:text-primary transition-colors group">
+                <span className="text-base font-medium mb-3">Scroll to explore</span>
+                <ArrowDownIcon className="animate-bounce h-6 w-6 group-hover:text-primary" />
+              </a>
+            )}
           </div>
         </div>
       </div>

@@ -12,6 +12,9 @@ import Projects from "./pages/Projects";
 import Garden from "./pages/Garden";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import Tools from "./pages/Tools";
+import Constraints from "./pages/Constraints";
+import Connect from "./pages/Connect";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +43,9 @@ const App = () => (
           <Route path="/projects" element={<Projects />} />
           <Route path="/garden" element={<Garden />} />
           <Route path="/about" element={<About />} />
+          <Route path="/tools" element={<Tools />} />
+          <Route path="/constraints" element={<Constraints />} />
+          <Route path="/connect" element={<Connect />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

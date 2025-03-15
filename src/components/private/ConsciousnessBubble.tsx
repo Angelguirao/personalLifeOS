@@ -1,24 +1,44 @@
 
 import React from 'react';
-import { cn } from "@/lib/utils";
+import { Link } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 
-export interface ConsciousnessBubbleProps {
+interface ConsciousnessBubbleProps {
   title: string;
   description: string;
   icon: React.ReactNode;
-  className?: string;
 }
 
-const ConsciousnessBubble = ({ title, description, icon, className }: ConsciousnessBubbleProps) => (
-  <div className={cn("glass p-6 flex flex-col h-full hover:shadow-md transition-all duration-300 group border-l-4 border-primary/50", className)}>
-    <div className="flex items-center gap-3 mb-3">
-      <div className="text-primary/80 group-hover:text-primary transition-colors duration-300">
-        {icon}
+const ConsciousnessBubble = ({ title, description, icon }: ConsciousnessBubbleProps) => {
+  const isSelfBubble = title === 'Self';
+  
+  const BubbleContent = () => (
+    <div className="p-6 bg-card/80 backdrop-blur-sm border border-border rounded-lg transition-all duration-300 hover:shadow-md hover:border-primary/20 group">
+      <div className="flex items-start gap-4">
+        <div className="bg-primary/10 p-2.5 rounded-md text-primary">
+          {icon}
+        </div>
+        <div className="space-y-1">
+          <h3 className="font-medium text-base group-hover:text-primary transition-colors">
+            {title}
+          </h3>
+          <p className="text-sm text-muted-foreground">
+            {description}
+          </p>
+        </div>
       </div>
-      <h3 className="font-serif text-lg font-semibold">{title}</h3>
     </div>
-    <p className="text-sm text-muted-foreground group-hover:text-foreground/90 transition-colors duration-300">{description}</p>
-  </div>
-);
+  );
+  
+  return isSelfBubble ? (
+    <Link to="/about" className={cn("block", isSelfBubble && "cursor-pointer")}>
+      <BubbleContent />
+    </Link>
+  ) : (
+    <div>
+      <BubbleContent />
+    </div>
+  );
+};
 
 export default ConsciousnessBubble;

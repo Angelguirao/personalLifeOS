@@ -30,11 +30,12 @@ const Footer = () => {
             <h3 className="font-serif text-lg font-semibold">Navigation</h3>
             <nav className="flex flex-col space-y-2">
               <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Home</Link>
-              <Link to="/philosophy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Philosophy</Link>
-              <Link to="/entrepreneurship" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Micropreneurship</Link>
-              <Link to="/projects" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Projects</Link>
-              <Link to="/garden" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Garden</Link>
-              <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</Link>
+              <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Self</Link>
+              <Link to="/garden" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Theory</Link>
+              <Link to="/projects" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Action</Link>
+              <Link to="/tools" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Tools</Link>
+              <Link to="/constraints" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Constraints</Link>
+              <Link to="/connect" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Connect</Link>
             </nav>
           </div>
           

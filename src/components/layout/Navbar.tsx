@@ -15,11 +15,12 @@ const Navbar = () => {
   
   const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'Philosophy', path: '/philosophy' },
-    { name: 'Micropreneurship', path: '/entrepreneurship' },
-    { name: 'Projects', path: '/projects' },
-    { name: 'Garden', path: '/garden' },
-    { name: 'About', path: '/about' },
+    { name: 'Self', path: '/about' },
+    { name: 'Theory', path: '/garden' },
+    { name: 'Action', path: '/projects' },
+    { name: 'Tools', path: '/tools' },
+    { name: 'Constraints', path: '/constraints' },
+    { name: 'Connect', path: '/connect' },
   ];
 
   useEffect(() => {
