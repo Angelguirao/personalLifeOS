@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import { BookOpen, Check } from 'lucide-react';
-import { MentalModelFormValues } from '../MentalModelForm';
+import { MentalModelFormValues } from './types';
 
 interface AnalysisTabProps {
   control: Control<MentalModelFormValues>;

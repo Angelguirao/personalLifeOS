@@ -19,7 +19,7 @@ import {
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '@/components/ui/separator';
 import { X, Plus } from 'lucide-react';
-import { MentalModelFormValues } from '../MentalModelForm';
+import { MentalModelFormValues } from './types';
 import { RelationshipType } from '@/lib/garden/types/connection-types';
 import { getMentalModels } from '@/lib/garden/api';
 

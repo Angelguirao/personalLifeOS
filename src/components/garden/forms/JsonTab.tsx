@@ -11,7 +11,7 @@ import {
   FormMessage,
   FormDescription,
 } from '@/components/ui/form';
-import { MentalModelFormValues } from '../MentalModelForm';
+import { MentalModelFormValues } from './types';
 import { Code, Copy, Download, Loader, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 

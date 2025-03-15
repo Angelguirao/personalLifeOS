@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import { Calendar, Check } from 'lucide-react';
-import { MentalModelFormValues } from '../MentalModelForm';
+import { MentalModelFormValues } from './types';
 
 interface MetadataTabProps {
   control: Control<MentalModelFormValues>;

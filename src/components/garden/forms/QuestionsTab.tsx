@@ -10,7 +10,7 @@ import {
   FormMessage,
   FormDescription,
 } from '@/components/ui/form';
-import { MentalModelFormValues } from '../MentalModelForm';
+import { MentalModelFormValues } from './types';
 import { HelpCircle } from 'lucide-react';
 
 interface QuestionsTabProps {

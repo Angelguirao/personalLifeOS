@@ -10,7 +10,7 @@ import {
   FormMessage,
   FormDescription,
 } from '@/components/ui/form';
-import { MentalModelFormValues } from '../MentalModelForm';
+import { MentalModelFormValues } from './types';
 import { Checkbox } from '@/components/ui/checkbox';
 import { History, GitBranch, GitMerge } from 'lucide-react';
 

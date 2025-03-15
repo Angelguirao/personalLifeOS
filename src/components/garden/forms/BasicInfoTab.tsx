@@ -11,7 +11,7 @@ import {
   FormMessage,
   FormDescription,
 } from '@/components/ui/form';
-import { MentalModelFormValues } from '../MentalModelForm';
+import { MentalModelFormValues } from './types';
 import { Image, Clock, MapPin, Heart, Eye } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 

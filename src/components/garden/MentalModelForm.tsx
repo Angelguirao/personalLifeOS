@@ -1,26 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-} from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import { MentalModel } from '@/lib/garden/types';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { mentalModelSchema } from './forms/schema';
-import { BasicInfoTab } from './forms/BasicInfoTab';
-import { MetadataTab } from './forms/MetadataTab';
-import { AnalysisTab } from './forms/AnalysisTab';
-import { QuestionsTab } from './forms/QuestionsTab';
-import { InspirationsTab } from './forms/InspirationsTab';
-import { VersioningTab } from './forms/VersioningTab';
-import { JsonTab } from './forms/JsonTab';
-import { ConnectionsTab } from './forms/ConnectionsTab';
 import { processModelForForm } from '@/lib/garden/utils/form-processors';
-
-export type MentalModelFormValues = z.infer<typeof mentalModelSchema>;
+import { FormTabs } from './forms/FormTabs';
+import { FormActions } from './forms/FormActions';
+import { MentalModelFormValues } from './forms/types';
 
 interface MentalModelFormProps {
   model?: MentalModel;
@@ -29,22 +17,6 @@ interface MentalModelFormProps {
   onCancel: () => void;
   isSubmitting: boolean;
 }
-
-// Helper function to convert arrays to comma-separated strings for form initialization
-export const convertArrayToString = (arr?: string[]) => arr ? arr.join(', ') : '';
-
-// Handle legacy visibility values
-export const getVisibilityValue = (modelVisibility?: string): 'public' | 'private' | 'unlisted' => {
-  if (!modelVisibility) return 'public';
-  
-  // If we have a legacy 'restricted' value, convert it to 'private'
-  if (modelVisibility === 'restricted') {
-    return 'private';
-  }
-  
-  // Otherwise, use the value as long as it matches our allowed types
-  return modelVisibility as 'public' | 'private' | 'unlisted';
-};
 
 const MentalModelForm = ({ model, initialData, onSubmit, onCancel, isSubmitting }: MentalModelFormProps) => {
   const [activeTab, setActiveTab] = useState("basic");
@@ -139,71 +111,20 @@ const MentalModelForm = ({ model, initialData, onSubmit, onCancel, isSubmitting 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-8 mb-4">
-            <TabsTrigger value="basic">Basic</TabsTrigger>
-            <TabsTrigger value="metadata">Metadata</TabsTrigger>
-            <TabsTrigger value="analysis">Analysis</TabsTrigger>
-            <TabsTrigger value="connections">Connections</TabsTrigger>
-            <TabsTrigger value="questions">Questions</TabsTrigger>
-            <TabsTrigger value="inspirations">Inspirations</TabsTrigger>
-            <TabsTrigger value="versioning">Versioning</TabsTrigger>
-            <TabsTrigger value="json">JSON</TabsTrigger>
-          </TabsList>
-          
-          {/* Basic Information Tab (now includes Origin) */}
-          <TabsContent value="basic" className="space-y-4">
-            <BasicInfoTab control={form.control} />
-          </TabsContent>
-          
-          {/* Metadata Tab */}
-          <TabsContent value="metadata" className="space-y-4">
-            <MetadataTab control={form.control} />
-          </TabsContent>
-          
-          {/* Analysis Tab */}
-          <TabsContent value="analysis" className="space-y-4">
-            <AnalysisTab control={form.control} />
-          </TabsContent>
-          
-          {/* Connections Tab */}
-          <TabsContent value="connections" className="space-y-4">
-            <ConnectionsTab control={form.control} modelId={model?.id} />
-          </TabsContent>
-          
-          {/* Questions Tab (formerly part of Additional) */}
-          <TabsContent value="questions" className="space-y-4">
-            <QuestionsTab control={form.control} />
-          </TabsContent>
-          
-          {/* Inspirations Tab (formerly part of Additional) */}
-          <TabsContent value="inspirations" className="space-y-4">
-            <InspirationsTab control={form.control} />
-          </TabsContent>
-          
-          {/* Versioning Tab (new, formerly part of Origin) */}
-          <TabsContent value="versioning" className="space-y-4">
-            <VersioningTab control={form.control} />
-          </TabsContent>
-          
-          {/* JSON Tab */}
-          <TabsContent value="json" className="space-y-4">
-            <JsonTab 
-              control={form.control} 
-              defaultValues={defaultValues} 
-              reset={(values) => form.reset(values)} 
-            />
-          </TabsContent>
-        </Tabs>
+        <FormTabs 
+          control={form.control}
+          modelId={model?.id}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          defaultValues={defaultValues}
+          resetForm={(values) => form.reset(values)}
+        />
 
-        <div className="flex justify-end space-x-2 pt-4">
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
-            Cancel
-          </Button>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Saving...' : model ? 'Update Model' : 'Create Model'}
-          </Button>
-        </div>
+        <FormActions 
+          isSubmitting={isSubmitting}
+          onCancel={onCancel}
+          isUpdate={!!model}
+        />
       </form>
     </Form>
   );
