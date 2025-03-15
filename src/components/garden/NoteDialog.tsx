@@ -103,6 +103,33 @@ const NoteDialog = ({ note, isOpen, onOpenChange, onModelDeleted }: NoteDialogPr
     }
   };
 
+  // Helper function to check if an object or array has content
+  const hasContent = (obj: any): boolean => {
+    if (!obj) return false;
+    
+    if (Array.isArray(obj)) {
+      return obj.length > 0;
+    }
+    
+    if (typeof obj === 'object') {
+      // Check if any value in the object is non-empty
+      return Object.values(obj).some(value => {
+        if (typeof value === 'string') return value.trim() !== '';
+        if (Array.isArray(value)) return value.length > 0;
+        if (typeof value === 'object' && value !== null) return hasContent(value);
+        return false;
+      });
+    }
+    
+    return false;
+  };
+  
+  // Check if socratic attributes section has any content to display
+  const hasSocraticContent = note.socraticAttributes && hasContent(note.socraticAttributes);
+  
+  // Check if consequences section has any content to display
+  const hasConsequencesContent = note.consequences && hasContent(note.consequences);
+
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -204,11 +231,13 @@ const NoteDialog = ({ note, isOpen, onOpenChange, onModelDeleted }: NoteDialogPr
             )}
             
             {/* Full content */}
-            <div className="prose prose-slate dark:prose-invert max-w-none">
-              <p>
-                {note.fullContent}
-              </p>
-            </div>
+            {note.fullContent && note.fullContent.trim() !== '' && (
+              <div className="prose prose-slate dark:prose-invert max-w-none">
+                <p>
+                  {note.fullContent}
+                </p>
+              </div>
+            )}
             
             {/* Applications section if available */}
             {note.applications?.examples && note.applications.examples.length > 0 && (
@@ -224,18 +253,18 @@ const NoteDialog = ({ note, isOpen, onOpenChange, onModelDeleted }: NoteDialogPr
               </div>
             )}
             
-            {/* Consequences section if available */}
-            {note.consequences && (Object.keys(note.consequences).length > 0) && (
+            {/* Consequences section if available and has content */}
+            {hasConsequencesContent && (
               <div className="mt-6 space-y-2">
                 <h3 className="text-sm font-semibold">Implications:</h3>
                 <div className="space-y-1 text-sm">
-                  {note.consequences.personal && (
+                  {note.consequences?.personal && note.consequences.personal.trim() !== '' && (
                     <p><span className="font-medium">Personal:</span> {note.consequences.personal}</p>
                   )}
-                  {note.consequences.interpersonal && (
+                  {note.consequences?.interpersonal && note.consequences.interpersonal.trim() !== '' && (
                     <p><span className="font-medium">Interpersonal:</span> {note.consequences.interpersonal}</p>
                   )}
-                  {note.consequences.societal && (
+                  {note.consequences?.societal && note.consequences.societal.trim() !== '' && (
                     <p><span className="font-medium">Societal:</span> {note.consequences.societal}</p>
                   )}
                 </div>
@@ -261,18 +290,18 @@ const NoteDialog = ({ note, isOpen, onOpenChange, onModelDeleted }: NoteDialogPr
               </div>
             )}
             
-            {/* Socratic attributes if available */}
-            {note.socraticAttributes && Object.keys(note.socraticAttributes).length > 0 && (
+            {/* Socratic attributes if available and has content */}
+            {hasSocraticContent && (
               <div className="mt-6 space-y-3">
                 <h3 className="text-sm font-semibold flex items-center">
                   <MessageCircleQuestion size={14} className="mr-2 text-primary" />
                   Socratic Analysis
                 </h3>
                 <div className="space-y-2 text-sm">
-                  {note.socraticAttributes.clarification && (
+                  {note.socraticAttributes?.clarification && note.socraticAttributes.clarification.trim() !== '' && (
                     <p><span className="font-medium">Clarification:</span> {note.socraticAttributes.clarification}</p>
                   )}
-                  {note.socraticAttributes.assumptions && note.socraticAttributes.assumptions.length > 0 && (
+                  {note.socraticAttributes?.assumptions && note.socraticAttributes.assumptions.length > 0 && (
                     <div>
                       <span className="font-medium">Assumptions:</span>
                       <ul className="mt-1 pl-4 space-y-1">
@@ -284,10 +313,10 @@ const NoteDialog = ({ note, isOpen, onOpenChange, onModelDeleted }: NoteDialogPr
                       </ul>
                     </div>
                   )}
-                  {note.socraticAttributes.evidence && (
+                  {note.socraticAttributes?.evidence && note.socraticAttributes.evidence.trim() !== '' && (
                     <p><span className="font-medium">Evidence:</span> {note.socraticAttributes.evidence}</p>
                   )}
-                  {note.socraticAttributes.alternativePerspectives && note.socraticAttributes.alternativePerspectives.length > 0 && (
+                  {note.socraticAttributes?.alternativePerspectives && note.socraticAttributes.alternativePerspectives.length > 0 && (
                     <div>
                       <span className="font-medium">Alternative Perspectives:</span>
                       <ul className="mt-1 pl-4 space-y-1">
@@ -299,7 +328,7 @@ const NoteDialog = ({ note, isOpen, onOpenChange, onModelDeleted }: NoteDialogPr
                       </ul>
                     </div>
                   )}
-                  {note.socraticAttributes.implications && (
+                  {note.socraticAttributes?.implications && note.socraticAttributes.implications.trim() !== '' && (
                     <p><span className="font-medium">Implications:</span> {note.socraticAttributes.implications}</p>
                   )}
                 </div>

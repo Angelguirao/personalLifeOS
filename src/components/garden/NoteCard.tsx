@@ -84,7 +84,7 @@ const NoteCard = ({ note, index, onRefresh }: NoteCardProps) => {
             <Button 
               variant="ghost" 
               className="text-primary hover:text-primary/90 gap-1"
-              onClick={(e) => e.stopPropagation()}
+              onClick={handleOpenDialog}
             >
               Read more
               <ChevronRight size={16} />
