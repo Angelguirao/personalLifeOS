@@ -4,6 +4,7 @@ import { MentalModel } from './types/mental-model-types';
 import { tableExists } from './utils/table-utils';
 import { transformMentalModelFromSupabase, transformMentalModelToSupabase } from './utils/model-transforms';
 import { toast } from 'sonner';
+import { v4 as uuidv4 } from 'uuid';
 
 export const getMentalModels = async (): Promise<MentalModel[]> => {
   console.log('Fetching mental models...');
@@ -95,7 +96,16 @@ export const createMentalModel = async (model: Omit<MentalModel, 'id'>): Promise
   // Check authentication
   await checkAuthentication();
   
-  const supabaseModel = transformMentalModelToSupabase(model);
+  // Generate a new UUID for the model
+  const modelWithId = {
+    ...model,
+    id: uuidv4()
+  };
+  
+  // Transform to Supabase format
+  const supabaseModel = transformMentalModelToSupabase(modelWithId);
+  
+  console.log('Creating mental model with data:', supabaseModel);
   
   const { data, error } = await supabase
     .from('mental_models')
@@ -103,7 +113,10 @@ export const createMentalModel = async (model: Omit<MentalModel, 'id'>): Promise
     .select()
     .single();
   
-  if (error) throw error;
+  if (error) {
+    console.error('Error creating mental model:', error);
+    throw error;
+  }
   return transformMentalModelFromSupabase(data);
 };
 

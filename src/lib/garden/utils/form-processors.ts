@@ -20,6 +20,11 @@ export const processFormDataForSubmission = (formData: MentalModelFormValues): O
     createNewVersion: boolean;
     versionNote: string;
   };
+  bookInfo?: {
+    title: string;
+    author: string;
+    link: string;
+  } | undefined;
 } => {
   // Generate a timestamp
   const now = new Date().toISOString();
@@ -40,43 +45,43 @@ export const processFormDataForSubmission = (formData: MentalModelFormValues): O
   
   // Prepare LATCH attributes
   const latchAttributes = {
-    location: formData.latchLocation,
-    alphabeticalIndex: formData.latchAlphabetical,
-    time: formData.latchTime,
-    category: formData.latchCategory,
+    location: formData.latchLocation || '',
+    alphabeticalIndex: formData.latchAlphabetical || '',
+    time: formData.latchTime || '',
+    category: formData.latchCategory || '',
     hierarchyLevel: parseInt(formData.latchHierarchyLevel || '3')
   };
   
   // Prepare DSRP structure
   const dsrpStructure = {
-    distinctions: formData.dsrpDistinctions,
-    systemStructure: formData.dsrpSystems,
+    distinctions: formData.dsrpDistinctions || '',
+    systemStructure: formData.dsrpSystems || '',
     relationships: formData.dsrpRelationships ? JSON.parse(formData.dsrpRelationships) : undefined,
     perspectives: processStringsToArray(formData.dsrpPerspectives)
   };
   
   // Prepare Socratic attributes
   const socraticAttributes = {
-    clarification: formData.socraticClarification,
+    clarification: formData.socraticClarification || '',
     assumptions: processStringsToArray(formData.socraticAssumptions),
-    evidence: formData.socraticEvidence,
+    evidence: formData.socraticEvidence || '',
     alternativePerspectives: processStringsToArray(formData.socraticPerspectives),
-    implications: formData.socraticImplications
+    implications: formData.socraticImplications || ''
   };
   
   // Prepare origin moment
   const originMoment = formData.originDatetime ? {
     datetime: formData.originDatetime,
-    location: formData.originLocation,
+    location: formData.originLocation || '',
     emotions: processStringsToArray(formData.originEmotions),
-    perceptions: formData.originPerceptions
+    perceptions: formData.originPerceptions || ''
   } : undefined;
   
   // Prepare consequences
   const consequences = {
-    personal: formData.consequencesPersonal,
-    interpersonal: formData.consequencesInterpersonal,
-    societal: formData.consequencesSocietal
+    personal: formData.consequencesPersonal || '',
+    interpersonal: formData.consequencesInterpersonal || '',
+    societal: formData.consequencesSocietal || ''
   };
   
   // Prepare book info if provided
