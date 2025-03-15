@@ -1,4 +1,3 @@
-
 import { MentalModelFormValues } from "@/components/garden/forms/types";
 import { MentalModel } from "../types";
 
@@ -6,6 +5,7 @@ import { MentalModel } from "../types";
  * Process form data from the mental model form into the format needed for API submission
  */
 export const processFormDataForSubmission = (formData: MentalModelFormValues): Omit<MentalModel, 'id'> & {
+  id?: string;
   connections?: Array<{
     targetId: string;
     relationship: string;
