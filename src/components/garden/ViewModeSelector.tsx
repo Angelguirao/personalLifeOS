@@ -7,7 +7,7 @@ import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 export type HierarchicalPerspective = 'mentalModels' | 'questions' | 'experiences' | 'frameworks' | 'systems';
 
 // The view mode within each perspective
-export type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart' | 'hierarchy';
+export type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart';
 
 interface ViewModeSelectorProps {
   activePerspective: HierarchicalPerspective;
@@ -36,13 +36,14 @@ const ViewModeSelector = ({
           className="flex flex-wrap justify-center gap-2"
         >
           <ToggleGroupItem 
-            value="mentalModels" 
+            value="experiences" 
             variant="outline" 
             size="sm" 
-            className={`flex-1 sm:flex-initial ${activePerspective === 'mentalModels' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+            className={`flex-1 sm:flex-initial ${activePerspective === 'experiences' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
+            disabled={true}
           >
-            <Brain size={16} className="mr-2" />
-            Mental Models
+            <Activity size={16} className="mr-2" />
+            Experiences
           </ToggleGroupItem>
           
           <ToggleGroupItem 
@@ -56,14 +57,13 @@ const ViewModeSelector = ({
           </ToggleGroupItem>
 
           <ToggleGroupItem 
-            value="experiences" 
+            value="mentalModels" 
             variant="outline" 
             size="sm" 
-            className={`flex-1 sm:flex-initial ${activePerspective === 'experiences' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
-            disabled={true}
+            className={`flex-1 sm:flex-initial ${activePerspective === 'mentalModels' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
           >
-            <Activity size={16} className="mr-2" />
-            Experiences
+            <Brain size={16} className="mr-2" />
+            Mental Models
           </ToggleGroupItem>
 
           <ToggleGroupItem 
@@ -102,16 +102,6 @@ const ViewModeSelector = ({
             onValueChange={(value) => value && onViewChange(value as ViewMode)} 
             className="flex flex-wrap justify-center gap-2"
           >
-            <ToggleGroupItem 
-              value="hierarchy" 
-              variant="outline" 
-              size="sm" 
-              className={`flex-1 sm:flex-initial ${activeView === 'hierarchy' ? 'bg-black text-white hover:bg-black/90' : 'hover:bg-green-50 border-green-100'}`}
-            >
-              <Layers size={16} className="mr-2" />
-              Hierarchy
-            </ToggleGroupItem>
-            
             <ToggleGroupItem 
               value="list" 
               variant="outline" 

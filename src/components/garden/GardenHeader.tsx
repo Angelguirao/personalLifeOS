@@ -13,7 +13,7 @@ const GardenHeader = () => {
         Back to home
       </Link>
       
-      <div className="space-y-4 mb-10 relative text-center">
+      <div className="space-y-4 mb-12 relative text-center">
         <h1 className="heading-lg">
           <RevealText>Digital Garden</RevealText>
         </h1>

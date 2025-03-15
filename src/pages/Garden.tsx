@@ -5,12 +5,9 @@ import ListView from '@/components/garden/ListView';
 import GraphView from '@/components/garden/GraphView';
 import ViewModeSelector, { HierarchicalPerspective, ViewMode } from '@/components/garden/ViewModeSelector';
 import { QuestionsView } from '@/components/garden/questions/QuestionsView';
-import HierarchyView from '@/components/garden/HierarchyView';
 import { DataModelAdapter } from '@/lib/garden/adapters';
 import ModelManagement from '@/components/garden/ModelManagement';
-import { Button } from '@/components/ui/button';
 import ModelFormDialog from '@/components/garden/ModelFormDialog';
-import { Database } from 'lucide-react';
 import GardenHeader from '@/components/garden/GardenHeader';
 import GardenSearch from '@/components/garden/GardenSearch';
 import EmptyGarden from '@/components/garden/EmptyGarden';
@@ -22,7 +19,7 @@ import { toast } from 'sonner';
 const Garden = () => {
   // State for hierarchical perspective and view mode
   const [activePerspective, setActivePerspective] = useState<HierarchicalPerspective>('mentalModels');
-  const [activeView, setActiveView] = useState<ViewMode>('hierarchy');
+  const [activeView, setActiveView] = useState<ViewMode>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -34,7 +31,6 @@ const Garden = () => {
     selectedModel,
     isAuthenticated,
     fetchData,
-    checkDatabase,
     handleModelSelect,
   } = useGardenData();
 
@@ -71,7 +67,7 @@ const Garden = () => {
     if (perspective === 'questions') {
       setActiveView('qa');
     } else if (perspective === 'mentalModels') {
-      setActiveView('hierarchy');
+      setActiveView('list');
     }
   };
 
@@ -124,12 +120,6 @@ const Garden = () => {
               {activePerspective === 'mentalModels' && (
                 <div className="flex gap-2">
                   <ModelManagement onRefresh={fetchData} />
-                  {isAuthenticated && (
-                    <Button variant="outline" size="sm" onClick={checkDatabase} className="flex items-center gap-2">
-                      <Database size={16} />
-                      <span className="hidden md:inline">Check Database</span>
-                    </Button>
-                  )}
                 </div>
               )}
             </div>
@@ -158,14 +148,6 @@ const Garden = () => {
                   />
                 ) : activePerspective === 'mentalModels' && (
                   <>
-                    {activeView === 'hierarchy' && (
-                      <HierarchyView 
-                        models={filteredModels}
-                        questions={questions}
-                        onSelectModel={handleModelSelect}
-                      />
-                    )}
-
                     {activeView === 'list' && (
                       <ListView 
                         notes={filteredModels} 
