@@ -5,38 +5,6 @@ import { toast } from 'sonner';
 // Initialize Supabase client with improved error handling
 let supabase;
 
-// Check for environment variables and initialize Supabase
-try {
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-  
-  if (!supabaseUrl || !supabaseKey) {
-    console.log('Supabase credentials not found in environment variables. Using fallback data.');
-    toast.error('Database credentials missing. Check your environment variables.');
-    supabase = null;
-  } else {
-    console.log('Supabase credentials found. URL format valid:', 
-      supabaseUrl?.startsWith('https://') && supabaseUrl?.includes('.supabase.co'),
-      'Key format valid:', 
-      typeof supabaseKey === 'string' && supabaseKey.length > 20
-    );
-    
-    supabase = createClient(supabaseUrl, supabaseKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-      },
-    });
-    
-    // Test connection by making a simple query
-    testConnection();
-  }
-} catch (error) {
-  console.error('Failed to initialize Supabase client:', error);
-  supabase = null;
-  toast.error('Failed to initialize database connection');
-}
-
 // Test the database connection
 const testConnection = async () => {
   if (!supabase) return;
@@ -99,6 +67,38 @@ const createHelperFunctions = async () => {
     // Not critical, so we'll continue
   }
 };
+
+// Check for environment variables and initialize Supabase
+try {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    console.log('Supabase credentials not found in environment variables. Using fallback data.');
+    toast.error('Database credentials missing. Check your environment variables.');
+    supabase = null;
+  } else {
+    console.log('Supabase credentials found. URL format valid:', 
+      supabaseUrl?.startsWith('https://') && supabaseUrl?.includes('.supabase.co'),
+      'Key format valid:', 
+      typeof supabaseKey === 'string' && supabaseKey.length > 20
+    );
+    
+    supabase = createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+      },
+    });
+    
+    // Test connection by making a simple query
+    testConnection();
+  }
+} catch (error) {
+  console.error('Failed to initialize Supabase client:', error);
+  supabase = null;
+  toast.error('Failed to initialize database connection');
+}
 
 // Export the Supabase client
 export default supabase;
