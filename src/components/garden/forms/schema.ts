@@ -61,7 +61,11 @@ export const mentalModelSchema = z.object({
   connections: z.array(
     z.object({
       targetId: z.string(),
-      relationship: z.string(),
+      relationship: z.enum([
+        'related', 'supports', 'contradicts', 'extends', 'example',
+        'implementation', 'question', 'inspires', 'builds_on',
+        'contrasts', 'references', 'questions'
+      ]) as z.ZodEnum<[RelationshipType, ...RelationshipType[]]>,
       strength: z.number().min(1).max(10)
     })
   ).optional(),

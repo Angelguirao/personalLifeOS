@@ -15,6 +15,7 @@ import {
 import { toast } from 'sonner';
 import supabase from '@/lib/garden/client';
 import { processFormDataForSubmission, processModelForForm } from '@/lib/garden/utils/form-processors';
+import { RelationshipType } from '@/lib/garden/types/connection-types';
 
 interface ModelFormDialogProps {
   isOpen: boolean;
@@ -48,7 +49,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
               ...prevData, 
               connections: formattedConnections.map(conn => ({
                 targetId: String(conn.targetId), // Ensure targetId is a string
-                relationship: String(conn.relationship), // Convert relationship to string
+                relationship: conn.relationship as RelationshipType, // Keep as RelationshipType
                 strength: conn.strength
               }))
             };
@@ -132,7 +133,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
             if (existingConn.strength !== conn.strength || existingConn.relationship !== conn.relationship) {
               await updateConnection(existingConn.id, {
                 strength: conn.strength,
-                relationship: String(conn.relationship)
+                relationship: conn.relationship as RelationshipType
               });
             }
           } else {
@@ -141,7 +142,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
               sourceId: modelId,
               targetId: conn.targetId,
               strength: conn.strength,
-              relationship: String(conn.relationship)
+              relationship: conn.relationship as RelationshipType
             });
           }
         }
