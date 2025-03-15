@@ -35,6 +35,10 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
     setIsDialogOpen(true);
   };
   
+  const handleDialogOpenChange = (open: boolean) => {
+    setIsDialogOpen(open);
+  };
+  
   return (
     <BlurEffect className={`animation-delay-${(index + 1) * 100}`}>
       <article 
@@ -87,7 +91,7 @@ const NoteCard = ({ note, index }: NoteCardProps) => {
         <NoteDialog 
           note={note} 
           isOpen={isDialogOpen} 
-          onOpenChange={setIsDialogOpen} 
+          onOpenChange={handleDialogOpenChange}
         />
       </article>
     </BlurEffect>
