@@ -18,73 +18,133 @@ export const tableExists = async (tableName: string): Promise<boolean> => {
     
     console.log(`Checking if table ${schema}.${table} exists...`);
     
-    // Try direct query as it's more reliable with schema-qualified names
-    return await directTableQuery(schema, table);
+    // Method 1: Try direct query
+    try {
+      const result = await directTableCheck(schema, table);
+      if (result) return true;
+    } catch (directError) {
+      console.warn(`Direct table check failed for ${schema}.${table}:`, directError);
+    }
+    
+    // Method 2: Try using information_schema
+    try {
+      const result = await informationSchemaCheck(schema, table);
+      if (result) return true;
+    } catch (schemaError) {
+      console.warn(`Information schema check failed for ${schema}.${table}:`, schemaError);
+    }
+    
+    // Method 3: Try accessing the table directly without schema qualification
+    try {
+      const result = await fallbackTableCheck(table);
+      if (result) return true;
+    } catch (fallbackError) {
+      console.warn(`Fallback table check failed for ${table}:`, fallbackError);
+    }
+    
+    // If all methods failed, the table likely doesn't exist
+    console.warn(`Table ${schema}.${table} does not exist in Supabase`);
+    return false;
   } catch (error) {
     console.error(`Error checking if table ${tableName} exists:`, error);
     return false;
   }
 };
 
-// Improved function to check if a table exists by directly querying it
-const directTableQuery = async (schema: string, table: string): Promise<boolean> => {
+// Direct check for a table using RPC if available
+const directTableCheck = async (schema: string, table: string): Promise<boolean> => {
   try {
-    // For Supabase, we need to use RPC to query tables in non-public schemas
-    const { data, error } = await supabase.rpc('check_table_exists', { 
-      p_schema_name: schema,
-      p_table_name: table
-    });
+    // First try using a custom function if it exists
+    try {
+      const { data, error } = await supabase.rpc('check_table_exists', { 
+        p_schema_name: schema,
+        p_table_name: table
+      });
+      
+      if (!error && data === true) {
+        console.log(`Table ${schema}.${table} exists according to RPC check`);
+        return true;
+      }
+    } catch (rpcError) {
+      console.warn(`RPC check_table_exists failed for ${schema}.${table}:`, rpcError);
+    }
     
+    // Try a direct query to the schema-qualified table
+    const fullName = `${schema}.${table}`;
+    const { data, error } = await supabase
+      .from(fullName)
+      .select('*')
+      .limit(1);
+      
     if (error) {
-      console.warn(`Error checking if table ${schema}.${table} exists: ${error.message}`);
-      // If RPC fails, we fall back to a different approach
-      return await fallbackTableCheck(schema, table);
+      if (error.message.includes('does not exist')) {
+        console.warn(`Table ${schema}.${table} does not exist in Supabase: ${error.message}`);
+        throw error;
+      }
+      
+      // Some other error occurred, maybe permissions
+      console.warn(`Error accessing table ${schema}.${table}: ${error.message}`);
+      return false;
     }
     
-    const exists = data === true;
-    console.log(`Table ${schema}.${table} exists: ${exists}`);
-    
-    if (!exists) {
-      console.warn(`Table ${schema}.${table} does not exist in the database`);
-      toast.error(`Table ${schema}.${table} not found. Run the setup script in Supabase.`);
-    }
-    
-    return exists;
+    console.log(`Table ${schema}.${table} exists and returned data:`, data ? data.length : 0, 'rows');
+    return true;
   } catch (error) {
-    console.error(`Error in direct table query for ${schema}.${table}:`, error);
-    return await fallbackTableCheck(schema, table);
+    console.warn(`Direct table check failed for ${schema}.${table}:`, error);
+    throw error;
   }
 };
 
-// Fallback method when RPC is not available
-const fallbackTableCheck = async (schema: string, table: string): Promise<boolean> => {
+// Check table existence using information_schema
+const informationSchemaCheck = async (schema: string, table: string): Promise<boolean> => {
   try {
-    // Try a direct query with the full schema path
-    // Note: This may not work for all cases but is a good fallback
-    let query = `${schema}.${table}`;
+    // Try to query information_schema.tables
+    const { data, error } = await supabase
+      .from('information_schema.tables')
+      .select('table_name')
+      .eq('table_schema', schema)
+      .eq('table_name', table)
+      .limit(1);
+      
+    if (error) {
+      console.warn(`Information schema check failed for ${schema}.${table}: ${error.message}`);
+      throw error;
+    }
     
-    // In some cases with Supabase, we might need to workaround by removing schema prefix
-    // Let's try a direct query to the table without schema qualification
+    const exists = data && data.length > 0;
+    console.log(`Table ${schema}.${table} exists according to information_schema: ${exists}`);
+    return exists;
+  } catch (error) {
+    console.warn(`Information schema check failed for ${schema}.${table}:`, error);
+    throw error;
+  }
+};
+
+// Fallback method when other methods fail
+const fallbackTableCheck = async (table: string): Promise<boolean> => {
+  try {
+    // Try a direct query to the table without schema qualification
     const { data, error } = await supabase
       .from(table)
       .select('*')
       .limit(1);
       
     if (error) {
-      if (error.code === '42P01') {  // Table or view does not exist
-        console.warn(`Table ${schema}.${table} does not exist in Supabase: ${error.message}`);
-        toast.error(`Table ${table} not found. Please run the setup script.`);
-      } else {
-        console.warn(`Error accessing table ${schema}.${table}: ${error.message}`);
+      if (error.message.includes('does not exist')) {
+        console.warn(`Table ${table} does not exist in Supabase: ${error.message}`);
+        throw error;
       }
+      
+      // Some other error occurred, maybe permissions
+      console.warn(`Error accessing table ${table}: ${error.message}`);
       return false;
     }
     
     console.log(`Table ${table} exists and returned data:`, data ? data.length : 0, 'rows');
     return true;
   } catch (error) {
-    console.error(`Error in fallback table check for ${schema}.${table}:`, error);
-    return false;
+    console.warn(`Fallback table check failed for ${table}:`, error);
+    throw error;
   }
 };
 
@@ -107,11 +167,9 @@ export const runSetupScript = async (): Promise<boolean> => {
       console.warn('Could not create table check function:', fnError);
     }
     
-    // Provide specific instructions for setting up tables
-    toast.info('You need to run the setup script manually in the Supabase SQL Editor', {
-      description: 'Go to Supabase Dashboard > SQL Editor and run the complete_garden_setup.sql script',
-      duration: 8000
-    });
+    // Import the setup helper dynamically to avoid circular dependency
+    const setupHelper = await import('../utils/setup-helper');
+    setupHelper.showSetupInstructions();
     
     return true;
   } catch (error) {
@@ -143,7 +201,19 @@ const createTableCheckFunction = async (): Promise<void> => {
   `;
   
   try {
-    const { error } = await supabase.rpc('exec_sql', { sql: createFunctionSQL });
+    // First try using RPC method
+    try {
+      const { error } = await supabase.rpc('exec_sql', { sql: createFunctionSQL });
+      if (!error) {
+        console.log('Successfully created table check function');
+        return;
+      }
+    } catch (rpcError) {
+      console.warn('Could not create table check function via RPC:', rpcError);
+    }
+    
+    // If RPC fails, try direct SQL using supabase-js (requires higher permissions)
+    const { error } = await supabase.from('_raw_sql').rpc('', { sql: createFunctionSQL });
     if (error) throw error;
     console.log('Successfully created table check function');
   } catch (error) {

@@ -10,12 +10,20 @@ const testConnection = async () => {
   if (!supabase) return;
   
   try {
-    // Try to access public schema first as a basic connection test
-    const { data, error } = await supabase.from('information_schema.schemata').select('schema_name').limit(1);
+    // Try a simple query first as a basic connection test
+    // Using information_schema directly often has permission issues in Supabase
+    const { data, error } = await supabase
+      .from('information_schema.schemata')
+      .select('schema_name')
+      .limit(1)
+      .catch(e => ({ data: null, error: e }));
     
     if (error) {
       console.warn('Supabase connection test failed:', error.message);
       handleConnectionError(error);
+      
+      // Check if tables exist by attempting to access them directly
+      await checkTablesExist();
     } else {
       console.log('Supabase connection test successful!');
       toast.success('Connected to database successfully');
@@ -26,6 +34,61 @@ const testConnection = async () => {
   } catch (error) {
     console.error('Supabase connection test error:', error);
     toast.error('Failed to connect to database: ' + error.message);
+    
+    // Even with connection error, try to check tables
+    await checkTablesExist();
+  }
+};
+
+// Check if the required tables exist
+const checkTablesExist = async () => {
+  try {
+    // Try to access the distinctions table directly
+    const { error: distinctionsError } = await supabase
+      .from('distinctions.distinctions')
+      .select('id')
+      .limit(1)
+      .single();
+    
+    // Try to access the systems table directly
+    const { error: systemsError } = await supabase
+      .from('systems.systems')
+      .select('id')
+      .limit(1)
+      .single();
+    
+    // Try to access the connections table directly
+    const { error: connectionsError } = await supabase
+      .from('relationships.connections')
+      .select('id')
+      .limit(1)
+      .single();
+    
+    // If all queries failed with table not exist errors, we need to run the setup
+    if (
+      distinctionsError?.message?.includes('does not exist') &&
+      systemsError?.message?.includes('does not exist') &&
+      connectionsError?.message?.includes('does not exist')
+    ) {
+      console.log('Database tables need to be created - displaying setup instructions');
+      
+      // Show toast with database setup instructions
+      toast.error('Database tables need to be set up', {
+        description: 'Please run the SQL setup script in the Supabase SQL Editor',
+        duration: 10000,
+        action: {
+          label: 'Setup Instructions',
+          onClick: () => {
+            // Import and call the setup helper dynamically to avoid circular dependency
+            import('./utils/setup-helper').then(module => {
+              module.showSetupInstructions();
+            });
+          }
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Error checking tables existence:', error);
   }
 };
 
@@ -113,7 +176,17 @@ export const executeSQL = async (sql: string): Promise<boolean> => {
   if (!supabase) return false;
   
   try {
-    const { error } = await supabase.rpc('exec_sql', { sql });
+    // First try using the RPC method
+    try {
+      const { error } = await supabase.rpc('exec_sql', { sql });
+      if (!error) return true;
+    } catch (rpcError) {
+      console.warn('RPC exec_sql failed, trying raw SQL:', rpcError);
+    }
+    
+    // If RPC fails, try direct SQL using supabase-js
+    // Note: This requires higher permissions and may not work
+    const { error } = await supabase.from('_raw_sql').rpc('', { sql });
     if (error) {
       console.error('Error executing SQL:', error);
       return false;
