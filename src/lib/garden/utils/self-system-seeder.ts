@@ -1,5 +1,5 @@
 
-import { createSystem, createSystemModelRelation, getSystems } from '@/lib/garden/api';
+import { createSystem, createSystemModelRelation, getSystems } from '@/lib/garden/systems';
 import { System } from '@/lib/garden/types';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';

@@ -70,7 +70,7 @@ export {
   getSystemModelRelations,
   createSystemModelRelation,
   deleteSystemModelRelation
-} from './api-systems';
+} from './systems';
 
 // Export utility functions if needed externally
 export {
