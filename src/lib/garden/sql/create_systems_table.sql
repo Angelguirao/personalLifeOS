@@ -21,10 +21,17 @@ CREATE INDEX IF NOT EXISTS idx_systems_name ON systems(name);
 CREATE INDEX IF NOT EXISTS idx_systems_category ON systems(category);
 
 -- Ensure the updated_at timestamp gets updated
-CREATE TRIGGER IF NOT EXISTS set_systems_timestamp
-BEFORE UPDATE ON systems
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at_column();
+-- PostgreSQL doesn't support IF NOT EXISTS for triggers, so we need a different approach
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'set_systems_timestamp') THEN
+    CREATE TRIGGER set_systems_timestamp
+    BEFORE UPDATE ON systems
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+  END IF;
+END
+$$;
 
 -- Create a relation table between systems and mental models
 CREATE TABLE IF NOT EXISTS system_model_relations (
