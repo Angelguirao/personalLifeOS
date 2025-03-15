@@ -11,7 +11,7 @@ export interface System {
   category?: string;
   importanceLevel: number; // 1-5 scale
   visibility: VisibilityLevel;
-  relatedModels: string[]; // Array of model IDs
+  relatedModels: string[]; // Array of distinction IDs
   parentSystem?: string; // ID of parent system
   distinctions?: string[]; // Array of distinctions (experiences, thoughts, actions, etc.)
   metadata?: Record<string, any>;
@@ -19,8 +19,8 @@ export interface System {
   updatedAt: string;
 }
 
-// Define the system-model relationship types
-export type SystemModelRelationshipType = 
+// Define the system-distinction relationship types
+export type SystemDistinctionRelationshipType = 
   'contains' | 
   'influences' | 
   'implements' | 
@@ -28,12 +28,12 @@ export type SystemModelRelationshipType =
   'contradicts' | 
   'references';
 
-// Define the system-model relationship interface
-export interface SystemModelRelation {
+// Define the system-distinction relationship interface
+export interface SystemDistinctionRelation {
   id: number;
   systemId: string;
-  modelId: string;
-  relationshipType: SystemModelRelationshipType;
+  distinctionId: string;
+  relationshipType: SystemDistinctionRelationshipType;
   strength: number; // 1-10 scale
   createdAt: string;
 }

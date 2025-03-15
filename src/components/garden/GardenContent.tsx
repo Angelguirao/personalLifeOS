@@ -1,7 +1,6 @@
 import React from 'react';
 import ListView from '@/components/garden/ListView';
 import GraphView from '@/components/garden/GraphView';
-import { QuestionsView } from '@/components/garden/questions/QuestionsView';
 import { Button } from '@/components/ui/button';
 import { DataModelAdapter } from '@/lib/garden/adapters';
 import EmptyGarden from '@/components/garden/EmptyGarden';
@@ -20,7 +19,7 @@ interface GardenContentProps {
   selectedModel?: MentalModel;
   isLoading: boolean;
   isAuthenticated: boolean;
-  onCreateModel: () => void;
+  onCreateDistinction: () => void;
   handleModelSelect: (model: MentalModel) => void;
   onCreateQuestion: (questionData: Omit<Question, 'id'>) => Promise<void>;
   fetchData: () => void;
@@ -36,7 +35,7 @@ const GardenContent: React.FC<GardenContentProps> = ({
   selectedModel,
   isLoading,
   isAuthenticated,
-  onCreateModel,
+  onCreateDistinction,
   handleModelSelect,
   onCreateQuestion,
   fetchData
@@ -52,23 +51,12 @@ const GardenContent: React.FC<GardenContentProps> = ({
     );
   }
 
-  // Questions View (part of Distinctions now)
-  if (activeView === 'qa') {
-    return (
-      <QuestionsView 
-        questions={questions} 
-        models={models.map(m => ({ id: m.id, title: m.title }))}
-        onCreateQuestion={onCreateQuestion}
-      />
-    );
-  }
-
-  // Distinctions Perspective (Mental Models, etc.)
+  // Distinctions Perspective (Mental Models, Questions, Experiences, etc.)
   if (activePerspective === 'distinctions') {
-    if (models.length === 0) {
+    if (models.length === 0 && questions.length === 0) {
       return (
         <EmptyGarden 
-          onCreateModel={onCreateModel} 
+          onCreateModel={onCreateDistinction} 
           isAuthenticated={isAuthenticated}
         />
       );
