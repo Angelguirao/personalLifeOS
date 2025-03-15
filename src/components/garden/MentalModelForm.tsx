@@ -88,6 +88,19 @@ const MentalModelForm = ({ model, onSubmit, onCancel, isSubmitting }: MentalMode
   // Convert arrays to comma-separated strings for form initialization
   const convertArrayToString = (arr?: string[]) => arr ? arr.join(', ') : '';
   
+  // Handle legacy visibility values
+  const getVisibilityValue = (modelVisibility?: string): 'public' | 'private' | 'unlisted' => {
+    if (!modelVisibility) return 'public';
+    
+    // If we have a legacy 'restricted' value, convert it to 'private'
+    if (modelVisibility === 'restricted') {
+      return 'private';
+    }
+    
+    // Otherwise, use the value as long as it matches our allowed types
+    return modelVisibility as 'public' | 'private' | 'unlisted';
+  };
+  
   const form = useForm<MentalModelFormValues>({
     resolver: zodResolver(mentalModelSchema),
     defaultValues: {
@@ -139,7 +152,7 @@ const MentalModelForm = ({ model, onSubmit, onCancel, isSubmitting }: MentalMode
       bookLink: model?.bookInfo?.link || '',
       
       // Visibility and Metadata
-      visibility: (model?.visibility === 'restricted' ? 'private' : model?.visibility) || 'public',
+      visibility: getVisibilityValue(model?.visibility),
       imageUrl: model?.imageUrl || '',
     },
   });
