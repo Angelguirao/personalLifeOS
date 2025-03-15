@@ -14,18 +14,25 @@ export const seedInitialData = async () => {
   console.log('Checking Supabase tables...');
   
   try {
-    // Check if tables exist
-    const mentalModelsTableExists = await tableExists('mental_models');
-    const connectionsTableExists = await tableExists('connections');
-    const versionsTableExists = await tableExists('mental_model_versions');
-    const questionsTableExists = await tableExists('questions');
-    const inspirationsTableExists = await tableExists('inspirations');
+    // Check if tables exist - using schema qualification now
+    const distinctionsTableExists = await tableExists('distinctions.distinctions');
+    const systemsTableExists = await tableExists('systems.systems');
+    const connectionsTableExists = await tableExists('relationships.connections');
+    const inspirationsTableExists = await tableExists('perspectives.inspirations');
     
-    // If mental models table doesn't exist, warn the user
-    if (!mentalModelsTableExists || !connectionsTableExists || !versionsTableExists || 
-        !questionsTableExists || !inspirationsTableExists) {
-      console.error('Some database tables do not exist in Supabase. Please create them manually in the Supabase dashboard.');
+    // If tables don't exist, warn the user
+    if (!distinctionsTableExists || !systemsTableExists || !connectionsTableExists || !inspirationsTableExists) {
+      console.error('Some database tables do not exist in Supabase. Tables need to be created in the Supabase dashboard.');
       toast.error('Required database tables not found');
+      
+      // Log which tables are missing for debugging
+      console.error('Missing tables:', {
+        'distinctions.distinctions': !distinctionsTableExists,
+        'systems.systems': !systemsTableExists,
+        'relationships.connections': !connectionsTableExists,
+        'perspectives.inspirations': !inspirationsTableExists
+      });
+      
       return;
     }
     

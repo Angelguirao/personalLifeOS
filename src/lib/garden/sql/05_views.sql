@@ -26,7 +26,7 @@ SELECT
   id,
   title,
   summary, 
-  full_content,
+  content as full_content,
   tags,
   visibility,
   created_at,

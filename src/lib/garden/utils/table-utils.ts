@@ -10,22 +10,42 @@ export const tableExists = async (tableName: string): Promise<boolean> => {
   }
   
   try {
-    // Try to fetch a single record from the table
-    const { error } = await supabase
-      .from(tableName)
-      .select('id')
-      .limit(1);
+    // Split the table name to handle schema-qualified names
+    const parts = tableName.split('.');
+    let schema = 'public';
+    let table = tableName;
     
-    // If there's a PostgreSQL error about the relation not existing, the table doesn't exist
-    if (error && (
-      error.message.includes('relation') && 
-      error.message.includes('does not exist')
-    )) {
-      console.warn(`Table ${tableName} does not exist in Supabase`);
-      return false;
+    if (parts.length > 1) {
+      schema = parts[0];
+      table = parts[1];
     }
     
-    return true;
+    // Query the information_schema to check if the table exists
+    const { data, error } = await supabase
+      .from('information_schema.tables')
+      .select('table_name')
+      .eq('table_schema', schema)
+      .eq('table_name', table)
+      .limit(1);
+    
+    if (error) {
+      console.error(`Error checking if table ${tableName} exists:`, error);
+      
+      // Try alternative approach - query the table directly
+      const { error: queryError } = await supabase
+        .from(tableName)
+        .select('*')
+        .limit(1);
+        
+      if (queryError) {
+        console.warn(`Table ${tableName} does not exist in Supabase`);
+        return false;
+      }
+      
+      return true;
+    }
+    
+    return data && data.length > 0;
   } catch (error) {
     console.error(`Error checking if table ${tableName} exists:`, error);
     return false;
