@@ -3,16 +3,15 @@ import React, { useState, useMemo } from 'react';
 import { Layers, ChevronRight, ChevronDown } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { MentalModel, Question } from '@/lib/garden/types';
+import { MentalModel } from '@/lib/garden/types';
 
 interface HierarchyViewProps {
   models: MentalModel[];
-  questions: Question[];
+  questions?: never; // This is now optional since questions are in a separate view
   onSelectModel?: (model: MentalModel) => void;
 }
 
-export const HierarchyView = ({ models, questions, onSelectModel }: HierarchyViewProps) => {
+export const HierarchyView = ({ models, onSelectModel }: HierarchyViewProps) => {
   const [expandedLevels, setExpandedLevels] = useState<Record<number, boolean>>({
     1: true, 2: true, 3: true, 4: false, 5: false
   });
@@ -55,9 +54,6 @@ export const HierarchyView = ({ models, questions, onSelectModel }: HierarchyVie
     }
   };
 
-  // Format for displaying questions separately
-  const hasQuestions = questions.length > 0;
-
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-4">
@@ -67,46 +63,6 @@ export const HierarchyView = ({ models, questions, onSelectModel }: HierarchyVie
           {models.length}
         </Badge>
       </div>
-
-      {/* Questions Section */}
-      {hasQuestions && (
-        <Card className="mb-6">
-          <CardHeader className="py-3">
-            <div 
-              className="flex items-center justify-between cursor-pointer"
-              onClick={() => toggleLevel(0)}
-            >
-              <CardTitle className="text-md flex items-center">
-                {expandedLevels[0] ? <ChevronDown className="h-4 w-4 mr-2" /> : <ChevronRight className="h-4 w-4 mr-2" />}
-                Foundational Questions
-              </CardTitle>
-              <Badge variant="secondary">
-                {questions.length}
-              </Badge>
-            </div>
-          </CardHeader>
-          
-          {expandedLevels[0] && (
-            <CardContent className="py-2">
-              <ul className="space-y-2">
-                {questions.map(question => (
-                  <li key={question.id} className="border-l-2 pl-3 py-1 border-l-muted-foreground hover:border-l-primary">
-                    <div className="text-sm">{question.questionText}</div>
-                    <div className="flex mt-1 gap-1">
-                      <Badge variant="outline" className="text-xs">
-                        {question.category}
-                      </Badge>
-                      <Badge variant="secondary" className="text-xs">
-                        Importance: {question.importanceRank}
-                      </Badge>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          )}
-        </Card>
-      )}
 
       {/* Hierarchical Levels */}
       {[1, 2, 3, 4, 5].map(level => (

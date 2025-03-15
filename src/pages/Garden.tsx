@@ -4,11 +4,10 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ListView from '@/components/garden/ListView';
 import GraphView from '@/components/garden/GraphView';
-import ViewModeSelector from '@/components/garden/ViewModeSelector';
+import ViewModeSelector, { HierarchicalPerspective } from '@/components/garden/ViewModeSelector';
 import { QuestionsView } from '@/components/garden/questions/QuestionsView';
 import HierarchyView from '@/components/garden/HierarchyView';
 import { DataModelAdapter } from '@/lib/garden/adapters';
-import { Input } from '@/components/ui/input';
 import ModelManagement from '@/components/garden/ModelManagement';
 import { Button } from '@/components/ui/button';
 import ModelFormDialog from '@/components/garden/ModelFormDialog';
@@ -25,7 +24,9 @@ import { toast } from 'sonner';
 type ViewMode = 'list' | 'graph' | 'table' | 'qa' | 'flowchart' | 'hierarchy';
 
 const Garden = () => {
-  const [activeView, setActiveView] = useState<ViewMode>('hierarchy'); // Set default to hierarchy
+  // State for hierarchical perspective and view mode
+  const [activePerspective, setActivePerspective] = useState<HierarchicalPerspective>('mentalModels');
+  const [activeView, setActiveView] = useState<ViewMode>('hierarchy');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -66,6 +67,20 @@ const Garden = () => {
     }
   };
 
+  // Handle perspective change
+  const handlePerspectiveChange = (perspective: HierarchicalPerspective) => {
+    setActivePerspective(perspective);
+    
+    // Set appropriate default view for each perspective
+    if (perspective === 'questions') {
+      // Questions perspective only has one view
+      setActiveView('qa');
+    } else if (perspective === 'mentalModels' && activeView === 'qa') {
+      // If switching to mental models from questions, set default view
+      setActiveView('hierarchy');
+    }
+  };
+
   // Convert to garden notes for legacy components
   const gardenNotes = DataModelAdapter.modelsToNotes(models);
 
@@ -93,81 +108,95 @@ const Garden = () => {
           
           <div className="flex flex-col space-y-6">
             <div className="flex flex-col sm:flex-row justify-between gap-4">
-              <ViewModeSelector activeView={activeView} onViewChange={setActiveView} />
+              <ViewModeSelector 
+                activePerspective={activePerspective}
+                activeView={activeView} 
+                onPerspectiveChange={handlePerspectiveChange}
+                onViewChange={setActiveView} 
+              />
               
               <div className="flex space-x-2">
                 <GardenSearch searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
               </div>
             </div>
             
-            <div className="flex justify-between items-center">
-              <ModelManagement onRefresh={fetchData} />
-              {isAuthenticated && (
-                <Button variant="outline" size="sm" onClick={checkDatabase} className="flex items-center gap-2">
-                  <Database size={16} />
-                  <span>Check Database</span>
-                </Button>
-              )}
-            </div>
+            {/* Only show model management when in Mental Models perspective */}
+            {activePerspective === 'mentalModels' && (
+              <div className="flex justify-between items-center">
+                <ModelManagement onRefresh={fetchData} />
+                {isAuthenticated && (
+                  <Button variant="outline" size="sm" onClick={checkDatabase} className="flex items-center gap-2">
+                    <Database size={16} />
+                    <span>Check Database</span>
+                  </Button>
+                )}
+              </div>
+            )}
             
             {isLoading ? (
               <div className="h-64 flex items-center justify-center">
                 <div className="animate-spin h-8 w-8 border-t-2 border-primary rounded-full"></div>
               </div>
-            ) : models.length === 0 && activeView !== 'qa' && activeView !== 'hierarchy' ? (
-              <EmptyGarden 
-                onCreateModel={() => setIsCreateDialogOpen(true)} 
-                isAuthenticated={isAuthenticated}
-              />
             ) : (
               <>
-                {activeView === 'hierarchy' && (
-                  <HierarchyView 
-                    models={filteredModels}
-                    questions={questions}
-                    onSelectModel={handleModelSelect}
-                  />
-                )}
-
-                {activeView === 'list' && (
-                  <ListView 
-                    notes={filteredModels} 
-                    onSelectModel={handleModelSelect}
-                    selectedModelId={selectedModel?.id}
-                    onRefresh={fetchData}
-                  />
-                )}
-                
-                {activeView === 'graph' && connections.length > 0 && gardenNotes.length > 0 ? (
-                  <div className="h-[600px] rounded-xl border shadow-sm overflow-hidden">
-                    <GraphView 
-                      nodes={gardenNotes}
-                      connections={connections} 
-                      models={models}
-                    />
-                  </div>
-                ) : activeView === 'graph' && (
-                  <div className="h-[600px] rounded-xl border shadow-sm overflow-hidden flex items-center justify-center">
-                    <div className="text-center p-6 max-w-md">
-                      <h3 className="text-lg font-medium mb-2">No Graph Data Available</h3>
-                      <p className="text-muted-foreground">
-                        {connections.length === 0 ? 
-                          "There are no connections between notes to display in the graph." : 
-                          "There was a problem with the graph data."}
-                      </p>
-                      <Button onClick={fetchData} className="mt-4">
-                        Refresh Data
-                      </Button>
-                    </div>
-                  </div>
-                )}
-                
-                {activeView === 'qa' && (
+                {/* Questions Perspective */}
+                {activePerspective === 'questions' && (
                   <QuestionsView 
                     questions={questions} 
                     models={models.map(m => ({ id: m.id, title: m.title }))}
                     onCreateQuestion={handleCreateQuestion}
                   />
+                )}
+
+                {/* Mental Models Perspective */}
+                {activePerspective === 'mentalModels' && models.length === 0 ? (
+                  <EmptyGarden 
+                    onCreateModel={() => setIsCreateDialogOpen(true)} 
+                    isAuthenticated={isAuthenticated}
+                  />
+                ) : activePerspective === 'mentalModels' && (
+                  <>
+                    {activeView === 'hierarchy' && (
+                      <HierarchyView 
+                        models={filteredModels}
+                        questions={questions}
+                        onSelectModel={handleModelSelect}
+                      />
+                    )}
+
+                    {activeView === 'list' && (
+                      <ListView 
+                        notes={filteredModels} 
+                        onSelectModel={handleModelSelect}
+                        selectedModelId={selectedModel?.id}
+                        onRefresh={fetchData}
+                      />
+                    )}
+                    
+                    {activeView === 'graph' && connections.length > 0 && gardenNotes.length > 0 ? (
+                      <div className="h-[600px] rounded-xl border shadow-sm overflow-hidden">
+                        <GraphView 
+                          nodes={gardenNotes}
+                          connections={connections} 
+                          models={models}
+                        />
+                      </div>
+                    ) : activeView === 'graph' && (
+                      <div className="h-[600px] rounded-xl border shadow-sm overflow-hidden flex items-center justify-center">
+                        <div className="text-center p-6 max-w-md">
+                          <h3 className="text-lg font-medium mb-2">No Graph Data Available</h3>
+                          <p className="text-muted-foreground">
+                            {connections.length === 0 ? 
+                              "There are no connections between notes to display in the graph." : 
+                              "There was a problem with the graph data."}
+                          </p>
+                          <Button onClick={fetchData} className="mt-4">
+                            Refresh Data
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </>
             )}
