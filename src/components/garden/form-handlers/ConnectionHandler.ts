@@ -15,46 +15,57 @@ export const handleConnections = async (
     strength: number;
   }> = []
 ) => {
-  if (!modelId || connections.length === 0) return;
+  if (!modelId || !connections || connections.length === 0) return;
   
-  // First, get existing connections to compare
-  const existingConnections = await getNoteConnections(modelId);
-  
-  // Process each connection
-  for (const conn of connections) {
-    // Check if this connection already exists
-    const existingConn = existingConnections.find(ec => 
-      (ec.sourceId === modelId && ec.targetId === conn.targetId) ||
-      (ec.targetId === modelId && ec.sourceId === conn.targetId)
-    );
+  try {
+    // First, get existing connections to compare
+    const existingConnections = await getNoteConnections(modelId);
+    console.log('Processing connections for model:', modelId);
+    console.log('Connections to handle:', connections);
+    console.log('Existing connections:', existingConnections);
     
-    if (existingConn) {
-      // Update existing connection if needed
-      if (existingConn.strength !== conn.strength || existingConn.relationship !== conn.relationship) {
-        await updateConnection(existingConn.id.toString(), {
+    // Process each connection
+    for (const conn of connections) {
+      // Check if this connection already exists
+      const existingConn = existingConnections.find(ec => 
+        (ec.sourceId === modelId && ec.targetId === conn.targetId) ||
+        (ec.targetId === modelId && ec.sourceId === conn.targetId)
+      );
+      
+      if (existingConn) {
+        // Update existing connection if needed
+        if (existingConn.strength !== conn.strength || existingConn.relationship !== conn.relationship) {
+          console.log('Updating connection:', existingConn.id, conn);
+          await updateConnection(existingConn.id.toString(), {
+            strength: conn.strength,
+            relationship: conn.relationship as RelationshipType
+          });
+        }
+      } else {
+        // Create new connection
+        console.log('Creating new connection:', modelId, conn.targetId);
+        await createConnection({
+          sourceId: modelId,
+          targetId: conn.targetId,
           strength: conn.strength,
           relationship: conn.relationship as RelationshipType
         });
       }
-    } else {
-      // Create new connection
-      await createConnection({
-        sourceId: modelId,
-        targetId: conn.targetId,
-        strength: conn.strength,
-        relationship: conn.relationship as RelationshipType
-      });
     }
-  }
-  
-  // Delete connections that were removed
-  for (const existingConn of existingConnections) {
-    const stillExists = connections.some(conn => 
-      conn.targetId === (existingConn.sourceId === modelId ? existingConn.targetId : existingConn.sourceId)
-    );
     
-    if (!stillExists) {
-      await deleteConnection(existingConn.id.toString());
+    // Delete connections that were removed
+    for (const existingConn of existingConnections) {
+      const stillExists = connections.some(conn => 
+        conn.targetId === (existingConn.sourceId === modelId ? existingConn.targetId : existingConn.sourceId)
+      );
+      
+      if (!stillExists) {
+        console.log('Deleting connection:', existingConn.id);
+        await deleteConnection(existingConn.id.toString());
+      }
     }
+  } catch (error) {
+    console.error('Error handling connections:', error);
+    throw error;
   }
 };

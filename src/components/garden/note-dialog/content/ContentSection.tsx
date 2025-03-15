@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { MentalModel } from '@/lib/garden/types/mental-model-types';
-import { Textarea } from '@/components/ui/textarea';
 
 interface ContentSectionProps {
   note: MentalModel;
