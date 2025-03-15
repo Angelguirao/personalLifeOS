@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ListView from '@/components/garden/ListView';
 import GraphView from '@/components/garden/GraphView';
@@ -5,6 +6,7 @@ import { QuestionsView } from '@/components/garden/questions/QuestionsView';
 import { Button } from '@/components/ui/button';
 import { DataModelAdapter } from '@/lib/garden/adapters';
 import EmptyGarden from '@/components/garden/EmptyGarden';
+import PlaceholderView from '@/components/garden/PlaceholderView';
 import { HierarchicalPerspective, ViewMode } from '@/components/garden/ViewModeSelector';
 import { MentalModel, Question } from '@/lib/garden/types';
 import { Connection } from '@/lib/garden/types';
