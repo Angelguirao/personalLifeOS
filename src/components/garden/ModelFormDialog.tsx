@@ -1,12 +1,20 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import MentalModelForm, { MentalModelFormValues } from './MentalModelForm';
 import { MentalModel } from '@/lib/garden/types';
-import { createMentalModel, updateMentalModel } from '@/lib/garden/api';
+import { 
+  createMentalModel, 
+  updateMentalModel, 
+  getConnections,
+  getNoteConnections,
+  createConnection,
+  updateConnection,
+  deleteConnection
+} from '@/lib/garden/api';
 import { toast } from 'sonner';
 import supabase from '@/lib/garden/client';
-import { processFormDataForSubmission } from '@/lib/garden/utils/form-processors';
+import { processFormDataForSubmission, processModelForForm } from '@/lib/garden/utils/form-processors';
 
 interface ModelFormDialogProps {
   isOpen: boolean;
@@ -17,6 +25,43 @@ interface ModelFormDialogProps {
 
 const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDialogProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState<MentalModelFormValues | null>(null);
+  const [connections, setConnections] = useState([]);
+
+  // Load connections when editing an existing model
+  useEffect(() => {
+    const fetchConnections = async () => {
+      if (model?.id) {
+        try {
+          const modelConnections = await getNoteConnections(model.id);
+          // Format connections for the form
+          const formattedConnections = modelConnections.map(conn => ({
+            targetId: conn.targetId === model.id ? conn.sourceId : conn.targetId,
+            relationship: conn.relationship,
+            strength: conn.strength
+          }));
+          
+          // Update form data with connections
+          setFormData(prevData => {
+            if (!prevData) return processModelForForm(model);
+            return { ...prevData, connections: formattedConnections };
+          });
+        } catch (error) {
+          console.error('Error fetching connections:', error);
+        }
+      }
+    };
+    
+    if (model) {
+      // Initialize form with model data
+      setFormData(processModelForForm(model));
+      // Fetch connections
+      fetchConnections();
+    } else {
+      // Initialize empty form for new model
+      setFormData(null);
+    }
+  }, [model]);
 
   const handleSubmit = async (formData: MentalModelFormValues) => {
     setIsSubmitting(true);
@@ -35,14 +80,89 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
       // Process the form data into the format needed for the API
       const processedData = processFormDataForSubmission(formData);
       
+      let modelId: string;
+      
       if (model) {
         // Update existing model
-        await updateMentalModel(model.id, processedData);
+        const updatedModel = await updateMentalModel(model.id, processedData);
+        modelId = model.id;
+        
+        // Create a new version if requested
+        if (processedData.versionInfo?.createNewVersion) {
+          try {
+            // Here you would call your versioning API
+            // e.g. await createModelVersion(modelId, processedData.versionInfo.versionNote);
+            console.log('Would create new version:', processedData.versionInfo.versionNote);
+          } catch (versionError) {
+            console.error('Error creating version:', versionError);
+            // Continue with the update even if versioning fails
+          }
+        }
+        
         toast.success('Mental model updated successfully');
       } else {
         // Create new model
-        await createMentalModel(processedData);
+        const newModel = await createMentalModel(processedData);
+        modelId = newModel.id;
         toast.success('Mental model created successfully');
+      }
+      
+      // Handle connections updates if we have a valid model ID
+      if (modelId && processedData.connections && processedData.connections.length > 0) {
+        // First, get existing connections to compare
+        const existingConnections = await getNoteConnections(modelId);
+        
+        // Process each connection
+        for (const conn of processedData.connections) {
+          // Check if this connection already exists
+          const existingConn = existingConnections.find(ec => 
+            (ec.sourceId === modelId && ec.targetId === conn.targetId) ||
+            (ec.targetId === modelId && ec.sourceId === conn.targetId)
+          );
+          
+          if (existingConn) {
+            // Update existing connection if needed
+            if (existingConn.strength !== conn.strength || existingConn.relationship !== conn.relationship) {
+              await updateConnection(existingConn.id, {
+                strength: conn.strength,
+                relationship: conn.relationship
+              });
+            }
+          } else {
+            // Create new connection
+            await createConnection({
+              sourceId: modelId,
+              targetId: conn.targetId,
+              strength: conn.strength,
+              relationship: conn.relationship
+            });
+          }
+        }
+        
+        // Delete connections that were removed
+        for (const existingConn of existingConnections) {
+          const stillExists = processedData.connections.some(conn => 
+            conn.targetId === (existingConn.sourceId === modelId ? existingConn.targetId : existingConn.sourceId)
+          );
+          
+          if (!stillExists) {
+            await deleteConnection(existingConn.id);
+          }
+        }
+      }
+      
+      // Handle book info / inspiration if provided
+      if (processedData.bookInfo) {
+        // Here you would save to your inspirations table
+        // e.g. await saveInspiration(modelId, processedData.bookInfo);
+        console.log('Would save book inspiration:', processedData.bookInfo);
+      }
+      
+      // Handle questions if provided
+      if (processedData.relatedQuestions && processedData.relatedQuestions.length > 0) {
+        // Here you would save related questions
+        // e.g. await saveRelatedQuestions(modelId, processedData.relatedQuestions);
+        console.log('Would save related questions:', processedData.relatedQuestions);
       }
       
       onOpenChange(false);
@@ -66,6 +186,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
         
         <MentalModelForm
           model={model}
+          initialData={formData}
           onSubmit={handleSubmit}
           onCancel={() => onOpenChange(false)}
           isSubmitting={isSubmitting}

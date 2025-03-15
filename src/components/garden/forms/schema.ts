@@ -51,10 +51,32 @@ export const mentalModelSchema = z.object({
   // Open Questions
   openQuestions: z.string().optional(),
   
-  // Inspiration
+  // Inspiration (Book Reference)
   bookTitle: z.string().optional(),
   bookAuthor: z.string().optional(),
   bookLink: z.string().optional(),
+  
+  // Connections to other models
+  connections: z.array(
+    z.object({
+      targetId: z.string(),
+      relationship: z.string(),
+      strength: z.number().min(1).max(10)
+    })
+  ).optional(),
+  
+  // Questions related to this model
+  relatedQuestions: z.array(
+    z.object({
+      id: z.string().optional(),
+      questionText: z.string(),
+      isNew: z.boolean().optional()
+    })
+  ).optional(),
+  
+  // Versioning
+  versionNote: z.string().optional(),
+  createNewVersion: z.boolean().optional(),
   
   // Visibility and Metadata
   visibility: z.enum(['public', 'private', 'unlisted']).default('public'),
@@ -63,4 +85,3 @@ export const mentalModelSchema = z.object({
   // For JSON import/export
   jsonData: z.string().optional(),
 });
-

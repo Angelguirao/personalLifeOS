@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,11 +16,13 @@ import { AnalysisTab } from './forms/AnalysisTab';
 import { AdditionalTab } from './forms/AdditionalTab';
 import { OriginTab } from './forms/OriginTab';
 import { JsonTab } from './forms/JsonTab';
+import { processModelForForm } from '@/lib/garden/utils/form-processors';
 
 export type MentalModelFormValues = z.infer<typeof mentalModelSchema>;
 
 interface MentalModelFormProps {
   model?: MentalModel;
+  initialData?: MentalModelFormValues | null;
   onSubmit: (data: MentalModelFormValues) => Promise<void>;
   onCancel: () => void;
   isSubmitting: boolean;
@@ -42,75 +44,91 @@ export const getVisibilityValue = (modelVisibility?: string): 'public' | 'privat
   return modelVisibility as 'public' | 'private' | 'unlisted';
 };
 
-const MentalModelForm = ({ model, onSubmit, onCancel, isSubmitting }: MentalModelFormProps) => {
+const MentalModelForm = ({ model, initialData, onSubmit, onCancel, isSubmitting }: MentalModelFormProps) => {
   const [activeTab, setActiveTab] = useState("basic");
   
-  const defaultValues = {
+  // Use initialData if provided, otherwise generate default values from model
+  const defaultValues = initialData || (model ? processModelForForm(model) : {
     // Basic information
-    title: model?.title || '',
-    subtitle: model?.subtitle || '',
-    developmentStage: model?.developmentStage || 'seedling',
-    confidenceLevel: model?.confidenceLevel || 'working',
-    summary: model?.summary || '',
-    fullContent: model?.fullContent || '',
-    imageUrl: model?.imageUrl || '',
+    title: '',
+    subtitle: '',
+    developmentStage: 'seedling',
+    confidenceLevel: 'working',
+    summary: '',
+    fullContent: '',
+    imageUrl: '',
     
     // Tags and categories
-    tags: convertArrayToString(model?.tags?.filter(tag => !tag.startsWith('domain:') && !tag.startsWith('framework:') && !tag.startsWith('application:'))),
-    domains: model?.tags?.filter(tag => tag.startsWith('domain:')).map(tag => tag.replace('domain:', '')).join(', ') || '',
-    frameworks: model?.tags?.filter(tag => tag.startsWith('framework:')).map(tag => tag.replace('framework:', '')).join(', ') || '',
-    applications: model?.tags?.filter(tag => tag.startsWith('application:')).map(tag => tag.replace('application:', '')).join(', ') || '',
+    tags: '',
+    domains: '',
+    frameworks: '',
+    applications: '',
     
     // LATCH Framework
-    latchLocation: model?.latchAttributes?.location || '',
-    latchAlphabetical: model?.latchAttributes?.alphabeticalIndex || '',
-    latchTime: model?.latchAttributes?.time || '',
-    latchCategory: model?.latchAttributes?.category || '',
-    latchHierarchyLevel: model?.latchAttributes?.hierarchyLevel?.toString() || '3',
+    latchLocation: '',
+    latchAlphabetical: '',
+    latchTime: '',
+    latchCategory: '',
+    latchHierarchyLevel: '3',
     
     // DSRP Structure
-    dsrpDistinctions: model?.dsrpStructure?.distinctions || '',
-    dsrpSystems: model?.dsrpStructure?.systemStructure || '',
-    dsrpRelationships: model?.dsrpStructure?.relationships ? JSON.stringify(model.dsrpStructure.relationships) : '',
-    dsrpPerspectives: model?.dsrpStructure?.perspectives ? model.dsrpStructure.perspectives.join(', ') : '',
+    dsrpDistinctions: '',
+    dsrpSystems: '',
+    dsrpRelationships: '',
+    dsrpPerspectives: '',
     
     // Socratic Attributes
-    socraticClarification: model?.socraticAttributes?.clarification || '',
-    socraticAssumptions: model?.socraticAttributes?.assumptions ? model.socraticAttributes.assumptions.join(', ') : '',
-    socraticEvidence: model?.socraticAttributes?.evidence || '',
-    socraticPerspectives: model?.socraticAttributes?.alternativePerspectives ? model.socraticAttributes.alternativePerspectives.join(', ') : '',
-    socraticImplications: model?.socraticAttributes?.implications || '',
+    socraticClarification: '',
+    socraticAssumptions: '',
+    socraticEvidence: '',
+    socraticPerspectives: '',
+    socraticImplications: '',
     
     // Origin Moment
-    originDatetime: model?.originMoment?.datetime || '',
-    originLocation: model?.originMoment?.location || '',
-    originEmotions: model?.originMoment?.emotions ? model.originMoment.emotions.join(', ') : '',
-    originPerceptions: model?.originMoment?.perceptions || '',
+    originDatetime: '',
+    originLocation: '',
+    originEmotions: '',
+    originPerceptions: '',
     
     // Consequences
-    consequencesPersonal: model?.consequences?.personal || '',
-    consequencesInterpersonal: model?.consequences?.interpersonal || '',
-    consequencesSocietal: model?.consequences?.societal || '',
+    consequencesPersonal: '',
+    consequencesInterpersonal: '',
+    consequencesSocietal: '',
     
     // Open Questions
-    openQuestions: model?.openQuestions ? model.openQuestions.join('\n') : '',
+    openQuestions: '',
     
     // Book Info
-    bookTitle: model?.bookInfo?.title || '',
-    bookAuthor: model?.bookInfo?.author || '',
-    bookLink: model?.bookInfo?.link || '',
+    bookTitle: '',
+    bookAuthor: '',
+    bookLink: '',
+    
+    // Versioning
+    versionNote: '',
+    createNewVersion: true,
     
     // Visibility
-    visibility: getVisibilityValue(model?.visibility),
+    visibility: 'public',
     
     // JSON data field (initially empty)
     jsonData: '',
-  };
+    
+    // Connections and questions
+    connections: [],
+    relatedQuestions: []
+  });
   
   const form = useForm<MentalModelFormValues>({
     resolver: zodResolver(mentalModelSchema),
     defaultValues,
   });
+
+  // Update form values when initialData changes
+  useEffect(() => {
+    if (initialData) {
+      form.reset(initialData);
+    }
+  }, [initialData, form]);
 
   const handleSubmit = async (data: MentalModelFormValues) => {
     await onSubmit(data);

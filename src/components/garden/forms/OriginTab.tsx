@@ -12,7 +12,7 @@ import {
   FormDescription,
 } from '@/components/ui/form';
 import { MentalModelFormValues } from '../MentalModelForm';
-import { Clock, MapPin, Heart } from 'lucide-react';
+import { Clock, MapPin, Heart, Eye } from 'lucide-react';
 
 interface OriginTabProps {
   control: Control<MentalModelFormValues>;
@@ -95,6 +95,52 @@ export const OriginTab = ({ control }: OriginTabProps) => {
           </FormItem>
         )}
       />
+
+      <div className="mt-6">
+        <h4 className="text-md font-medium mb-2">Versioning</h4>
+        <div className="grid grid-cols-1 gap-4">
+          <FormField
+            control={control}
+            name="createNewVersion"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormControl>
+                  <input
+                    type="checkbox"
+                    checked={field.value}
+                    onChange={field.onChange}
+                    className="h-4 w-4 mt-1"
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Create new version</FormLabel>
+                  <FormDescription>
+                    When enabled, a snapshot of the current state will be saved as a new version
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={control}
+            name="versionNote"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Version Note</FormLabel>
+                <FormControl>
+                  <Textarea 
+                    placeholder="Describe what changed in this version" 
+                    rows={2} 
+                    {...field} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
     </>
   );
 };
