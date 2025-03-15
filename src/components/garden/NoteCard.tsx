@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link2, Sprout, ExternalLink, ChevronRight } from 'lucide-react';
+import { Link2, Sprout, ChevronRight } from 'lucide-react';
 import BlurEffect from '../ui/BlurEffect';
 import { GardenNote } from '../../lib/garden/types/legacy-types';
 import NoteDialog from './NoteDialog';
