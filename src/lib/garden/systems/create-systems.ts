@@ -7,8 +7,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Create a new system
 export const createSystem = async (system: Omit<System, 'id' | 'createdAt' | 'updatedAt'>): Promise<System> => {
-  if (!supabase || !(await tableExists('systems'))) {
-    throw new Error('Cannot create system: Supabase connection or table not available');
+  if (!supabase) {
+    throw new Error('Cannot create system: Supabase connection not available');
+  }
+  
+  // Check if the systems table exists in the correct schema
+  const systemsExist = await tableExists('systems.systems');
+  if (!systemsExist) {
+    throw new Error('Cannot create system: Systems table not available');
   }
   
   // Generate a new UUID for the system
@@ -22,6 +28,8 @@ export const createSystem = async (system: Omit<System, 'id' | 'createdAt' | 'up
   
   console.log('Creating system with data:', supabaseSystem);
   
+  // Note: When using schema-qualified tables in Supabase REST API,
+  // we need to use the table name only and rely on RLS policies
   const { data, error } = await supabase
     .from('systems')
     .insert(supabaseSystem)

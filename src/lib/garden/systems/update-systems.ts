@@ -6,12 +6,20 @@ import { transformSystemFromSupabase, transformSystemToSupabase } from './transf
 
 // Update an existing system
 export const updateSystem = async (id: string, system: Partial<System>): Promise<System> => {
-  if (!supabase || !(await tableExists('systems'))) {
-    throw new Error('Cannot update system: Supabase connection or table not available');
+  if (!supabase) {
+    throw new Error('Cannot update system: Supabase connection not available');
+  }
+  
+  // Check if the systems table exists in the correct schema
+  const systemsExist = await tableExists('systems.systems');
+  if (!systemsExist) {
+    throw new Error('Cannot update system: Systems table not available');
   }
   
   const updates = transformSystemToSupabase(system);
   
+  // Note: When using schema-qualified tables in Supabase REST API,
+  // we need to use the table name only and rely on RLS policies
   const { data, error } = await supabase
     .from('systems')
     .update(updates)
@@ -25,10 +33,18 @@ export const updateSystem = async (id: string, system: Partial<System>): Promise
 
 // Delete a system
 export const deleteSystem = async (id: string): Promise<void> => {
-  if (!supabase || !(await tableExists('systems'))) {
-    throw new Error('Cannot delete system: Supabase connection or table not available');
+  if (!supabase) {
+    throw new Error('Cannot delete system: Supabase connection not available');
   }
   
+  // Check if the systems table exists in the correct schema
+  const systemsExist = await tableExists('systems.systems');
+  if (!systemsExist) {
+    throw new Error('Cannot delete system: Systems table not available');
+  }
+  
+  // Note: When using schema-qualified tables in Supabase REST API,
+  // we need to use the table name only and rely on RLS policies
   const { error } = await supabase
     .from('systems')
     .delete()
