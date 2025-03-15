@@ -14,11 +14,14 @@ export const transformMentalModelFromSupabase = (data: any): MentalModel => {
     imageUrl: data.image_url || '',
     tags: data.tags || [],
     visibility: data.visibility || 'public',
-    createdAt: data.created_at ? new Date(data.created_at) : new Date(),
-    updatedAt: data.updated_at ? new Date(data.updated_at) : new Date(),
+    
+    // Using timestamps object instead of direct createdAt/updatedAt
+    timestamps: {
+      created: data.created_at || new Date().toISOString(),
+      modified: data.updated_at || new Date().toISOString()
+    },
     
     // Optional complex fields
-    timestamps: data.timestamps || null,
     originMoment: data.origin_moment || null,
     applications: data.applications || null,
     consequences: data.consequences || null,
@@ -30,7 +33,7 @@ export const transformMentalModelFromSupabase = (data: any): MentalModel => {
     
     // Legacy fields (for compatibility)
     stage: data.development_stage || 'seedling',
-    lastUpdated: data.updated_at ? new Date(data.updated_at) : new Date(),
+    lastUpdated: data.updated_at || new Date().toISOString(),
     questionsLinked: data.questions_linked || [],
   };
 };
@@ -50,9 +53,9 @@ export const transformMentalModelToSupabase = (model: MentalModel): any => {
     tags: model.tags,
     visibility: model.visibility,
     
-    // Convert Date to ISO string for Supabase (fix for the type error)
-    created_at: model.createdAt instanceof Date ? model.createdAt.toISOString() : model.createdAt,
-    updated_at: model.updatedAt instanceof Date ? model.updatedAt.toISOString() : model.updatedAt,
+    // Convert timestamps from the model to Supabase format
+    created_at: model.timestamps?.created || new Date().toISOString(),
+    updated_at: model.timestamps?.modified || new Date().toISOString(),
     
     // Optional complex fields
     timestamps: model.timestamps,
