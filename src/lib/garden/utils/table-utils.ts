@@ -12,19 +12,25 @@ export const tableExists = async (tableName: string): Promise<boolean> => {
   try {
     // Split the table name to handle schema-qualified names
     const parts = tableName.split('.');
-    const fullyQualifiedName = parts.length > 1 ? tableName : `public.${tableName}`;
+    const schema = parts.length > 1 ? parts[0] : 'public';
+    const table = parts.length > 1 ? parts[1] : parts[0];
     
     // Query the table directly as a simpler approach
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from(tableName)
       .select('*')
       .limit(1);
       
     if (error) {
-      console.warn(`Table ${tableName} does not exist in Supabase or is inaccessible: ${error.message}`);
+      if (error.code === '42P01') {  // Table or view does not exist
+        console.warn(`Table ${tableName} does not exist in Supabase: ${error.message}`);
+      } else {
+        console.warn(`Error accessing table ${tableName}: ${error.message}`);
+      }
       return false;
     }
     
+    console.log(`Table ${tableName} exists and returned data:`, data ? data.length : 0, 'rows');
     return true;
   } catch (error) {
     console.error(`Error checking if table ${tableName} exists:`, error);

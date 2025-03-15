@@ -1,3 +1,4 @@
+
 import supabase, { isSupabaseAvailable } from './client';
 import { MentalModel } from './types/mental-model-types';
 import { tableExists } from './utils/table-utils';
@@ -111,17 +112,27 @@ export const createMentalModel = async (model: Omit<MentalModel, 'id'>): Promise
   
   console.log('Creating mental model with data:', supabaseModel);
   
-  const { data, error } = await supabase
-    .from('distinctions.distinctions')
-    .insert(supabaseModel)
-    .select()
-    .single();
-  
-  if (error) {
+  try {
+    const { data, error } = await supabase
+      .from('distinctions.distinctions')
+      .insert(supabaseModel)
+      .select()
+      .single();
+    
+    if (error) {
+      console.error('Supabase error when creating mental model:', error);
+      throw new Error(`Failed to create mental model: ${error.message}`);
+    }
+    
+    if (!data) {
+      throw new Error('No data returned after creating mental model');
+    }
+    
+    return transformMentalModelFromSupabase(data);
+  } catch (error) {
     console.error('Error creating mental model:', error);
     throw error;
   }
-  return transformMentalModelFromSupabase(data);
 };
 
 export const updateMentalModel = async (id: string, model: Partial<MentalModel>): Promise<MentalModel> => {
@@ -154,16 +165,29 @@ export const updateMentalModel = async (id: string, model: Partial<MentalModel>)
   if (model.hierarchicalView !== undefined) updates.hierarchical_view = model.hierarchicalView;
   if (model.visibility !== undefined) updates.visibility = model.visibility;
   
-  const { data, error } = await supabase
-    .from('distinctions.distinctions')
-    .update(updates)
-    .eq('id', id)
-    .eq('type', 'mental_model')
-    .select()
-    .single();
-  
-  if (error) throw error;
-  return transformMentalModelFromSupabase(data);
+  try {
+    const { data, error } = await supabase
+      .from('distinctions.distinctions')
+      .update(updates)
+      .eq('id', id)
+      .eq('type', 'mental_model')
+      .select()
+      .single();
+    
+    if (error) {
+      console.error('Supabase error when updating mental model:', error);
+      throw new Error(`Failed to update mental model: ${error.message}`);
+    }
+    
+    if (!data) {
+      throw new Error('No data returned after updating mental model');
+    }
+    
+    return transformMentalModelFromSupabase(data);
+  } catch (error) {
+    console.error('Error updating mental model:', error);
+    throw error;
+  }
 };
 
 export const deleteMentalModel = async (id: string): Promise<void> => {
@@ -174,11 +198,19 @@ export const deleteMentalModel = async (id: string): Promise<void> => {
   // Check authentication
   await checkAuthentication();
   
-  const { error } = await supabase
-    .from('distinctions.distinctions')
-    .delete()
-    .eq('id', id)
-    .eq('type', 'mental_model');
-  
-  if (error) throw error;
+  try {
+    const { error } = await supabase
+      .from('distinctions.distinctions')
+      .delete()
+      .eq('id', id)
+      .eq('type', 'mental_model');
+    
+    if (error) {
+      console.error('Supabase error when deleting mental model:', error);
+      throw new Error(`Failed to delete mental model: ${error.message}`);
+    }
+  } catch (error) {
+    console.error('Error deleting mental model:', error);
+    throw error;
+  }
 };

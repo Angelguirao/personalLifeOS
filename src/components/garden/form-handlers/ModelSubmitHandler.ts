@@ -27,13 +27,26 @@ export const handleModelSubmit = async (
     
     // Check authentication status before proceeding
     if (supabase) {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session }, error: authError } = await supabase.auth.getSession();
+      if (authError) {
+        console.error('Authentication error:', authError);
+        toast.error('Authentication error occurred');
+        setIsSubmitting(false);
+        onOpenChange(false);
+        return;
+      }
+      
       if (!session) {
         toast.error('You must be logged in to perform this action');
         setIsSubmitting(false);
         onOpenChange(false);
         return;
       }
+    } else {
+      toast.error('Database connection is not available');
+      setIsSubmitting(false);
+      onOpenChange(false);
+      return;
     }
     
     // Process the form data into the format needed for the API
@@ -45,22 +58,30 @@ export const handleModelSubmit = async (
     if (model) {
       // Update existing model
       console.log('Updating existing model:', model.id);
-      const updatedModel = await updateMentalModel(model.id, processedData);
-      modelId = model.id;
-      
-      // Create a new version if requested
-      if (processedData.versionInfo?.createNewVersion) {
-        try {
-          // Here you would call your versioning API
-          // e.g. await createModelVersion(modelId, processedData.versionInfo.versionNote);
-          console.log('Would create new version:', processedData.versionInfo.versionNote);
-        } catch (versionError) {
-          console.error('Error creating version:', versionError);
-          // Continue with the update even if versioning fails
+      try {
+        const updatedModel = await updateMentalModel(model.id, processedData);
+        modelId = model.id;
+        
+        // Create a new version if requested
+        if (processedData.versionInfo?.createNewVersion) {
+          try {
+            // Here you would call your versioning API
+            // e.g. await createModelVersion(modelId, processedData.versionInfo.versionNote);
+            console.log('Would create new version:', processedData.versionInfo.versionNote);
+          } catch (versionError) {
+            console.error('Error creating version:', versionError);
+            // Continue with the update even if versioning fails
+            toast.warning('Updated model but failed to create version');
+          }
         }
+        
+        toast.success('Mental model updated successfully');
+      } catch (updateError) {
+        console.error('Error updating mental model:', updateError);
+        toast.error(`Failed to update mental model: ${updateError instanceof Error ? updateError.message : 'Unknown error'}`);
+        setIsSubmitting(false);
+        return;
       }
-      
-      toast.success('Mental model updated successfully');
     } else {
       // Create new model with a generated UUID
       console.log('Creating new mental model');
@@ -69,26 +90,38 @@ export const handleModelSubmit = async (
         processedData.id = uuidv4();
       }
       
-      const newModel = await createMentalModel(processedData);
-      modelId = newModel.id;
-      toast.success('Mental model created successfully');
+      try {
+        const newModel = await createMentalModel(processedData);
+        modelId = newModel.id;
+        toast.success('Mental model created successfully');
+      } catch (createError) {
+        console.error('Error creating mental model:', createError);
+        toast.error(`Failed to create mental model: ${createError instanceof Error ? createError.message : 'Unknown error'}`);
+        setIsSubmitting(false);
+        return;
+      }
     }
     
-    // Handle connections updates if we have a valid model ID
-    if (modelId && processedData.connections && processedData.connections.length > 0) {
-      await handleConnections(modelId, processedData.connections);
-    }
-    
-    // Handle book info / inspiration if provided
-    if (processedData.bookInfo && processedData.bookInfo.title) {
-      await handleBookInspiration(modelId, processedData.bookInfo);
-    }
-    
-    // Handle questions if provided
-    if (processedData.relatedQuestions && processedData.relatedQuestions.length > 0) {
-      // Here you would save related questions
-      // e.g. await saveRelatedQuestions(modelId, processedData.relatedQuestions);
-      console.log('Would save related questions:', processedData.relatedQuestions);
+    try {
+      // Handle connections updates if we have a valid model ID
+      if (modelId && processedData.connections && processedData.connections.length > 0) {
+        await handleConnections(modelId, processedData.connections);
+      }
+      
+      // Handle book info / inspiration if provided
+      if (processedData.bookInfo && processedData.bookInfo.title) {
+        await handleBookInspiration(modelId, processedData.bookInfo);
+      }
+      
+      // Handle questions if provided
+      if (processedData.relatedQuestions && processedData.relatedQuestions.length > 0) {
+        // Here you would save related questions
+        // e.g. await saveRelatedQuestions(modelId, processedData.relatedQuestions);
+        console.log('Would save related questions:', processedData.relatedQuestions);
+      }
+    } catch (relatedDataError) {
+      console.error('Error saving related data:', relatedDataError);
+      toast.warning('Model saved but some related data could not be updated');
     }
     
     onOpenChange(false);
@@ -102,11 +135,15 @@ export const handleModelSubmit = async (
         toast.error('Error with model ID generation. Please try again.');
       } else if (error.message.includes('not-null constraint')) {
         toast.error('Missing required fields. Please check the form.');
+      } else if (error.message.includes('relation')) {
+        toast.error('Database error: Table not found. Please ensure database is properly set up.');
+      } else if (error.message.includes('authentication')) {
+        toast.error('Authentication error. Please log in again.');
       } else {
         toast.error(`Failed to save mental model: ${error.message}`);
       }
     } else {
-      toast.error('Failed to save mental model');
+      toast.error('Failed to save mental model due to an unknown error');
     }
   } finally {
     setIsSubmitting(false);
