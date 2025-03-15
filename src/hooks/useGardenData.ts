@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { getMentalModels, getConnections, seedInitialData } from '@/lib/garden/api';
 import { MentalModel, Connection } from '@/lib/garden/types';
+import supabase from '@/lib/garden/client';
 
 export function useGardenData() {
   const [models, setModels] = useState<MentalModel[]>([]);
   const [connections, setConnections] = useState<Connection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedModel, setSelectedModel] = useState<MentalModel | undefined>(undefined);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Function to check database connection
   const checkDatabase = async () => {
@@ -51,19 +53,47 @@ export function useGardenData() {
     setSelectedModel(model);
   };
 
+  // Check authentication status
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      if (!supabase) return;
+      
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setIsAuthenticated(!!session);
+      } catch (error) {
+        console.error('Error checking auth status:', error);
+      }
+    };
+
+    checkAuthStatus();
+    
+    // Subscribe to auth changes
+    if (supabase) {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        setIsAuthenticated(!!session);
+      });
+      
+      return () => subscription.unsubscribe();
+    }
+  }, []);
+
   useEffect(() => {
     // Fetch data on component mount
     fetchData();
     
     // Check database connection on load
-    checkDatabase();
-  }, []);
+    if (isAuthenticated) {
+      checkDatabase();
+    }
+  }, [isAuthenticated]);
 
   return {
     models,
     connections,
     isLoading,
     selectedModel,
+    isAuthenticated,
     fetchData,
     checkDatabase,
     handleModelSelect,

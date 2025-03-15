@@ -8,7 +8,7 @@ interface GardenSearchProps {
   setSearchQuery: (query: string) => void;
 }
 
-const Garden = ({ searchQuery, setSearchQuery }: GardenSearchProps) => {
+const GardenSearch = ({ searchQuery, setSearchQuery }: GardenSearchProps) => {
   return (
     <div className="relative w-full sm:w-64">
       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -22,4 +22,4 @@ const Garden = ({ searchQuery, setSearchQuery }: GardenSearchProps) => {
   );
 };
 
-export default Garden;
+export default GardenSearch;

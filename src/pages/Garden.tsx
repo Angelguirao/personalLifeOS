@@ -29,6 +29,7 @@ const Garden = () => {
     connections,
     isLoading,
     selectedModel,
+    isAuthenticated,
     fetchData,
     checkDatabase,
     handleModelSelect,
@@ -65,10 +66,12 @@ const Garden = () => {
             
             <div className="flex justify-between items-center">
               <ModelManagement onRefresh={fetchData} />
-              <Button variant="outline" size="sm" onClick={checkDatabase} className="flex items-center gap-2">
-                <Database size={16} />
-                <span>Check Database</span>
-              </Button>
+              {isAuthenticated && (
+                <Button variant="outline" size="sm" onClick={checkDatabase} className="flex items-center gap-2">
+                  <Database size={16} />
+                  <span>Check Database</span>
+                </Button>
+              )}
             </div>
             
             {isLoading ? (
@@ -76,7 +79,10 @@ const Garden = () => {
                 <div className="animate-spin h-8 w-8 border-t-2 border-primary rounded-full"></div>
               </div>
             ) : models.length === 0 ? (
-              <EmptyGarden onCreateModel={() => setIsCreateDialogOpen(true)} />
+              <EmptyGarden 
+                onCreateModel={() => setIsCreateDialogOpen(true)} 
+                isAuthenticated={isAuthenticated}
+              />
             ) : (
               <>
                 {activeView === 'list' && (
