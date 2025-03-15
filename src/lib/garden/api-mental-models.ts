@@ -110,15 +110,15 @@ export const createMentalModel = async (model: Omit<MentalModel, 'id'>): Promise
     // Check authentication
     await checkAuthentication();
     
-    // Generate a new UUID for the model if not provided
-    const modelWithId = {
-      ...model,
-      id: model.id || uuidv4()
-    };
+    // Generate a new UUID for the model
+    const modelId = uuidv4();
     
     // Transform to Supabase format and ensure type is set to mental_model
     const supabaseModel = {
-      ...transformMentalModelToSupabase(modelWithId),
+      ...transformMentalModelToSupabase({
+        ...model,
+        id: modelId
+      } as MentalModel),
       type: 'mental_model'
     };
     
