@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, Lock } from 'lucide-react';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { 
   AlertDialog,
@@ -51,6 +51,15 @@ const ModelManagement = ({ selectedModel, onRefresh }: ModelManagementProps) => 
     };
 
     checkAuthStatus();
+    
+    // Subscribe to auth changes
+    if (supabase) {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        setIsAuthenticated(!!session);
+      });
+      
+      return () => subscription.unsubscribe();
+    }
   }, []);
 
   const handleDelete = async () => {
@@ -67,109 +76,15 @@ const ModelManagement = ({ selectedModel, onRefresh }: ModelManagementProps) => 
     }
   };
 
-  const handleLoginClick = async () => {
-    if (!supabase) {
-      toast.error('Supabase is not configured properly');
-      return;
-    }
-
-    // Show a simple signin modal with email/password
-    const email = prompt('Enter your email:');
-    const password = prompt('Enter your password:');
-    
-    if (!email || !password) return;
-    
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-      
-      if (error) throw error;
-      
-      toast.success('Signed in successfully');
-      setIsAuthenticated(true);
-    } catch (error) {
-      console.error('Error signing in:', error);
-      toast.error('Invalid credentials');
-    }
-  };
-
-  const handleSignUpClick = async () => {
-    if (!supabase) {
-      toast.error('Supabase is not configured properly');
-      return;
-    }
-
-    // Show a simple signup modal with email/password
-    const email = prompt('Enter your email to register:');
-    const password = prompt('Create a password:');
-    
-    if (!email || !password) return;
-    
-    try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password
-      });
-      
-      if (error) throw error;
-      
-      toast.success('Signed up successfully! Check your email for confirmation.');
-    } catch (error) {
-      console.error('Error signing up:', error);
-      toast.error('Failed to sign up');
-    }
-  };
-
-  const handleLogout = async () => {
-    if (!supabase) return;
-    
-    try {
-      await supabase.auth.signOut();
-      setIsAuthenticated(false);
-      toast.success('Signed out successfully');
-    } catch (error) {
-      console.error('Error signing out:', error);
-      toast.error('Failed to sign out');
-    }
-  };
-
   if (isAuthLoading) {
-    return (
-      <div className="flex items-center space-x-2">
-        <div className="h-9 w-24 bg-muted animate-pulse rounded-md"></div>
-      </div>
-    );
+    return null; // Don't show anything while loading
   }
 
   if (!isAuthenticated) {
-    return (
-      <div className="flex items-center justify-between w-full">
-        <div className="text-sm text-muted-foreground flex items-center">
-          <Lock size={14} className="mr-1.5" />
-          Some features require authentication
-        </div>
-        <div className="flex space-x-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={handleSignUpClick}
-          >
-            Sign Up
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={handleLoginClick}
-          >
-            Sign In
-          </Button>
-        </div>
-      </div>
-    );
+    return null; // Don't show anything if not authenticated
   }
 
+  // Only show management UI when authenticated
   return (
     <div className="flex items-center justify-between w-full">
       <div className="flex items-center space-x-2">
@@ -207,14 +122,6 @@ const ModelManagement = ({ selectedModel, onRefresh }: ModelManagementProps) => 
           </>
         )}
       </div>
-      
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={handleLogout}
-      >
-        Sign Out
-      </Button>
       
       {/* Create Dialog */}
       <ModelFormDialog
