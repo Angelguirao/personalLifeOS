@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link2, Sprout, X } from 'lucide-react';
+import { Link2, Sprout, X, Book } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from '../ui/dialog';
 import { GardenNote } from '../../lib/garden/types/legacy-types';
 import { Button } from '../ui/button';
@@ -28,48 +28,69 @@ const NoteDialog = ({ note, isOpen, onOpenChange }: NoteDialogProps) => {
         <DialogHeader>
           <DialogTitle className="font-serif text-xl font-semibold">{note.title}</DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground">
-            {note.stage} note • Last updated: {new Date(note.lastUpdated).toLocaleDateString()}
+            {note.subtitle || "A digital garden note"}
           </DialogDescription>
         </DialogHeader>
         
-        {/* Use the built-in DialogClose component instead of a custom div */}
         <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </DialogClose>
         
-        <div className="mb-3 flex items-center text-xs text-muted-foreground">
-          <div className="flex items-center">
-            <Sprout size={16} className={getStageColor(note.stage)} />
-            <span className="ml-1 capitalize">{note.stage}</span>
+        <div className="mb-4 flex items-center justify-between border-b pb-3">
+          <div className="flex items-center text-xs text-muted-foreground">
+            <div className="flex items-center">
+              <Sprout size={16} className={getStageColor(note.stage)} />
+              <span className="ml-1 capitalize">{note.stage} note</span>
+            </div>
           </div>
-          <span className="mx-2">•</span>
-          <time dateTime={note.lastUpdated}>Updated: {new Date(note.lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+          <time dateTime={note.lastUpdated} className="text-xs text-muted-foreground">
+            Updated: {new Date(note.lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
         </div>
         
         <div className="mt-4 space-y-4">
-          <p className="text-muted-foreground">
-            {note.bookInfo ? (
-              <>
-                {note.fullContent.split(note.bookInfo.title)[0]}
-                <a 
+          <div className="prose prose-slate dark:prose-invert max-w-none">
+            <p className="text-muted-foreground">
+              {note.bookInfo ? (
+                <>
+                  {note.fullContent.split(note.bookInfo.title)[0]}
+                  <a 
+                    href={note.bookInfo.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    {note.bookInfo.title}
+                  </a>
+                  {note.fullContent.split(note.bookInfo.title)[1]}
+                </>
+              ) : (
+                note.fullContent
+              )}
+            </p>
+          </div>
+          
+          {/* Show book reference if available */}
+          {note.bookInfo && (
+            <div className="mt-4 p-3 bg-secondary/20 rounded-md">
+              <div className="flex items-center text-sm">
+                <Book size={14} className="mr-2 text-primary" />
+                <span>From: <a 
                   href={note.bookInfo.link} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-primary hover:underline"
                 >
                   {note.bookInfo.title}
-                </a>
-                {note.fullContent.split(note.bookInfo.title)[1]}
-              </>
-            ) : (
-              note.fullContent
-            )}
-          </p>
+                </a> by {note.bookInfo.author}</span>
+              </div>
+            </div>
+          )}
           
           {note.connections && note.connections.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-4">
-              <span className="text-xs text-muted-foreground mr-2">Connected ideas:</span>
+            <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
+              <span className="text-xs text-muted-foreground mr-2">Tags:</span>
               {note.connections.map((tag) => (
                 <span key={tag} className="inline-flex items-center px-2 py-1 rounded-full bg-secondary/50 text-muted-foreground text-xs">
                   <Link2 size={10} className="mr-1" />
