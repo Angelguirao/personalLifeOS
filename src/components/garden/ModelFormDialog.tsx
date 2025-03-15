@@ -35,15 +35,82 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
       const now = new Date().toISOString();
       
       // Process tags from comma-separated string to array
-      const tagsArray = formData.tags 
-        ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') 
+      const processStringsToArray = (str?: string) => 
+        str ? str.split(',').map(item => item.trim()).filter(item => item !== '') : [];
+      
+      const tagsArray = processStringsToArray(formData.tags);
+      
+      // Add domain, framework, and application tags with prefixes
+      const domainTags = processStringsToArray(formData.domains).map(d => `domain:${d}`);
+      const frameworkTags = processStringsToArray(formData.frameworks).map(f => `framework:${f}`);
+      const applicationTags = processStringsToArray(formData.applications).map(a => `application:${a}`);
+      
+      // Combine all tags
+      const allTags = [...tagsArray, ...domainTags, ...frameworkTags, ...applicationTags];
+      
+      // Prepare LATCH attributes
+      const latchAttributes = {
+        location: formData.latchLocation,
+        alphabeticalIndex: formData.latchAlphabetical,
+        time: formData.latchTime,
+        category: formData.latchCategory,
+        hierarchyLevel: parseInt(formData.latchHierarchyLevel as string) || 3
+      };
+      
+      // Prepare DSRP structure
+      const dsrpStructure = {
+        distinctions: formData.dsrpDistinctions,
+        systemStructure: formData.dsrpSystems,
+        relationships: formData.dsrpRelationships ? JSON.parse(`{"text": "${formData.dsrpRelationships}"}`) : undefined,
+        perspectives: processStringsToArray(formData.dsrpPerspectives)
+      };
+      
+      // Prepare Socratic attributes
+      const socraticAttributes = {
+        clarification: formData.socraticClarification,
+        assumptions: processStringsToArray(formData.socraticAssumptions),
+        evidence: formData.socraticEvidence,
+        alternativePerspectives: processStringsToArray(formData.socraticPerspectives),
+        implications: formData.socraticImplications
+      };
+      
+      // Prepare consequences
+      const consequences = {
+        personal: formData.consequencesPersonal,
+        interpersonal: formData.consequencesInterpersonal,
+        societal: formData.consequencesSocietal
+      };
+      
+      // Prepare book info if provided
+      const bookInfo = formData.bookTitle ? {
+        title: formData.bookTitle,
+        author: formData.bookAuthor || 'Unknown',
+        link: formData.bookLink || ''
+      } : undefined;
+      
+      // Process open questions - split by newlines
+      const openQuestions = formData.openQuestions
+        ? formData.openQuestions.split('\n').map(q => q.trim()).filter(q => q !== '')
         : [];
       
       if (model) {
         // Update existing model
         await updateMentalModel(model.id, {
-          ...formData,
-          tags: tagsArray,
+          title: formData.title,
+          subtitle: formData.subtitle,
+          developmentStage: formData.developmentStage,
+          confidenceLevel: formData.confidenceLevel,
+          summary: formData.summary,
+          fullContent: formData.fullContent,
+          tags: allTags,
+          latchAttributes,
+          dsrpStructure,
+          socraticAttributes,
+          consequences,
+          openQuestions,
+          bookInfo,
+          imageUrl: formData.imageUrl,
+          visibility: formData.visibility,
           timestamps: {
             ...model.timestamps,
             modified: now
@@ -59,15 +126,19 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
           confidenceLevel: formData.confidenceLevel,
           summary: formData.summary,
           fullContent: formData.fullContent,
-          tags: tagsArray,
+          tags: allTags,
           timestamps: {
             created: now,
             modified: now,
           },
-          visibility: 'public',
-          latchAttributes: {
-            hierarchyLevel: 3
-          }
+          latchAttributes,
+          dsrpStructure,
+          socraticAttributes,
+          consequences,
+          openQuestions,
+          bookInfo,
+          imageUrl: formData.imageUrl,
+          visibility: formData.visibility,
         });
         toast.success('Mental model created successfully');
       }
@@ -84,7 +155,7 @@ const ModelFormDialog = ({ isOpen, onOpenChange, model, onSuccess }: ModelFormDi
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {model ? 'Edit Mental Model' : 'Create New Mental Model'}

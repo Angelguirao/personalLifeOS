@@ -17,9 +17,16 @@ const ListView = ({ notes, onSelectModel, selectedModelId, onRefresh }: ListView
     }
   };
 
+  // Sort notes by modified date (latest first)
+  const sortedNotes = [...notes].sort((a, b) => {
+    const dateA = new Date(a.timestamps?.modified || a.lastUpdated || '');
+    const dateB = new Date(b.timestamps?.modified || b.lastUpdated || '');
+    return dateB.getTime() - dateA.getTime();
+  });
+
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      {notes.length === 0 ? (
+      {sortedNotes.length === 0 ? (
         <div className="md:col-span-2 p-6 text-center">
           <h3 className="text-lg font-medium mb-2">No mental models found</h3>
           <p className="text-muted-foreground">
@@ -27,7 +34,7 @@ const ListView = ({ notes, onSelectModel, selectedModelId, onRefresh }: ListView
           </p>
         </div>
       ) : (
-        notes.map((note, index) => (
+        sortedNotes.map((note, index) => (
           <div 
             key={note.id} 
             onClick={() => handleCardClick(note)}
