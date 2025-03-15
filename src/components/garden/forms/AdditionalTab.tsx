@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Control } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
@@ -13,7 +12,7 @@ import {
 } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import { ArrowDown, ArrowUp, Book } from 'lucide-react';
-import { MentalModelFormValues } from '../MentalModelForm';
+import { MentalModelFormValues } from './types';
 
 interface AdditionalTabProps {
   control: Control<MentalModelFormValues>;

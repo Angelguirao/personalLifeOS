@@ -1,5 +1,5 @@
 
-import { MentalModelFormValues } from "@/components/garden/MentalModelForm";
+import { MentalModelFormValues } from "@/components/garden/forms/types";
 import { MentalModel } from "../types";
 
 /**

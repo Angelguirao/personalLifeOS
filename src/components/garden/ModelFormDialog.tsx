@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import MentalModelForm, { MentalModelFormValues } from './MentalModelForm';
+import MentalModelForm from './MentalModelForm';
+import { MentalModelFormValues } from './forms/types';
 import { MentalModel, SourceType, RelationshipType } from '@/lib/garden/types';
 import { 
   createMentalModel, 
