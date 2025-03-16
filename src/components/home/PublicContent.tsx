@@ -42,8 +42,8 @@ const PublicContent = () => {
   const { isAuthenticated } = useAuth();
   
   return (
-    <div className="bg-gradient-to-br from-white to-purple-50/5 py-24">
-      <div className="container-narrow mx-auto px-6">
+    <div className="bg-gradient-to-br from-white to-purple-50/5 py-24 mt-[-20vh]">
+      <div className="container-narrow mx-auto px-6 pt-[30vh]">
         <Section id="what-i-think" title="What I Think" icon={Lightbulb}>
           <p className="text-foreground">
             Maybe Descartes was onto something when he claimed, "I think, therefore I am." Ideas, I believe, are among the most powerful forces shaping the world—and my identity.

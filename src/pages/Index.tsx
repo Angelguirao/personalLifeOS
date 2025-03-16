@@ -13,7 +13,7 @@ const Index = () => {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
     
-    // Handle smooth scrolling for anchor links
+    // Handle smooth scrolling for anchor links with increased offset
     const handleAnchorClick = (e) => {
       const target = e.target;
       if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('#')) {
@@ -21,7 +21,7 @@ const Index = () => {
         const id = target.getAttribute('href').slice(1);
         const element = document.getElementById(id);
         if (element) {
-          const offset = 100; // Adjust offset as needed
+          const offset = 120; // Increased offset to account for negative margin
           const elementPosition = element.getBoundingClientRect().top;
           const offsetPosition = elementPosition + window.pageYOffset - offset;
           
