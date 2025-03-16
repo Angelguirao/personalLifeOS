@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ArrowDownIcon } from 'lucide-react';
+import { ArrowDownIcon, SparklesIcon } from 'lucide-react';
 import RevealText from '../ui/RevealText';
 import BlurEffect from '../ui/BlurEffect';
 import { useAuth } from '@/hooks/useAuth';
@@ -14,6 +14,13 @@ const Hero = () => {
       <div className="container-narrow relative z-10">
         <div className="space-y-8 text-center sm:text-left">
           <div className="space-y-3">
+            {isAuthenticated ? (
+              <div className="inline-flex items-center justify-center p-1.5 px-4 rounded-full bg-primary/10 text-primary mb-4 mx-auto sm:mx-0">
+                <SparklesIcon size={16} className="mr-2" />
+                <span className="text-sm font-medium">Life Operating System</span>
+              </div>
+            ) : null}
+            
             <h1 className="heading-xl">
               {isAuthenticated ? (
                 <RevealText>Hello, Angel</RevealText>

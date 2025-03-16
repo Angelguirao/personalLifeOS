@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Brain, Lightbulb, Zap, Users } from 'lucide-react';
 import NavbarAuth from './NavbarAuth';
 import SocialLinks from './SocialLinks';
 import supabase from '@/lib/garden/client';
@@ -16,10 +16,10 @@ const Navbar = () => {
   // Define nav items with different labels based on authentication
   const getNavItems = (isAuth) => isAuth
     ? [
-        { name: 'Consciousness', path: '/' },
-        { name: 'Thought', path: '/garden' },
-        { name: 'Action', path: '/projects' },
-        { name: 'Connect', path: '/connect' },
+        { name: 'LifeOS', path: '/', icon: <Brain size={16} className="mr-1.5" /> },
+        { name: 'Thought', path: '/garden', icon: <Lightbulb size={16} className="mr-1.5" /> },
+        { name: 'Action', path: '/projects', icon: <Zap size={16} className="mr-1.5" /> },
+        { name: 'Connect', path: '/connect', icon: <Users size={16} className="mr-1.5" /> },
       ]
     : [
         { name: 'Home', path: '/' },
@@ -92,11 +92,12 @@ const Navbar = () => {
                 key={item.path} 
                 to={item.path}
                 className={cn(
-                  "text-sm font-medium transition-colors duration-200 hover:text-primary opacity-0 animate-fade-in",
+                  "text-sm font-medium transition-colors duration-200 hover:text-primary flex items-center opacity-0 animate-fade-in",
                   location.pathname === item.path ? "text-primary" : "text-muted-foreground",
                   `animation-delay-${(index + 1) * 100}`
                 )}
               >
+                {isAuthenticated && item.icon}
                 {item.name}
               </Link>
             ))}
@@ -134,10 +135,11 @@ const Navbar = () => {
               key={item.path} 
               to={item.path}
               className={cn(
-                "text-lg font-medium transition-colors",
+                "text-lg font-medium transition-colors flex items-center",
                 location.pathname === item.path ? "text-primary" : "text-muted-foreground"
               )}
             >
+              {isAuthenticated && item.icon}
               {item.name}
             </Link>
           ))}

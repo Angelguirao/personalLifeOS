@@ -22,9 +22,14 @@ const Index = () => {
         <Hero />
         
         {isAuthenticated ? (
-          // Display Life Operating System for authenticated users
-          <div id="consciousness-os" className="bg-gradient-to-br from-background to-purple-50/10">
-            <ConsciousnessOS />
+          <div className="space-y-16">
+            {/* Display Life Operating System UI for authenticated users */}
+            <div id="consciousness-os" className="bg-gradient-to-br from-background to-purple-50/10">
+              <ConsciousnessOS />
+            </div>
+            
+            {/* Also show the public content below the OS for authenticated users */}
+            <PublicContent />
           </div>
         ) : (
           // Display public content for non-authenticated users

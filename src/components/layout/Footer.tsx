@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Github, Twitter, Linkedin, Mail, Bitcoin, Copy } from 'lucide-react';
+import { Github, Twitter, Linkedin, Mail, Bitcoin, Copy, Brain, Lightbulb, Zap, Users } from 'lucide-react';
 import { toast } from "@/components/ui/use-toast";
 import { useAuth } from '@/hooks/useAuth';
 
@@ -33,10 +33,18 @@ const Footer = () => {
             <nav className="flex flex-col space-y-2">
               {isAuthenticated ? (
                 <>
-                  <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Consciousness</Link>
-                  <Link to="/garden" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Thought</Link>
-                  <Link to="/projects" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Action</Link>
-                  <Link to="/connect" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Connect</Link>
+                  <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                    <Brain size={14} className="mr-1.5" /> LifeOS
+                  </Link>
+                  <Link to="/garden" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                    <Lightbulb size={14} className="mr-1.5" /> Thought
+                  </Link>
+                  <Link to="/projects" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                    <Zap size={14} className="mr-1.5" /> Action
+                  </Link>
+                  <Link to="/connect" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                    <Users size={14} className="mr-1.5" /> Connect
+                  </Link>
                 </>
               ) : (
                 <>

@@ -33,7 +33,7 @@ const ConsciousnessOS = () => {
               <span className="text-sm font-medium">Life Operating System</span>
             </div>
             
-            <h2 className="heading-lg">Consciousness OS</h2>
+            <h2 className="heading-lg">Your Personal OS</h2>
             <p className="body-md text-muted-foreground max-w-2xl mx-auto">
               Your personal framework for understanding and navigating consciousness.
               Each category represents a dimension of conscious experience you can explore and optimize.
@@ -46,7 +46,7 @@ const ConsciousnessOS = () => {
                 size="lg"
               >
                 <BookIcon size={16} className="mr-2 group-hover:text-primary transition-colors" />
-                <span>Learn more about this framework</span>
+                <span>Explore framework documentation</span>
               </Button>
             </div>
           </motion.div>
