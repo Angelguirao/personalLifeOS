@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -62,7 +63,7 @@ const PublicContent = () => {
           </p>
           
           <p className="text-foreground">
-            I explore this further in my <HighlightedLink to="/cognition">Cognition Compass</HighlightedLink> project, where I use DSRP and other mental models for structuring information and making sense of complexity.
+            I explore this further in my <HighlightedLink to="/thought">Cognition Compass</HighlightedLink> project, where I use DSRP and other mental models for structuring information and making sense of complexity.
           </p>
         </Section>
 
@@ -97,10 +98,7 @@ const PublicContent = () => {
             Although I studied law at university, I quickly discovered <HighlightedLink to="/entrepreneurship">entrepreneurship</HighlightedLink> as my natural habitat. I've launched a travel blog, bought and operated a mobile game app, created a litigation finance marketplace, and explored various other ventures. Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas.
           </p>
           <p className="text-foreground">
-            Later, I worked as a venture analyst in a venture builder, where I learned the ins and outs of startup ecosystems.
-          </p>
-          <p className="text-foreground">
-            And right now I also work as a software engineer in startup environments, because why not add more chaos to the mix?
+            Later, I worked as a venture analyst in a venture builder and now I also work as a software engineer in startup environments—creating a professional blend of business insight and technical capabilities that adds even more chaos to the mix.
           </p>
           {!isAuthenticated && (
             <p className="text-foreground">
@@ -113,7 +111,7 @@ const PublicContent = () => {
           {isAuthenticated ? (
             <>
               <p className="text-foreground">
-                The relationships you nurture are an integral part of your identity. Your Life OS includes tools to help you map, nurture, and deepen these connections, creating a network of meaningful relationships that support your growth and well-being.
+                The relationships I nurture are an integral part of my identity. My Life OS includes tools to help me map, nurture, and deepen these connections, creating a network of meaningful relationships that support my growth and well-being.
               </p>
               <p className="text-foreground">
                 Use the <HighlightedLink to="/">home page</HighlightedLink> to access your public persona and see how others experience your online presence.
