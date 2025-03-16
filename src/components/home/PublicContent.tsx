@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -95,7 +94,7 @@ const PublicContent = () => {
             Still, the phrase "what I do for a living" feels strangely limiting—as if work alone could define someone.
           </p>
           <p className="text-foreground"> 
-            Although I studied law at university, I quickly discovered <HighlightedLink to="/entrepreneurship">entrepreneurship</HighlightedLink> as my natural habitat. I've launched a travel blog, bought and operated a mobile game app, created a litigation finance marketplace, and explored various other ventures. Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas.
+            Although I studied law at university, I quickly discovered <HighlightedLink to="/entrepreneurship">entrepreneurship</HighlightedLink> as my natural habitat. I've launched a travel blog, bought and operated a mobile game app, created a litigation finance marketplace, and explored various other ventures. Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas. The survivors of this ongoing experimentation are what you'll find on my <HighlightedLink to="/projects">Projects page</HighlightedLink>.
           </p>
           <p className="text-foreground">
             Later, I worked as a venture analyst in a venture builder and now I also work as a software engineer in startup environments—creating a professional blend of business insight and technical capabilities that adds even more chaos to the mix.
