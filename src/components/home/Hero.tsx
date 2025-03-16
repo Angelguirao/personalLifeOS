@@ -38,16 +38,16 @@ const Hero = () => {
           <BlurEffect className="animation-delay-400">
             {isAuthenticated ? (
               <div>
-                <p className="body-lg text-muted-foreground max-w-2xl mx-auto sm:mx-0">
+                <p className="body-lg text-foreground max-w-2xl mx-auto sm:mx-0">
                   Welcome to your Life Operating System. A holistic framework for navigating existence and optimizing your experience.
                 </p>
               </div>
             ) : (
               <div>
-                <p className="body-lg text-muted-foreground max-w-2xl mx-auto sm:mx-0">
+                <p className="body-lg text-foreground max-w-2xl mx-auto sm:mx-0">
                   I'm Angel.
                 </p>
-                <p className="body-lg text-muted-foreground max-w-2xl mx-auto sm:mx-0 mt-4">
+                <p className="body-lg text-foreground max-w-2xl mx-auto sm:mx-0 mt-4">
                   You can explore here the different facets of me—through my experiences, the ideas that shape my thinking, and the projects where I bring them to life*
                 </p>
                 <p className="body-sm italic text-muted-foreground/80 mt-4 border-l-2 border-primary/30 pl-4 max-w-2xl mx-auto sm:mx-0">
@@ -59,7 +59,7 @@ const Hero = () => {
           
           <div className="mt-12 opacity-0 animate-fade-in animation-delay-700">
             <a href="#what-i-experience" className="inline-flex flex-col items-center text-foreground hover:text-primary transition-colors group">
-              <span className="text-base font-medium mb-3">{isAuthenticated ? 'Explore your story' : 'Scroll to explore'}</span>
+              <span className="text-base font-medium mb-3">{isAuthenticated ? 'Explore your Life OS' : 'Scroll to explore'}</span>
               <ArrowDownIcon className="animate-bounce h-6 w-6 group-hover:text-primary" />
             </a>
           </div>

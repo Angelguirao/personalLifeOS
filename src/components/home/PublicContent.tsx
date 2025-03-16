@@ -2,8 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
-import { Lightbulb, Brain, Heart, User, Briefcase, Users, BookOpen, Cpu, Activity, Clock, Globe, HelpCircle } from 'lucide-react';
+import { Brain, Lightbulb, Heart, User, Briefcase, Users, BookOpen, Cpu, Activity, Clock, Globe, HelpCircle } from 'lucide-react';
 
 const Section = ({ id, title, children, icon }) => {
   const Icon = icon;
@@ -16,33 +15,38 @@ const Section = ({ id, title, children, icon }) => {
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6 }}
     >
-      <div className="flex items-center mb-6 gap-3">
+      <div className="flex items-center mb-8 gap-3">
         <div className="bg-primary/5 p-2 rounded-full">
-          <Icon size={18} className="text-primary" />
+          <Icon size={20} className="text-primary" />
         </div>
         <h2 className="text-2xl font-serif font-semibold tracking-tight">{title}</h2>
       </div>
-      <Card className="bg-white/60 backdrop-blur-sm border-none shadow-sm hover:shadow-md transition-shadow duration-300">
-        <CardContent className="p-6 sm:p-8">
-          <div className="prose prose-lg max-w-none text-muted-foreground">
-            {children}
-          </div>
-        </CardContent>
-      </Card>
+      <div className="prose prose-lg max-w-none text-foreground space-y-6">
+        {children}
+      </div>
     </motion.section>
   );
 };
 
+const HighlightedLink = ({ to, children }) => (
+  <Link 
+    to={to} 
+    className="text-primary font-medium hover:underline decoration-primary decoration-2 underline-offset-4 transition-all"
+  >
+    {children}
+  </Link>
+);
+
 const PublicContent = () => {
   return (
-    <div className="bg-gradient-to-br from-white to-purple-50/5 py-20">
-      <div className="container-narrow mx-auto">
+    <div className="bg-gradient-to-br from-white to-purple-50/5 py-32">
+      <div className="container-narrow mx-auto px-6">
         <Section id="what-i-experience" title="What I Experience" icon={Brain}>
           <p>
             Maybe identity isn't just a thought or an action—perhaps it's first and foremost a sensation. My existence is filtered through consciousness, an ongoing interplay of perception and awareness. The "what-it-is-like" of being me is an evolving state, shaped by emotions, sensations, and encounters with the world.
           </p>
           <p>
-            I explore this more deeply in my Consciousness Operating System project, where I examine how subjective experience, awareness, and meaning intertwine.
+            I explore this more deeply in my <HighlightedLink to="/consciousness">Consciousness Operating System</HighlightedLink> project, where I examine how subjective experience, awareness, and meaning intertwine.
           </p>
         </Section>
 
@@ -51,7 +55,7 @@ const PublicContent = () => {
             Maybe Descartes was onto something when he claimed, "I think, therefore I am." Ideas, I believe, are among the most powerful forces shaping the world—and my identity. I find comfort in the contradiction between wanting to understand everything and recognizing that complete understanding is impossible. It's in this tension that I find the motivation to keep exploring, even when (especially when) I have no idea where I'm going.
           </p>
           <p>
-            I explore this further in my Cognition Compass project, where I map out frameworks for thinking, perception, and structured knowledge.
+            I explore this further in my <HighlightedLink to="/cognition">Cognition Compass</HighlightedLink> project, where I map out frameworks for thinking, perception, and structured knowledge.
           </p>
         </Section>
 
@@ -60,7 +64,7 @@ const PublicContent = () => {
             Philosophy is my favorite playground, filled with questions that have no answers, too many answers, or answers that inevitably lead to more questions—the sort of intellectual adventures that can quickly clear a room. Yet, despite this endless questioning, I have outlined a philosophy of life that serves as a guiding framework. It weaves together my metaphysical, epistemological, ethical, political, and aesthetic perspectives, shaping how I navigate the world and make decisions. Yet, beneath all this intellectual exploration and life's unavoidable constraints, what truly matters to me is nurturing beautiful and meaningful relationships with my wife, family, and friends.
           </p>
           <p>
-            <Link to="/philosophy" className="text-primary hover:underline">Explore more in my Philosophy of Life.</Link>
+            <HighlightedLink to="/philosophy">Philosophy of Life</HighlightedLink>
           </p>
         </Section>
 
@@ -78,7 +82,7 @@ const PublicContent = () => {
             Still, the phrase "what I do for a living" feels strangely limiting—as if work alone could define someone. Although I studied law at university, I quickly discovered entrepreneurship as my natural habitat. I've launched a travel blog, bought and operated a mobile game app, created a litigation finance marketplace, and explored various other ventures. Later, I worked as a venture analyst in a venture builder, where I learned the ins and outs of startup ecosystems.
           </p>
           <p>
-            Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas. The survivors of this ongoing experimentation are what you'll find on my <Link to="/projects" className="text-primary hover:underline">Projects page</Link>.
+            Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas. The survivors of this ongoing experimentation are what you'll find on my <HighlightedLink to="/projects">Projects page</HighlightedLink>.
           </p>
           <p>
             I also work as a software engineer in startup environments, because why not add more chaos to the mix?
