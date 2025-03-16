@@ -13,21 +13,13 @@ const Navbar = () => {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
   
-  // Define nav items with different labels based on authentication
-  const getNavItems = (isAuth) => isAuth
-    ? [
-        { name: 'LifeOS', path: '/', icon: <Brain size={16} className="mr-1.5" /> },
-        { name: 'Thought', path: '/garden', icon: <Lightbulb size={16} className="mr-1.5" /> },
-        { name: 'Action', path: '/projects', icon: <Zap size={16} className="mr-1.5" /> },
-        { name: 'Connect', path: '/connect', icon: <Users size={16} className="mr-1.5" /> },
-      ]
-    : [
-        { name: 'Home', path: '/' },
-        { name: 'Garden', path: '/garden' },
-        { name: 'Projects', path: '/projects' },
-        { name: 'About', path: '/about' },
-        { name: 'Connect', path: '/connect' },
-      ];
+  // Define nav items with same labels for both authenticated and public users
+  const getNavItems = (isAuth) => [
+    { name: 'Home', path: '/', icon: <Brain size={16} className="mr-1.5" /> },
+    { name: 'Thought', path: '/garden', icon: <Lightbulb size={16} className="mr-1.5" /> },
+    { name: 'Action', path: '/projects', icon: <Zap size={16} className="mr-1.5" /> },
+    { name: 'Connect', path: '/connect', icon: <Users size={16} className="mr-1.5" /> },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,7 +61,7 @@ const Navbar = () => {
                   `animation-delay-${(index + 1) * 100}`
                 )}
               >
-                {isAuthenticated && item.icon}
+                {item.icon}
                 {item.name}
               </Link>
             ))}
@@ -111,7 +103,7 @@ const Navbar = () => {
                 location.pathname === item.path ? "text-primary" : "text-muted-foreground"
               )}
             >
-              {isAuthenticated && item.icon}
+              {item.icon}
               {item.name}
             </Link>
           ))}

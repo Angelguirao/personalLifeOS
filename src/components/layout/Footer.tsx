@@ -31,32 +31,18 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="font-serif text-lg font-semibold">Navigation</h3>
             <nav className="flex flex-col space-y-2">
-              {isAuthenticated ? (
-                <>
-                  <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
-                    <Brain size={14} className="mr-1.5" /> LifeOS
-                  </Link>
-                  <Link to="/garden" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
-                    <Lightbulb size={14} className="mr-1.5" /> Thought
-                  </Link>
-                  <Link to="/projects" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
-                    <Zap size={14} className="mr-1.5" /> Action
-                  </Link>
-                  <Link to="/connect" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
-                    <Users size={14} className="mr-1.5" /> Connect
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Home</Link>
-                  <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</Link>
-                  <Link to="/garden" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Garden</Link>
-                  <Link to="/projects" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Projects</Link>
-                  <Link to="/philosophy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Philosophy</Link>
-                  <Link to="/entrepreneurship" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Entrepreneurship</Link>
-                  <Link to="/connect" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Connect</Link>
-                </>
-              )}
+              <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                <Brain size={14} className="mr-1.5" /> Home
+              </Link>
+              <Link to="/garden" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                <Lightbulb size={14} className="mr-1.5" /> Thought
+              </Link>
+              <Link to="/projects" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                <Zap size={14} className="mr-1.5" /> Action
+              </Link>
+              <Link to="/connect" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                <Users size={14} className="mr-1.5" /> Connect
+              </Link>
             </nav>
           </div>
           

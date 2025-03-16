@@ -10,7 +10,6 @@ import { useAuth } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import Garden from "./pages/Garden";
 import Projects from "./pages/Projects";
-import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import Connect from "./pages/Connect";
 import Philosophy from "./pages/Philosophy";
@@ -65,7 +64,6 @@ const AppRoutes = () => {
         <Route path="/" element={<Index />} />
         <Route path="/garden" element={<Garden />} />
         <Route path="/projects" element={<Projects />} />
-        <Route path="/about" element={<About />} />
         <Route path="/connect" element={<Connect />} />
         <Route path="/philosophy" element={<Philosophy />} />
         <Route path="/entrepreneurship" element={<Entrepreneurship />} />
