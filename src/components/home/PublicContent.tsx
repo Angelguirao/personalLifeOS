@@ -92,17 +92,19 @@ const PublicContent = () => {
 
         <Section id="what-i-do-for-living" title="What I Do for a Living" icon={Briefcase}>
           <p className="text-foreground">
-            Still, the phrase "what I do for a living" feels strangely limiting—as if work alone could define someone. Although I studied law at university, I quickly discovered entrepreneurship as my natural habitat. I've launched a travel blog, bought and operated a mobile game app, created a litigation finance marketplace, and explored various other ventures. Later, I worked as a venture analyst in a venture builder, where I learned the ins and outs of startup ecosystems.
+            Still, the phrase "what I do for a living" feels strangely limiting—as if work alone could define someone. Although I studied law at university, I quickly discovered <HighlightedLink to="/entrepreneurship">entrepreneurship</HighlightedLink> as my natural habitat. I've launched a travel blog, bought and operated a mobile game app, created a litigation finance marketplace, and explored various other ventures. Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas.
           </p>
           <p className="text-foreground">
-            Throughout this journey, I've built and broken things, written and deleted things—continuously refining ideas. 
-            {!isAuthenticated && (
-              <span> The survivors of this ongoing experimentation are what you'll find on my <HighlightedLink to="/projects">Projects page</HighlightedLink>.</span>
-            )}
+            Later, I worked as a venture analyst in a venture builder, where I learned the ins and outs of startup ecosystems.
           </p>
           <p className="text-foreground">
-            I also work as a software engineer in startup environments, because why not add more chaos to the mix?
+            And right now I also work as a software engineer in startup environments, because why not add more chaos to the mix?
           </p>
+          {!isAuthenticated && (
+            <p className="text-foreground">
+              The survivors of this ongoing experimentation are what you'll find on my <HighlightedLink to="/projects">Projects page</HighlightedLink>.
+            </p>
+          )}
         </Section>
 
         <Section id="who-i-am-in-relation" title="Who I Am in Relation to Others" icon={Users}>
@@ -126,7 +128,7 @@ const PublicContent = () => {
           </p>
         </Section>
 
-        <Section id="who-i-am-over-time" title="Who I Am Over Time" icon={Clock}>
+        <Section id="who-i-am-over-time" title="The Story I Tell Myself" icon={Clock}>
           <p className="text-foreground">
             I am not static. None of us are. The past me, the present me, and the future me may have little in common, but they are somehow linked in an ongoing process of change. My identity is an unfolding story, and while I may not control every twist in the plot, I am, to some extent, its co-author.
           </p>

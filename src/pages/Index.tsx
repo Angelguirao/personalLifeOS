@@ -21,7 +21,12 @@ const Index = () => {
         const id = target.getAttribute('href').slice(1);
         const element = document.getElementById(id);
         if (element) {
-          element.scrollIntoView({
+          const offset = 100; // Adjust offset as needed
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
+          
+          window.scrollTo({
+            top: offsetPosition,
             behavior: 'smooth'
           });
         }
