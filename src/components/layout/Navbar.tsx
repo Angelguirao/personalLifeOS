@@ -13,14 +13,21 @@ const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
   
-  // Define nav items with conditional labels based on authentication
-  const getNavItems = (isAuth) => [
-    { name: isAuth ? 'Consciousness' : 'Home', path: '/' },
-    { name: isAuth ? 'Self' : 'About', path: '/about' },
-    { name: isAuth ? 'Theory' : 'Garden', path: '/garden' },
-    { name: isAuth ? 'Action' : 'Projects', path: '/projects' },
-    { name: 'Connect', path: '/connect' },
-  ];
+  // Define nav items with different labels based on authentication
+  const getNavItems = (isAuth) => isAuth
+    ? [
+        { name: 'Consciousness', path: '/' },
+        { name: 'Thought', path: '/garden' },
+        { name: 'Action', path: '/projects' },
+        { name: 'Connect', path: '/connect' },
+      ]
+    : [
+        { name: 'Home', path: '/' },
+        { name: 'Garden', path: '/garden' },
+        { name: 'Projects', path: '/projects' },
+        { name: 'About', path: '/about' },
+        { name: 'Connect', path: '/connect' },
+      ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -98,9 +105,11 @@ const Navbar = () => {
           {/* Desktop - Right Side: Admin Auth and Social Links */}
           <div className="flex items-center space-x-4 opacity-0 animate-fade-in">
             <NavbarAuth />
-            <div className="border-l border-border pl-4">
-              <SocialLinks />
-            </div>
+            {!isAuthenticated && (
+              <div className="border-l border-border pl-4">
+                <SocialLinks />
+              </div>
+            )}
           </div>
         </div>
         
@@ -139,10 +148,12 @@ const Navbar = () => {
           <NavbarAuth />
         </div>
 
-        {/* Mobile Social Icons */}
-        <div className="mt-8 pt-6 border-t border-border">
-          <SocialLinks />
-        </div>
+        {/* Mobile Social Icons (only for public users) */}
+        {!isAuthenticated && (
+          <div className="mt-8 pt-6 border-t border-border">
+            <SocialLinks />
+          </div>
+        )}
       </div>
     </header>
   );
