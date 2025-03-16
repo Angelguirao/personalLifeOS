@@ -44,15 +44,8 @@ const PublicContent = () => {
   return (
     <div className="bg-gradient-to-br from-white to-purple-50/5 py-24">
       <div className="container-narrow mx-auto px-6">
-        <Section id="what-i-experience" title="What I Experience" icon={Brain}>
-          <p className="text-foreground">
-            Maybe identity isn't just a thought or an action—perhaps it's first and foremost a sensation. My existence is filtered through consciousness, an ongoing interplay of perception and awareness. The "what-it-is-like" of being me is an evolving state, shaped by emotions, sensations, and encounters with the world.
-          </p>
-          <p className="text-foreground">
-            I explore this more deeply in my <HighlightedLink to="/consciousness">Consciousness Operating System</HighlightedLink> project, where I examine how subjective experience, awareness, and meaning intertwine.
-          </p>
-        </Section>
-
+        {/* Removed the "What I Experience" section */}
+        
         <Section id="what-i-think" title="What I Think" icon={Lightbulb}>
           <p className="text-foreground">
             Maybe Descartes was onto something when he claimed, "I think, therefore I am." Ideas, I believe, are among the most powerful forces shaping the world—and my identity.

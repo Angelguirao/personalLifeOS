@@ -58,7 +58,7 @@ const Hero = () => {
           </BlurEffect>
           
           <div className="mt-12 opacity-0 animate-fade-in animation-delay-700">
-            <a href="#what-i-experience" className="inline-flex flex-col items-center text-foreground hover:text-primary transition-colors group">
+            <a href="#what-i-think" className="inline-flex flex-col items-center text-foreground hover:text-primary transition-colors group">
               <span className="text-base font-medium mb-3">{isAuthenticated ? 'Explore your Life OS' : 'Scroll to explore'}</span>
               <ArrowDownIcon className="animate-bounce h-6 w-6 group-hover:text-primary" />
             </a>
