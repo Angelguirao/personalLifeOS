@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -44,6 +43,15 @@ const PublicContent = () => {
   return (
     <div className="bg-gradient-to-br from-white to-purple-50/5 py-24 mt-[-20vh]">
       <div className="container-narrow mx-auto px-6 pt-[30vh]">
+        <Section id="what-i-experience" title="What I Experience" icon={Brain}>
+          <p className="text-foreground">
+            Maybe identity isn't just a thought or an action—perhaps it's first and foremost a sensation. My existence is filtered through consciousness, an ongoing interplay of perception and awareness. The "what-it-is-like" of being me is an evolving state, shaped by emotions, sensations, and encounters with the world.
+          </p>
+          <p className="text-foreground">
+            I explore this more deeply in my <HighlightedLink to="/consciousness">Consciousness Operating System</HighlightedLink> project, where I examine how subjective experience, awareness, and meaning intertwine.
+          </p>
+        </Section>
+
         <Section id="what-i-think" title="What I Think" icon={Lightbulb}>
           <p className="text-foreground">
             Maybe Descartes was onto something when he claimed, "I think, therefore I am." Ideas, I believe, are among the most powerful forces shaping the world—and my identity.
@@ -55,15 +63,6 @@ const PublicContent = () => {
           
           <p className="text-foreground">
             I explore this further in my <HighlightedLink to="/cognition">Cognition Compass</HighlightedLink> project, where I use DSRP and other mental models for structuring information and making sense of complexity.
-          </p>
-        </Section>
-
-        <Section id="what-i-experience" title="What I Experience" icon={Brain}>
-          <p className="text-foreground">
-            Maybe identity isn't just a thought or an action—perhaps it's first and foremost a sensation. My existence is filtered through consciousness, an ongoing interplay of perception and awareness. The "what-it-is-like" of being me is an evolving state, shaped by emotions, sensations, and encounters with the world.
-          </p>
-          <p className="text-foreground">
-            I explore this more deeply in my <HighlightedLink to="/consciousness">Consciousness Operating System</HighlightedLink> project, where I examine how subjective experience, awareness, and meaning intertwine.
           </p>
         </Section>
 
@@ -111,12 +110,25 @@ const PublicContent = () => {
         </Section>
 
         <Section id="who-i-am-in-relation" title="Who I Am in Relation to Others" icon={Users}>
-          <p className="text-foreground">
-            Identity is never built in isolation. My sense of self is shaped through friendships, family, and cultural influences. The connections I form and nurture are an essential part of who I am, creating a web of relationships that both ground and challenge me.
-          </p>
-          <p className="text-foreground">
-            You can <HighlightedLink to="/connect">connect with me</HighlightedLink> through various channels if you'd like to become part of this ongoing conversation about life, ideas, and the fascinating complexity of being human.
-          </p>
+          {isAuthenticated ? (
+            <>
+              <p className="text-foreground">
+                The relationships you nurture are an integral part of your identity. Your Life OS includes tools to help you map, nurture, and deepen these connections, creating a network of meaningful relationships that support your growth and well-being.
+              </p>
+              <p className="text-foreground">
+                Use the <HighlightedLink to="/">home page</HighlightedLink> to access your public persona and see how others experience your online presence.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="text-foreground">
+                Identity is never built in isolation. My sense of self is shaped through friendships, family, and cultural influences. The connections I form and nurture are an essential part of who I am, creating a web of relationships that both ground and challenge me.
+              </p>
+              <p className="text-foreground">
+                You can <HighlightedLink to="/connect">connect with me</HighlightedLink> through various channels if you'd like to become part of this ongoing conversation about life, ideas, and the fascinating complexity of being human.
+              </p>
+            </>
+          )}
         </Section>
 
         <Section id="how-tools-shape-me" title="How My Tools & Extensions Shape Me" icon={Cpu}>
