@@ -5,13 +5,13 @@ import { cn } from "@/lib/utils";
 import { Menu, X, Brain, Lightbulb, Zap, Users } from 'lucide-react';
 import NavbarAuth from './NavbarAuth';
 import SocialLinks from './SocialLinks';
-import supabase from '@/lib/garden/client';
+import { useAuth } from '@/hooks/useAuth';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
   
   // Define nav items with different labels based on authentication
   const getNavItems = (isAuth) => isAuth
@@ -42,34 +42,6 @@ const Navbar = () => {
     // Close mobile menu when route changes
     setIsMobileMenuOpen(false);
   }, [location]);
-  
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      if (!supabase) {
-        setIsAuthenticated(false);
-        return;
-      }
-
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        setIsAuthenticated(!!session);
-      } catch (error) {
-        console.error('Error checking auth status:', error);
-        setIsAuthenticated(false);
-      }
-    };
-
-    checkAuthStatus();
-    
-    // Subscribe to auth changes
-    if (supabase) {
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-        setIsAuthenticated(!!session);
-      });
-      
-      return () => subscription.unsubscribe();
-    }
-  }, []);
   
   // Get the appropriate nav items based on authentication state
   const navItems = getNavItems(isAuthenticated);
